@@ -1,0 +1,67 @@
+[
+ {
+  "name": "q1-desert",
+  "query": "",
+  "x": 14.951,
+  "z": 0.976
+ },
+ {
+  "name": "q2-tropical",
+  "query": "",
+  "x": 13.256,
+  "z": 13.285
+ },
+ {
+  "name": "q3-show",
+  "query": "",
+  "x": -0.434,
+  "z": -1.79
+ },
+ {
+  "name": "q1-desert-dusk",
+  "query": "dusk=1",
+  "x": 14.951,
+  "z": 0.976,
+  "flat": [
+   "tropical",
+   "show"
+  ],
+  "pose": {
+   "distance": 17,
+   "pitchDeg": 30,
+   "yawDeg": -25,
+   "fov": 38,
+   "domeMix": 0
+  }
+ },
+ {
+  "name": "q2-tropical-dusk",
+  "query": "dusk=1",
+  "x": 13.256,
+  "z": 13.285,
+  "flat": [
+   "desert",
+   "show"
+  ],
+  "pose": {
+   "distance": 17,
+   "pitchDeg": 28,
+   "yawDeg": 10,
+   "fov": 38,
+   "domeMix": 0
+  }
+ },
+ {
+  "name": "q3-show-dusk",
+  "query": "dusk=1",
+  "x": -0.434,
+  "z": -1.79,
+  "pose": {
+   "distance": 19,
+   "pitchDeg": 30,
+   "yawDeg": -20,
+   "fov": 38,
+   "domeMix": 0
+  }
+ }
+]

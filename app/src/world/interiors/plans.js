@@ -47,90 +47,113 @@ function rng(seed) {
 
 // ---- plans --------------------------------------------------------------------------------------------------------
 // hero: hand-placed { s: sprite, h: height (units), a, r, cross? } (nudged around the bearing if it blocks a walk).
-// fill: { s: [sprites], h: [min, max], n, r: [r0, r1], arc: [a0, a1] (clockwise from a0), cross? } scattered with a
+// fill: { s: [sprites], h: [min, max], n, r: [r0, r1], arc: [a0, a1] (clockwise from a0), cross?, pd?, pack? } scattered with a
 //       fixed seed, rejected on walkways, the plaza and each other.
 // floor: the printed ground (index.js draws it): ground / path colours, ponds [{ a, r, rad }], beds.
 export const PLANS = {
+  // wave6-Q (judges, wave5 biome trials): ~3x the cards, layered by distance from the walk (low edging -> mid shrubs ->
+  // tall planting -> the wall), allowed to overlap like stacked pop-up layers; `pd` = [min, max] distance (units) from
+  // the walk EDGE a fill card may stand at, `pack` = how close cards may crowd (x the sum of their radii; hero 0.7).
   desert: {
     seed: 11,
     hero: [
-      { s: 'int_red_spire', h: 2.3, a: 345, r: 3.4 },
-      { s: 'int_red_spire', h: 1.8, a: 20, r: 3.9 },
-      { s: 'int_red_outcrop', h: 0.75, a: 0, r: 2.6 },
-      { s: 'int_red_spire', h: 1.6, a: 300, r: 3.6 },
-      { s: 'int_red_outcrop', h: 0.6, a: 75, r: 3.4 },
-      { s: 'int_red_outcrop', h: 0.55, a: 140, r: 3.3 },
-      { s: 'int_fan_palm', h: 4.4, a: 330, r: 1.9, cross: true },
-      { s: 'int_fan_palm', h: 3.6, a: 40, r: 2.9, cross: true },
-      { s: 'int_tree_aloe', h: 1.7, a: 310, r: 2.2 }, // photo 29: the tree aloe by the pond
-      { s: 'int_organ_cactus', h: 2.2, a: 15, r: 2.1 },
-      { s: 'cactus_0', h: 2.4, a: 55, r: 2.3 },
+      { s: 'int_euphorbia', h: 2.5, a: 235, r: 1.05 }, // tree-sized candelabra euphorbia on the central rock island
+      // pale salmon-tan sandstone spires, several taller than the traveller (photos 15, 20, 22)
+      { s: 'int_sand_spire_pale', h: 3.7, a: 345, r: 3.5 },
+      { s: 'int_sand_spire_pale', h: 3.1, a: 20, r: 3.9 },
+      { s: 'int_sand_spire_pale', h: 2.8, a: 300, r: 3.7 },
+      { s: 'int_sand_spire_pale', h: 2.3, a: 65, r: 3.8 },
+      { s: 'int_sand_ledge', h: 0.45, a: 0, r: 2.6 },
+      { s: 'int_sand_ledge', h: 0.4, a: 140, r: 3.4 },
+      // fan palms, some blue-grey with shaggy skirts (photos 19, 30)
+      { s: 'int_blue_fan_palm', h: 4.6, a: 330, r: 1.9, cross: true },
+      { s: 'int_blue_fan_palm', h: 3.9, a: 40, r: 2.9, cross: true },
+      { s: 'int_fan_palm', h: 3.6, a: 285, r: 3.1, cross: true },
+      { s: 'int_tree_aloe', h: 2.0, a: 310, r: 2.4 }, // photo 29: the tree aloe by the pond
+      { s: 'int_column_cactus', h: 2.8, a: 55, r: 2.3 },
+      { s: 'int_column_cactus', h: 2.3, a: 270, r: 3.3 },
       { s: 'bench_0', h: 0.34, a: 105, r: 1.55 }, // photo 19: a bench against the rockwork, by the path
     ],
     fill: [
-      { s: ['cactus_0', 'cactus_1', 'int_organ_cactus', 'int_tree_aloe'], h: [1.3, 2.0], n: 7, r: [2.0, 4.6], arc: [280, 90] },
-      { s: ['int_agave'], h: [0.45, 0.7], n: 8, r: [1.3, 4.6], arc: [0, 360] },
-      { s: ['barrel_cactus_0', 'barrel_cactus_1'], h: [0.32, 0.42], n: 7, r: [1.2, 4.2], arc: [0, 360] },
-      { s: ['prickly_pear_0', 'int_tree_aloe'], h: [0.7, 1.1], n: 4, r: [2.0, 4.4], arc: [60, 300] },
-      { s: ['desert_flowers_0', 'desert_flowers_1', 'thorn_bush_0'], h: [0.3, 0.45], n: 7, r: [1.1, 4.0], arc: [90, 270] },
-      { s: ['int_red_outcrop'], h: [0.35, 0.5], n: 4, r: [3.0, 4.8], arc: [90, 270] },
+      // back: tall unbranched columns, spires, euphorbias against the glass
+      { s: ['int_column_cactus', 'int_column_cactus', 'int_organ_cactus', 'int_sand_spire_pale', 'int_euphorbia', 'int_tree_aloe', 'int_euphorbia'], h: [1.6, 2.7], n: 16, r: [2.6, 4.9], arc: [250, 110], pd: [0.45, 9] },
+      // mid: aloes, yellow-flowering bushes, agaves, prickly pear
+      { s: ['int_yellow_bush', 'int_yellow_bush', 'int_tree_aloe', 'int_agave', 'prickly_pear_0', 'int_column_cactus', 'int_orn_grass'], h: [0.7, 1.3], n: 34, r: [1.0, 4.9], arc: [0, 360], pd: [0.2, 9] },
+      // walk edging: agaves, barrels, grasses, flowers
+      { s: ['int_agave', 'barrel_cactus_0', 'barrel_cactus_1', 'desert_flowers_0', 'desert_flowers_1', 'int_orn_grass', 'int_yellow_bush'], h: [0.3, 0.55], n: 52, r: [0.6, 4.9], arc: [0, 360], pd: [0, 0.45], pack: 0.45 },
+      { s: ['int_sand_ledge'], h: [0.3, 0.45], n: 6, r: [2.8, 4.9], arc: [90, 270] },
     ],
     floor: {
-      ground: '#c9916b', grain: '#b57a58', path: '#e2b99a', pathEdge: '#a8694c',
-      ponds: [{ u: -0.68, v: 0.5, rad: 0.45, water: '#4f8f86', rim: '#b0644a' }], // photo 29: a small pool in the rockwork
-      rocks: '#b4563e',
+      ground: '#d3a784', grain: '#bf9070', path: '#e8c6a8', pathEdge: '#ad7c60',
+      ponds: [{ u: -0.68, v: 0.5, rad: 0.45, water: '#4f8f86', rim: '#cfa080' }], // photo 29: a small pool in the rockwork
+      rocks: '#dcb08e',
+      cover: ['#b99a6a', '#9c9a6a', '#c8a27c', '#a7a26e'], // gravel + low succulent mats
     },
   },
   show: {
     seed: 23,
     hero: [
-      { s: 'gazebo_0', h: 1.75, a: 32, r: 2.05 }, // photo 28 + plan 01: gazebo behind the pond, at the end of the west spur
-      { s: 'trees_b_0', h: 3.4, a: 325, r: 3.4, cross: true }, // photos 16, 17: tall evergreens
-      { s: 'trees_b_3', h: 3.0, a: 30, r: 3.6, cross: true },
-      { s: 'blossom_tree_white_0', h: 1.9, a: 290, r: 2.6, cross: true },
-      { s: 'wisteria_arch_0', h: 1.15, a: 60, r: 2.4 }, // photo 16: the white pergola arch
-      { s: 'bench_0', h: 0.34, a: 150, r: 2.75 }, // photo 17: benches beside the walk, inside the loop
-      { s: 'bench_0', h: 0.34, a: 215, r: 2.75 },
+      { s: 'int_gazebo_white', h: 1.9, a: 32, r: 2.05 }, // photo 28 + plan 01: white gazebo, dark shingle roof
+      { s: 'int_conifer', h: 5.0, a: 330, r: 3.0 }, // photos 16, 17: one tall dominant conifer
+      { s: 'int_pergola', h: 1.5, a: 62, r: 2.5 }, // photo 16: the plain white lattice pergola
+      { s: 'int_red_shrub', h: 1.2, a: 290, r: 2.6 }, // photo 16: round red-flowering shrubs
+      { s: 'int_red_shrub', h: 1.0, a: 80, r: 3.6 },
+      { s: 'int_stone_wall', h: 0.32, a: 15, r: 2.75 }, // photo 17: the low stone retaining wall by the gazebo
+      { s: 'int_metal_bench', h: 0.42, a: 150, r: 2.75 }, // photo 17: dark metal benches beside the walk
+      { s: 'int_metal_bench', h: 0.42, a: 215, r: 2.75 },
       { s: 'mountains_rocks_6', h: 0.55, a: 255, r: 1.65 }, // reeds at the pond edge (photo 28)
       { s: 'mountains_rocks_7', h: 0.5, a: 120, r: 1.75 },
     ],
     fill: [
-      { s: ['flower_bed_0', 'flower_bed_1'], h: [0.38, 0.48], n: 12, r: [1.3, 4.6], arc: [0, 360] },
-      { s: ['bushes_0', 'bushes_3', 'bushes_0', 'blossom_tree_0'], h: [0.5, 1.0], n: 6, r: [2.8, 4.8], arc: [270, 100] },
-      { s: ['fern_0', 'fern_1', 'bushes_0'], h: [0.35, 0.5], n: 6, r: [1.4, 4.4], arc: [100, 260] },
+      // massed drifts wrapping the pond (photo 28: magenta / pink / purple / red)
+      { s: ['int_drift_rose', 'int_drift_purple'], h: [0.26, 0.36], n: 22, r: [1.35, 3.0], arc: [0, 360], pack: 0.35 },
+      // walk edging: coleus, bedding, grasses
+      { s: ['int_coleus', 'int_drift_rose', 'int_drift_purple', 'flower_bed_1', 'int_orn_grass', 'int_coleus'], h: [0.28, 0.5], n: 46, r: [1.3, 4.9], arc: [0, 360], pd: [0, 0.5], pack: 0.4 },
+      // mid: red shrubs, ornamental grass, bushes, coloured leaves
+      { s: ['int_red_shrub', 'int_orn_grass', 'bushes_0', 'bushes_3', 'int_coleus', 'int_red_shrub'], h: [0.55, 1.1], n: 28, r: [1.4, 4.9], arc: [0, 360], pd: [0.25, 9] },
+      // back: evergreens and big shrubs against the glass
+      { s: ['trees_b_0', 'trees_b_1', 'int_red_shrub', 'bushes_3', 'trees_b_3'], h: [1.3, 2.6], n: 12, r: [3.2, 4.9], arc: [250, 110], pd: [0.4, 9] },
     ],
     floor: {
-      ground: '#9fae6a', grain: '#8a9a5a', path: '#e6cfa6', pathEdge: '#b49466',
-      ponds: [{ u: -0.05, v: -0.08, rad: 1.35, water: '#5fa6a0', rim: '#c9bba0', lilies: true }], // photo 28 + plan 01: the pond inside the loop
-      beds: ['#d9566b', '#f0b54a', '#c06bb0', '#f1e9d6', '#e07a3a'],
+      ground: '#7f9a52', grain: '#6d8746', path: '#e6cfa6', pathEdge: '#b49466',
+      ponds: [{ u: -0.05, v: -0.08, rad: 1.35, water: '#5fa6a0', rim: '#a9a196', lilies: true }], // photo 28 + plan 01: the pond inside the loop
+      beds: ['#b8335a', '#d9566b', '#8a3f9a', '#c43a3a', '#e07a9a'],
+      cover: ['#5f7e3e', '#6f8f45', '#8a3f6a', '#a8405a', '#56733a'],
     },
   },
   tropical: {
     seed: 37,
     // doors at bearings 313 (lobby) and 0 (Desert link): the back is split by a walkway, so the tall planting stands
-    // either side of it (NE and W) and in the wedge between the two walks
+    // either side of it (NE and W) and in the wedge between the two walks. wave6-Q: canopy up toward the apex
     hero: [
-      { s: 'int_fan_palm', h: 5.6, a: 50, r: 1.5, cross: true }, // photo 31: a fan palm reaching the apex
-      { s: 'int_tall_palm', h: 5.0, a: 280, r: 1.9, cross: true },
-      { s: 'int_tall_palm', h: 4.3, a: 336, r: 2.8, cross: true },
-      { s: 'int_canopy_tree', h: 3.8, a: 40, r: 2.9, cross: true }, // photos 24-26: dense broadleaf canopy
-      { s: 'int_canopy_tree', h: 3.5, a: 268, r: 2.9, cross: true },
-      { s: 'int_canopy_tree', h: 3.2, a: 88, r: 3.1, cross: true },
-      { s: 'int_canopy_tree', h: 2.8, a: 336, r: 3.4, cross: true },
-      { s: 'int_banana', h: 2.2, a: 65, r: 2.7 },
-      { s: 'int_banana', h: 1.9, a: 245, r: 2.6 },
-      { s: 'int_tree_fern', h: 1.8, a: 110, r: 2.6 },
+      { s: 'int_tall_palm_lit', h: 6.4, a: 20, r: 0.9, cross: true }, // a full slender palm crown under the skylight
+      { s: 'int_fan_palm', h: 5.6, a: 50, r: 1.6, cross: true }, // photo 31: a fan palm reaching the apex
+      { s: 'int_tall_palm_lit', h: 5.4, a: 280, r: 1.9, cross: true },
+      { s: 'int_tall_palm', h: 4.8, a: 336, r: 2.8, cross: true },
+      { s: 'int_canopy_lit', h: 4.6, a: 40, r: 2.9, cross: true }, // photos 24-26: dense broadleaf canopy
+      { s: 'int_canopy_lit', h: 4.4, a: 268, r: 2.9, cross: true },
+      { s: 'int_canopy_tree', h: 4.0, a: 88, r: 3.1, cross: true },
+      { s: 'int_canopy_lit', h: 3.8, a: 336, r: 3.6, cross: true },
+      { s: 'int_feather_palm', h: 4.2, a: 300, r: 3.2, cross: true }, // fine feathery-leaved trees
+      { s: 'int_feather_palm', h: 3.8, a: 70, r: 3.8, cross: true },
+      { s: 'int_banana_lit', h: 2.4, a: 65, r: 2.7 },
+      { s: 'int_banana_lit', h: 2.1, a: 245, r: 2.6 },
+      { s: 'int_tree_fern', h: 1.9, a: 110, r: 2.6 },
     ],
     fill: [
-      { s: ['int_canopy_tree', 'int_tall_palm'], h: [2.4, 3.2], n: 3, r: [2.6, 3.6], arc: [200, 120], cross: true },
-      { s: ['int_banana', 'int_tree_fern', 'palm_0', 'palm_1'], h: [1.4, 2.2], n: 7, r: [2.2, 4.6], arc: [250, 120] },
-      { s: ['int_monstera', 'int_elephant_ear', 'int_monstera'], h: [0.6, 1.0], n: 14, r: [1.3, 4.7], arc: [0, 360] },
-      { s: ['fern_0', 'fern_1', 'bushes_0'], h: [0.35, 0.55], n: 10, r: [1.2, 4.5], arc: [0, 360] },
+      // canopy: tall broadleaf / feathery trees and palms ringing the glass
+      { s: ['int_canopy_lit', 'int_canopy_tree', 'int_feather_palm', 'int_tall_palm_lit', 'int_canopy_lit'], h: [3.0, 4.6], n: 14, r: [2.2, 4.9], arc: [230, 130], cross: true, pd: [0.3, 9], pack: 0.4 },
+      // mid: banana / cane strap-leaved clumps, tree ferns
+      { s: ['int_banana_lit', 'int_strap_clump', 'int_strap_clump', 'int_tree_fern', 'int_banana', 'int_feather_palm'], h: [1.4, 2.5], n: 26, r: [1.0, 4.9], arc: [220, 140], pd: [0.25, 9] },
+      { s: ['int_strap_clump', 'int_banana_lit', 'int_tree_fern'], h: [0.9, 1.5], n: 8, r: [1.0, 4.9], arc: [140, 220], pd: [0.25, 9] },
+      // understory: monstera, elephant ears, ferns right to the walk edge
+      { s: ['int_monstera_lit', 'int_elephant_lit', 'int_monstera', 'fern_0', 'fern_1', 'int_strap_clump', 'int_elephant_lit'], h: [0.45, 1.0], n: 60, r: [0.5, 4.9], arc: [0, 360], pd: [0, 0.6], pack: 0.4 },
     ],
     floor: {
-      ground: '#5f6b3f', grain: '#4c5733', path: '#cdb48a', pathEdge: '#8a7550',
+      ground: '#3f4d2a', grain: '#323e22', path: '#cdb48a', pathEdge: '#8a7550',
       ponds: [],
-      litter: ['#7b8a4a', '#3f4a2a', '#8d7a4a'],
+      litter: ['#5f7a33', '#2f3b20', '#6d6a3a'],
+      cover: ['#4f7a2c', '#3d6626', '#5f8a30', '#2f4d22', '#6a9a34'],
     },
   },
 };
@@ -149,7 +172,8 @@ export function layout(id, atlas) {
     if (rho > MAX_R) return 0;
     return Math.min(h, headroom(rho) * 0.92);
   };
-  const free = (x, z, rad) => isClear(x, z, rad, net, ponds) && out.every((p) => Math.hypot(p.x - x, p.z - z) > (p.rad + rad) * 0.7);
+  const free = (x, z, rad, pack = 0.7) => isClear(x, z, rad, net, ponds) && out.every((p) => Math.hypot(p.x - x, p.z - z) > (p.rad + rad) * pack);
+  const edge = (x, z) => pathDistance(net, x, z) - PATH_HALF; // distance from the walk edge
   for (const k of plan.hero) {
     if (!atlas.sprites[k.s]) continue;
     // nearest free spot to the authored one: rings of +-0.35 u, bearings +-8 deg steps up to +-48 deg
@@ -166,7 +190,8 @@ export function layout(id, atlas) {
   for (const g of plan.fill) {
     const span = ((g.arc[1] - g.arc[0] + 360) % 360) || 360;
     let placed = 0;
-    for (let tries = 0; placed < g.n && tries < g.n * 40; tries++) {
+    const [pd0, pd1] = g.pd || [0, Infinity];
+    for (let tries = 0; placed < g.n && tries < g.n * 60; tries++) {
       const s = g.s[Math.floor(rand() * g.s.length)];
       if (!atlas.sprites[s]) continue;
       const a = g.arc[0] + rand() * span;
@@ -175,7 +200,9 @@ export function layout(id, atlas) {
       const want = g.h[0] + rand() * (g.h[1] - g.h[0]);
       const h = fits(s, want, x, z);
       const rad = Math.min(halfW(s, want), 0.9) * 0.6;
-      if (h < want * 0.7 || !free(x, z, rad)) continue;
+      if (h < want * 0.7 || !free(x, z, rad, g.pack ?? 0.55)) continue;
+      const e = edge(x, z);
+      if (e < pd0 || e > pd1) continue;
       out.push({ s, h, x, z, cross: !!g.cross, rad });
       placed++;
     }

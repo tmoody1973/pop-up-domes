@@ -17,6 +17,21 @@ PAD = 10
 SHEETS = {
     'sheet_desert.png': ['int_agave', 'int_tree_aloe', 'int_red_spire', 'int_red_outcrop', 'int_fan_palm', 'int_organ_cactus'],
     'sheet_tropical.png': ['int_tall_palm', 'int_banana', 'int_monstera', 'int_canopy_tree', 'int_tree_fern', 'int_elephant_ear'],
+    # wave6-Q (appended after the wave3 sheets so their rects do not move). None = a sprite on the sheet that is skipped.
+    'sheet_desert2.png': ['int_sand_spire', 'int_sand_ledge', 'int_blue_fan_palm', 'int_column_cactus', 'int_euphorbia', 'int_yellow_bush'],
+    'sheet_show1.png': ['int_gazebo_white', 'int_pergola', 'int_red_shrub', None, 'int_drift_rose', 'int_drift_purple', 'int_coleus'],
+    'sheet_mix1.png': ['int_orn_grass', 'int_stone_wall', 'int_metal_bench', 'int_feather_palm', 'int_strap_clump', 'int_conifer'],
+}
+# wave6-Q: backlit / paled copies of generated sprites (judges: "brighter saturated backlit greens, not dull olive").
+# name -> (source int_* sprite, saturation x, brightness x). Pixels derived from our own generated art only.
+LIT = {
+    'int_canopy_lit': ('int_canopy_tree', 1.7, 1.22),
+    'int_tall_palm_lit': ('int_tall_palm', 1.6, 1.18),
+    'int_banana_lit': ('int_banana', 1.5, 1.15),
+    'int_monstera_lit': ('int_monstera', 1.7, 1.25),
+    'int_elephant_lit': ('int_elephant_ear', 1.6, 1.2),
+    # desert judges: rocks pale salmon-tan sandstone, not brick red (the warm dome light reddens the generated spire)
+    'int_sand_spire_pale': ('int_sand_spire', 0.6, 1.12),
 }
 
 
@@ -81,6 +96,8 @@ def main():
     x, y, row_h = PAD, BAND_Y, 0
     for sheet, names in SHEETS.items():
         for name, img, outline, tone in sprites_of(os.path.join(HERE, sheet), names):
+            if name is None:
+                continue
             w, h = img.size
             if x + w + PAD > AW:
                 x, y, row_h = PAD, y + row_h + PAD, 0
@@ -90,6 +107,21 @@ def main():
             print(f'{name:18s} rect {[x, y, w, h]}  outline {len(outline)} pts  tone {tone}')
             x += w + PAD
             row_h = max(row_h, h)
+    from PIL import ImageEnhance
+    for name, (src, sat, gain) in LIT.items():
+        sx, sy, w, h = j['sprites'][src]['rect']
+        img = atlas.crop((sx, sy, sx + w, sy + h))
+        a = img.getchannel('A')
+        rgb = ImageEnhance.Brightness(ImageEnhance.Color(img.convert('RGB')).enhance(sat)).enhance(gain)
+        img = rgb.convert('RGBA'); img.putalpha(a)
+        if x + w + PAD > AW:
+            x, y, row_h = PAD, y + row_h + PAD, 0
+        assert y + h <= AH, 'atlas band full'
+        atlas.paste(img, (x, y))
+        j['sprites'][name] = {**j['sprites'][src], 'rect': [x, y, w, h]}
+        print(f'{name:18s} rect {[x, y, w, h]}  (lit copy of {src})')
+        x += w + PAD
+        row_h = max(row_h, h)
     atlas.save(os.path.join(ATLAS, 'atlas.webp'), 'WEBP', quality=95, method=6)
     json.dump(j, open(jpath, 'w'), separators=(',', ':'))
 

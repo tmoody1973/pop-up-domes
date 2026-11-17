@@ -1,0 +1,47 @@
+[
+ {
+  "name": "r1-arches-dusk",
+  "query": "dusk=1",
+  "x": 3.51,
+  "z": 10.12,
+  "rise": 1,
+  "reach": 14,
+  "pose": {
+   "distance": 9,
+   "pitchDeg": 18,
+   "yawDeg": -45,
+   "fov": 45,
+   "domeMix": 0
+  }
+ },
+ {
+  "name": "r2-whole-book",
+  "query": "dusk=1",
+  "x": 7.0,
+  "z": 16.5,
+  "rise": 1,
+  "reach": 30,
+  "pose": {
+   "distance": 70,
+   "pitchDeg": 24,
+   "yawDeg": -20,
+   "fov": 38,
+   "domeMix": 0
+  }
+ },
+ {
+  "name": "r3-light-pole-close",
+  "query": "dusk=1",
+  "x": 3.62,
+  "z": 11.17,
+  "rise": 1,
+  "reach": 14,
+  "pose": {
+   "distance": 4.2,
+   "pitchDeg": 20,
+   "yawDeg": 0,
+   "fov": 55,
+   "domeMix": 0
+  }
+ }
+]

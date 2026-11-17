@@ -12,7 +12,7 @@ import { createFoldInstance } from '../fold.js';
 import { spriteCard, flap } from '../site/card.js';
 import { BASE_R } from '../domes/shell.js';
 import { PLANS, layout, pondsOf } from './plans.js';
-import { network, PATH_HALF } from './paths.js';
+import { network, pathDistance, PATH_HALF } from './paths.js';
 
 const STAGGER = 0.9; // s: the planting ripples up from the centre over ~1 s (fold.js per-instance staggerSpan)
 const FLOOR_PX = 512; // canvas pixels per dome floor
@@ -65,12 +65,26 @@ function drawFloor(ctx, ox, id, cards) {
     ctx.fillRect(ox + hash01(i, 5) * FLOOR_PX, hash01(i, 6) * FLOOR_PX, 2 + hash01(i, 8) * 3, 2);
   }
   ctx.globalAlpha = 1;
+  // wave6-Q ground cover: printed leaf / gravel mats over every bit of floor off the walks (judges: no bare floor)
+  if (f.cover) {
+    const net0 = network(id);
+    for (let i = 0; i < 1400; i++) {
+      const a = hash01(i, 21) * Math.PI * 2; const r = Math.sqrt(hash01(i, 22)) * BASE_R * 0.97;
+      const x = Math.cos(a) * r; const z = Math.sin(a) * r;
+      if (pathDistance(net0, x, z) < PATH_HALF + 0.08) continue;
+      const [px, py] = P(x, z); const w = (0.12 + hash01(i, 23) * 0.22) * S;
+      ctx.fillStyle = f.cover[i % f.cover.length]; ctx.globalAlpha = 0.55 + hash01(i, 24) * 0.35;
+      ctx.beginPath(); ctx.ellipse(px, py, w, w * 0.7, hash01(i, 25) * 3, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
   // planting beds under the cards (soft darker patches), rock bases in the desert, coloured beds in the show
   cards.forEach((c, i) => {
     const [x, y] = P(c.x, c.z);
     const w = Math.min(1.2, c.h * 0.45) * S;
-    ctx.fillStyle = f.beds && /flower_bed/.test(c.s) ? f.beds[i % f.beds.length] : (f.rocks && /red_/.test(c.s) ? f.rocks : f.grain);
-    ctx.globalAlpha = f.beds && /flower_bed/.test(c.s) ? 0.85 : 0.55;
+    const bed = f.beds && /flower_bed|drift|coleus/.test(c.s);
+    ctx.fillStyle = bed ? f.beds[i % f.beds.length] : (f.rocks && /red_|sand_/.test(c.s) ? f.rocks : f.grain);
+    ctx.globalAlpha = bed ? 0.85 : 0.55;
     ctx.beginPath(); ctx.ellipse(x, y, w, w * 0.6, 0, 0, Math.PI * 2); ctx.fill();
   });
   ctx.globalAlpha = 1;

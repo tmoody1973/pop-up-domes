@@ -81,7 +81,7 @@ export function createSiteProps({ scene, materials, assets, wfc, dip }) {
   }
   const placeFading = (build, name, xz, yaw) => { const f = fading(name); place(build(f.mat), xz, yaw, f); };
 
-  place(buildArcade(paper), along(50), AXIS_YAW);
+  place(buildArcade(paper), along(SITE.arcadeT), AXIS_YAW);
   placeFading((m) => buildLobby(m), 'lobby', ftToWorld(SITE.lobby.x, SITE.lobby.y), AXIS_YAW);
   SITE.poles.forEach((p, i) => placeFading((m) => buildPole('leaf_pole_' + i, m), 'leaf_pole_' + i, along(p.t, p.s), AXIS_YAW));
 

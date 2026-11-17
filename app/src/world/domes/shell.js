@@ -56,6 +56,8 @@ export const SECTOR_HALF_DEG = 50;
  * height (10 ft). The opening is a notch in the gore's lowest tier card (a ~1 ft lintel stays: the card is one piece)
  * plus a gap in that gore's base-ring card. */
 export const DOOR_W = 1.0;
+/** Minimum card left between a door notch and its gore's seam (u), so seams stay whole. */
+const DOOR_SEAM_MARGIN = 0.04;
 export const DOOR_TOP_FT = 10;
 const DOOR_U = DOOR_TOP_FT / UNIT_FT / H; // 0.118 (tier 1 ends at u = 0.13)
 
@@ -255,7 +257,12 @@ export function buildGeometries() {
   for (const c of domeCentres()) {
     for (const dr of doorsOf(c)) {
       if (doorGeo.has(dr.key)) continue;
-      const xt = tiers[0].rho0 * Math.tan(dr.delta); const xr = ringR * Math.tan(dr.delta); const hd = DOOR_W / 2;
+      const hd = DOOR_W / 2;
+      // keep the notch inside its own gore card (a door near a seam would otherwise cut the seam and the neighbour's
+      // edge); the card is narrowest at its foot, so clamp against the foot half-width minus a small margin.
+      // ponytail: notch may sit up to ~0.2 u off the collision door centre for doors near a seam; walk lines still clear.
+      const keepIn = (x, rho) => { const lim = rho * Math.tan(Math.PI / N_GORES) - hd - DOOR_SEAM_MARGIN; return Math.max(-lim, Math.min(lim, x)); };
+      const xt = keepIn(tiers[0].rho0 * Math.tan(dr.delta), tiers[0].rho0); const xr = keepIn(ringR * Math.tan(dr.delta), ringR);
       doorGeo.set(dr.key, {
         tier: tierGeometry(TIERS_U[0], TIERS_U[1], { x0: xt - hd, x1: xt + hd }).geometry,
         ring: slabGeometry([clipX(outline, xr - hd, -1), clipX(outline, xr + hd, 1)], CARD_T, ringUv),

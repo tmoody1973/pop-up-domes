@@ -8,6 +8,17 @@
 import { MODELS, rotateSockets } from '../core/models.js';
 import { TILE_SIZE } from '../core/config.js';
 
+// [wave6-R] Lobby hub + entrance axis registered to plan 06 (evidence/wave5/fidelity.md (c): the wave5 hub sat 10 / 16 ft
+// and the arcade front 8.5 / 14.4 ft (north-up / registered) off the plan). The hub is the midpoint of the two plan
+// readings of the lens planter, (94.4, -77.4) north-up and (97.2, -69.0) registered, so it sits within 5 ft of both; the
+// whole entrance (arcade, pools, poles, walk, plaza) is laid along the SW axis from it. Dome centres do not move.
+const HUB = { x: 95.8, y: -73.2 };
+const AXIS = [-Math.SQRT1_2, -Math.SQRT1_2]; // unit vector, lobby -> south-west (plan 06)
+const ARCADE_T = 49; // arch feet, ft down the axis from the hub (plan 06 pier row: (60.4, -112) north-up, (64.7, -105) registered)
+const PLAZA_T = 132; // plaza at the foot of the walk; keeps the [wave2-E] spacing (pools end 8 ft before it)
+/** Feet along the entrance axis from the hub (t) and across it (s). Same formula as site/index.js + print.js along(). */
+const at = (t, s = 0) => [HUB.x + AXIS[0] * t - AXIS[1] * s, HUB.y + AXIS[1] * t + AXIS[0] * s];
+
 export const SITE = Object.freeze({
   // Scale (LOG.md [wave1-A]): the book's cell torus (world/book.js GRID = 32) caps the spread at 30 cells; the spread is
   // symmetric about the spine and must hold the drive turnaround (x = -144 ft) through the east domes (x = 239 ft):
@@ -23,8 +34,11 @@ export const SITE = Object.freeze({
   ],
   // Lobby: plan 03-floor-plans/06 (NOT BUILD-NOTES §4, which wrongly puts it in the Show-Desert gap): a central hub touching
   // all three domes = the point equidistant from the three centres. The triangle is right-angled at Desert, so that is the
-  // midpoint of Show-Tropical (84.5, -79), 115.7 ft from each centre; r = 115.7 - 70 - ~1. Plan 06 measures (76, -84).
-  lobby: { x: 84.5, y: -79, r: 45 },
+  // midpoint of Show-Tropical (84.5, -79). [wave6-R] Plan 06 puts the planter 10-16 ft NE of that: HUB above. r = 42
+  // reaches the Desert and Tropical feet; print.js runs a paved neck from the hub to each dome door.
+  lobby: { ...HUB, r: 42 },
+  arcadeT: ARCADE_T,
+  plazaT: PLAZA_T,
   // Walkable strips, in feet, rasterised 4-connected. Region names are what other modules key on.
   paths: [
     // Link galleries: plan 06 + BUILD-NOTES §4 gaps (29 ft Show-Desert, 18 ft Desert-Tropical).
@@ -33,27 +47,29 @@ export const SITE = Object.freeze({
     // Entrance arcade: plan 06, faces south-west between Show and Tropical, on the lobby's SW axis (bearing 225 deg).
     // [wave2-E] Arch feet at t = 50 ft along the axis (front wall t = 42), so the pools (t = 58..112) clear the row;
     // arcade region t = 40..52, walk between the pools to the plaza at t = 120.
-    { region: 'arcade', pts: [[56.2, -107.3], [47.7, -115.8]] },
-    { region: 'walk', pts: [[47.7, -115.8], [0, -163.9]] },
+    // [wave6-R] arcade region t = ARCADE_T -/+ 4..6, walk on to the plaza
+    { region: 'arcade', pts: [at(ARCADE_T - 4), at(ARCADE_T + 4)] },
+    { region: 'walk', pts: [at(ARCADE_T + 4), at(PLAZA_T)] },
     // Entry drive: plan 06, from S. Layton Blvd (south-west, off the page) to the turnaround (centre measured at
     // (-106, -195) ft, 2.1 px/ft on the 2000 px plan), then up to the plaza.
-    { region: 'drive', pts: [[-400, -400], [-106, -195], [0, -163.9]] },
+    { region: 'drive', pts: [[-400, -400], [-106, -195], at(PLAZA_T)] },
   ],
   // Reflecting pools: plan 06, two long pools flanking the walk, centred t = 85 ft down the axis, 25 ft either side
   // (plan 06 measures (8, -126) and (39, -157)); long axis along the walk. [wave2-E] 54 x 14 ft (t = 58..112, so
   // they clear the arch row at t = 50 and the 18-ft plaza at t = 120); plan 06 reads ~60 x 15 ft.
+  // [wave6-R] centred t = 97 from the moved hub (t = 70..124: 23 ft clear of the arch row), 25 ft either side.
   pools: [
-    { x: 6.7, y: -121, len: 54, width: 14 },
-    { x: 42, y: -156.3, len: 54, width: 14 },
+    { x: at(97, -25)[0], y: at(97, -25)[1], len: 54, width: 14 },
+    { x: at(97, 25)[0], y: at(97, 25)[1], len: 54, width: 14 },
   ],
-  axis: [-Math.SQRT1_2, -Math.SQRT1_2], // unit vector, lobby -> south-west (plan 06)
+  axis: AXIS,
   // Spine (book gutter), on a tile seam through the Show | Desert-Tropical gap (Show ends x = 70, Desert / Tropical start
   // x = 99). 84 ft = tile seam 3.5 at 24 ft/tile; it runs through the lobby, never through a dome (asserted below).
   spineX: 84,
   // Lawn margin (tiles) around the site bbox before the page edge.
   marginTiles: 2,
   // Traveller start: the plaza at the foot of the walk, looking up at the arches (feet).
-  start: { x: 0, y: -163.9 },
+  start: { x: at(PLAZA_T)[0], y: at(PLAZA_T)[1] },
   // [wave2-E] Every cell is plain lawn (`site_lawn`: the meadow ground print, no props, world/site/tiles.js). Walks,
   // drive, pools, hub and labels are printed in world space on top (world/site/print.js); arcade, lobby, poles and
   // trees are set-pieces (world/site/pieces.js). The dome / biome waves swap `dome` for their interior tiles.
@@ -74,7 +90,7 @@ export const SITE = Object.freeze({
     { x: 92, y: -205, sprite: 'trees_a_3' },
   ],
   // Leaf-headed light poles (01-exterior/03, 07) flanking the walk, feet along / across the axis.
-  poles: [{ t: 62, s: 13 }, { t: 62, s: -13 }, { t: 104, s: 13 }, { t: 104, s: -13 }],
+  poles: [{ t: 74, s: 13 }, { t: 74, s: -13 }, { t: 116, s: 13 }, { t: 116, s: -13 }], // [wave6-R] pool ends, as before
 });
 
 /** Feet (site, +y north) -> world units (x, z) with z = -y. */

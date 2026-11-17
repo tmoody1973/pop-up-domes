@@ -1,0 +1,143 @@
+TEST                  CASE                                RESULT DETAIL
+1 wall stops          show @-161deg                       PASS   closest centre-to-wall-face 0.12 u (radius 0.12), stop r=5.75 vs ring 5.53 (face 5.63)
+1 wall stops          desert @-45deg                      PASS   closest centre-to-wall-face 0.12 u (radius 0.12), stop r=5.75 vs ring 5.53 (face 5.63)
+1 wall stops          tropical @70deg                     PASS   closest centre-to-wall-face 0.12 u (radius 0.12), stop r=5.75 vs ring 5.53 (face 5.63)
+2 doorway enters      show door @37deg                    PASS   end r=3.34 (inside < 5.43)
+2 doorway enters      show door @0deg                     PASS   end r=3.34 (inside < 5.43)
+2 doorway enters      desert door @135deg                 PASS   end r=3.34 (inside < 5.43)
+2 doorway enters      desert door @180deg                 PASS   end r=3.34 (inside < 5.43)
+2 doorway enters      desert door @90deg                  PASS   end r=3.34 (inside < 5.43)
+2 doorway enters      tropical door @-131deg              PASS   end r=3.34 (inside < 5.43)
+2 doorway enters      tropical door @-90deg               PASS   end r=3.34 (inside < 5.43)
+3 arcade              through door arch 3                 PASS   end t=-2.12 u from the arch row (wall at -0.67), crossings outside openings: 0, closest to row 0.01
+3 arcade              through door arch 4                 PASS   end t=-2.49 u from the arch row (wall at -0.67), crossings outside openings: 0, closest to row 0.01
+3 arcade              through door arch 5                 PASS   end t=-2.12 u from the arch row (wall at -0.67), crossings outside openings: 0, closest to row 0.01
+3 arcade              glazed arch 1 blocks                PASS   end t=0.16 u from the arch row (wall at -0.67), crossings outside openings: 0, closest to row 0.16
+3 arcade              glazed arch 7 blocks                PASS   end t=0.16 u from the arch row (wall at -0.67), crossings outside openings: 0, closest to row 0.16
+3 arcade              stucco wall blocks (behind arch 1)  PASS   closest t=-0.83 (wall at -0.67)
+4 pool blocks         pool 0                              PASS   frames in water 0, closest centre-to-water 0.12 u
+4 pool blocks         pool 1                              PASS   frames in water 0, closest centre-to-water 0.12 u
+5 lobby               wall 0 door                         PASS   frames inside 86/150, end inside
+5 lobby               wall 0 wall                         PASS   frames inside 0/60, end outside
+5 lobby               wall 1 door                         PASS   frames inside 86/150, end inside
+5 lobby               wall 1 wall                         PASS   frames inside 0/60, end outside
+5 lobby               wall 2 door                         PASS   frames inside 86/150, end inside
+5 lobby               wall 2 wall                         PASS   frames inside 0/60, end outside
+5 lobby               wall 3 door                         PASS   frames inside 86/150, end inside
+5 lobby               wall 3 wall                         PASS   frames inside 0/60, end outside
+6 folded dome passes  show folded (progress 0)            PASS   end r=2.97 (walked over the folded ring)
+{
+ "ring": {
+  "rIn": 5.43,
+  "rOut": 5.63,
+  "ringR": 5.53,
+  "doorW": 1,
+  "doorHalfDeg": 6.26
+ },
+ "doors": [
+  {
+   "id": "show",
+   "centre": [
+    0,
+    0
+   ],
+   "doorsDeg": [
+    37.38,
+    0
+   ]
+  },
+  {
+   "id": "desert",
+   "centre": [
+    14.08,
+    0
+   ],
+   "doorsDeg": [
+    135,
+    180,
+    90
+   ]
+  },
+  {
+   "id": "tropical",
+   "centre": [
+    14.08,
+    13.17
+   ],
+   "doorsDeg": [
+    -130.8,
+    -90
+   ]
+  }
+ ],
+ "lobby": [
+  {
+   "at": [
+    6.71,
+    7.37
+   ],
+   "normal": [
+    -0.71,
+    0.71
+   ],
+   "halfLen": 1.8,
+   "door": true
+  },
+  {
+   "at": [
+    9.26,
+    7.37
+   ],
+   "normal": [
+    0.71,
+    0.71
+   ],
+   "halfLen": 1.8,
+   "door": true
+  },
+  {
+   "at": [
+    9.26,
+    4.83
+   ],
+   "normal": [
+    0.71,
+    -0.71
+   ],
+   "halfLen": 1.8,
+   "door": true
+  },
+  {
+   "at": [
+    6.71,
+    4.83
+   ],
+   "normal": [
+    -0.71,
+    -0.71
+   ],
+   "halfLen": 1.8,
+   "door": true
+  }
+ ],
+ "arcade": {
+  "spacing": 1.11,
+  "archW": 0.89,
+  "opening": 0.46,
+  "doors": [
+   [
+    4.31,
+    8.2
+   ],
+   [
+    5.1,
+    8.99
+   ],
+   [
+    5.88,
+    9.77
+   ]
+  ]
+ }
+}
+{ consoleErrors: [], fails: 0, taskSpaceId: 'playwright' }

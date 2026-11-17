@@ -1,0 +1,13 @@
+q1-desert drawCalls 59 tris 176939 cardPlanes show:36 desert:48 tropical:49
+q1-desert {"hint":"absent","mode":"day","inside":["desert"]}
+q2-tropical drawCalls 80 tris 217187 cardPlanes show:36 desert:48 tropical:49
+q2-tropical {"hint":"absent","mode":"day","inside":["tropical"]}
+q3-show drawCalls 56 tris 155751 cardPlanes show:36 desert:48 tropical:49
+q3-show {"hint":"absent","mode":"day","inside":["show"]}
+q1-desert-dusk drawCalls 77 tris 207937 cardPlanes show:36 desert:48 tropical:49
+q1-desert-dusk {"hint":"absent","mode":"dusk","inside":["desert"]}
+q2-tropical-dusk drawCalls 101 tris 261821 cardPlanes show:36 desert:48 tropical:49
+q2-tropical-dusk {"hint":"absent","mode":"dusk","inside":["tropical"]}
+q3-show-dusk drawCalls 91 tris 217761 cardPlanes show:36 desert:48 tropical:49
+q3-show-dusk {"hint":"absent","mode":"dusk","inside":["show"]}
+console errors/warnings: none

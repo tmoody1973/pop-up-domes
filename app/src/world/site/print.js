@@ -49,7 +49,7 @@ export function buildSitePrint({ page, material, dip }) {
 
   // entry drive: Layton -> turnaround (plan 06, centre (-106, -195) ft) -> the plaza at the foot of the walk
   const turn = [-106, -195];
-  const plaza = along(120);
+  const plaza = along(SITE.plazaT);
   const drive = [[blvdX, -248], turn, plaza];
   band(drive, 22, COL.drive, COL.driveEdge);
   disc(turn[0], turn[1], 40, COL.driveEdge); disc(turn[0], turn[1], 39, COL.drive);
@@ -58,11 +58,16 @@ export function buildSitePrint({ page, material, dip }) {
   // link galleries and the lobby hub (plan 06): paved hub touching all three domes
   band([[70, 0], [99, 0]], 16, COL.walk, COL.walkEdge);
   band([[169, -70], [169, -88]], 16, COL.walk, COL.walkEdge);
+  // [wave6-R] a paved neck from the hub to each dome's lobby door (the hub no longer touches all three)
+  for (const d of SITE.domes) {
+    const l = Math.hypot(d.x - SITE.lobby.x, d.y - SITE.lobby.y); const k = (l - d.r + 2) / l;
+    band([[SITE.lobby.x, SITE.lobby.y], [SITE.lobby.x + (d.x - SITE.lobby.x) * k, SITE.lobby.y + (d.y - SITE.lobby.y) * k]], 16, COL.walk, COL.walkEdge);
+  }
   disc(SITE.lobby.x, SITE.lobby.y, SITE.lobby.r + 1.2, COL.walkEdge);
   disc(SITE.lobby.x, SITE.lobby.y, SITE.lobby.r, COL.hub);
   // arcade forecourt (along the arch feet) and the walk down the axis to the plaza
-  band([along(48, -64), along(48, 64)], 12, COL.walk, COL.walkEdge);
-  band([along(40), along(120)], 20, COL.walk, COL.walkEdge);
+  band([along(SITE.arcadeT - 2, -64), along(SITE.arcadeT - 2, 64)], 12, COL.walk, COL.walkEdge);
+  band([along(40), along(SITE.plazaT)], 20, COL.walk, COL.walkEdge);
   // plaza with its ring of hour marks (photo 07 foreground)
   disc(plaza[0], plaza[1], 18.8, COL.walkEdge); disc(plaza[0], plaza[1], 18, COL.walk);
   g.beginPath(); g.arc(plaza[0], plaza[1], 12, 0, Math.PI * 2); g.lineWidth = 0.5; g.strokeStyle = 'rgba(96, 72, 52, 0.5)'; g.stroke();

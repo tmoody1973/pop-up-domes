@@ -17,10 +17,24 @@ const RISE_AT = 2 * TILE_SIZE; // ~2 tiles from the base ring (PROMPT.md "The do
 const FOLD_AT = 3 * TILE_SIZE;
 const IN_AT = S.BASE_R * 0.92; // inside the glass foot: cut away
 const OUT_AT = S.BASE_R * 1.02;
-/** Warm glow of the vellum panes, scaled by the day/night glow intensity (3 by day, 9 at night: daynight.js). */
-const PANE_GLOW = '#2c1b07';
-/** Blue-white apex halo (photo 01-exterior/12). Dim colour: the glow list multiplies it by 3 (day) .. 9 (night). */
-const HALO_GLOW = '#3d5573';
+/** Warm glow of the vellum panes at dusk / night, scaled by the day/night glow intensity (~4 day .. 15 night:
+ * biomegrade.js). */
+const PANE_GLOW = '#4a2b08';
+/** By day the glass carries the sky: seen from below it is the blue of photo 02-int/18, from outside a cool sheen
+ * (photo 01-ext/14). Same glow list scaling. */
+const SKY_GLOW = '#4f6684';
+/** Blue-white apex halo (photo 01-exterior/12, concept frame 01). Dim colour: the glow list multiplies it. */
+const HALO_GLOW = '#6f8fbb';
+/** [wave6-P] Lantern look: the inner light passes straight through where the card faces the eye and grazes off at the
+ * silhouette, so pane centres glow and rims fall dark (concept frame 01). Applied to the emissive term only. */
+const FACING_GLOW = `
+{
+  float paperFacing = abs( dot( normal, normalize( vViewPosition ) ) );
+  totalEmissiveRadiance *= mix( 0.3, 1.35, paperFacing * paperFacing );
+}
+`;
+/** Day = the real glass building; dusk / night = paper lantern (print.js LOOKS). */
+const lookOf = (mode) => (mode === 'day' ? 'day' : 'lantern');
 
 export function createDomes({ scene, materials }) {
   const geos = S.buildGeometries();
@@ -32,7 +46,8 @@ export function createDomes({ scene, materials }) {
   const paperCompile = material.onBeforeCompile; const paperKey = material.customProgramCacheKey;
   material.onBeforeCompile = (shader, r) => {
     paperCompile.call(material, shader, r);
-    shader.fragmentShader = shader.fragmentShader.replace('gl_FragColor.a = gPaperCov;', 'gl_FragColor.a = gPaperCov * diffuseColor.a;');
+    shader.fragmentShader = shader.fragmentShader.replace('gl_FragColor.a = gPaperCov;', 'gl_FragColor.a = gPaperCov * diffuseColor.a;')
+      .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n' + FACING_GLOW);
   };
   material.customProgramCacheKey = () => paperKey.call(material) + '|vellum';
   material.forceSinglePass = true; // cards are separate instances sorted back to front: no back/front double pass needed
@@ -67,7 +82,7 @@ export function createDomes({ scene, materials }) {
 
   // apex halos: one InstancedMesh, riding on each cap
   const haloMat = materials.paper({ color: '#eef4ff', emissive: HALO_GLOW, emissiveIntensity: 3, fibre: 'none', vary: false, variant: 'dome-halo' });
-  const halo = new THREE.InstancedMesh(new THREE.TorusGeometry(S.LAYOUT.cap.r * 0.9, 0.035, 8, 48), haloMat, domes.length);
+  const halo = new THREE.InstancedMesh(new THREE.TorusGeometry(S.LAYOUT.cap.r * 1.2, 0.09, 10, 48), haloMat, domes.length);
   halo.name = 'dome-halos';
   halo.frustumCulled = false;
   scene.add(halo);
@@ -86,10 +101,25 @@ export function createDomes({ scene, materials }) {
   /** Evidence / debug: { rise: null|0|1, cut: null|0|1 } overrides the triggers for every dome. */
   const override = { rise: null, cut: null };
 
-  return {
+  // [wave6-P] day: clear glass + dark apex skylight ring; dusk / night: amber lantern + lit halo. Repainted on change only.
+  let look = null;
+  function setLook(next) {
+    look = next;
+    print.paint(next);
+    const lantern = next === 'lantern';
+    material.emissive.set(lantern ? PANE_GLOW : SKY_GLOW);
+    haloMat.color.set(lantern ? '#f2f6ff' : '#34322d');
+    haloMat.emissive.set(lantern ? HALO_GLOW : 0x000000);
+  }
+
+  const api = {
     domes, batch, halo, material, override, geos,
+    /** The day/night controller (main.js sets it once created); its mode picks the look. */
+    daynight: null,
     /** Per frame, after the traveller moved. p = traveller position (world units). */
     update(dt, p) {
+      const want = lookOf(api.daynight ? api.daynight.mode : 'day');
+      if (want !== look) setLook(want);
       for (const d of domes) {
         const dist = Math.hypot(p.x - d.x, p.z - d.z);
         const edge = dist - S.BASE_R;
@@ -109,4 +139,5 @@ export function createDomes({ scene, materials }) {
       }
     },
   };
+  return api;
 }

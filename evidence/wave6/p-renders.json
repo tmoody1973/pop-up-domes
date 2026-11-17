@@ -1,0 +1,6 @@
+[
+ {"name":"p1-spread-dusk","query":"dusk=1","x":4.2,"z":9.4,"rise":1,"reach":16,"pose":{"distance":40,"pitchDeg":42,"yawDeg":-45,"fov":38,"domeMix":0}},
+ {"name":"p2-spread-day","query":"","x":4.2,"z":9.4,"rise":1,"reach":16,"pose":{"distance":40,"pitchDeg":42,"yawDeg":-45,"fov":38,"domeMix":0}},
+ {"name":"p3-desert-cutaway-dusk","query":"dusk=1","x":14.951,"z":0.976,"flat":["tropical","show"],"pose":{"distance":17,"pitchDeg":30,"yawDeg":-25,"fov":38,"domeMix":0}},
+ {"name":"p4-apex-from-inside-day","query":"","x":14.951,"z":0.976,"rise":1,"cut":0,"cam":{"pos":[15.6,0.9,1.9],"look":[14.951,8.5,0.976],"fov":75}}
+]

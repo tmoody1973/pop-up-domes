@@ -10,15 +10,25 @@
 import * as THREE from 'three';
 import { LAYOUT, ROWS, RING, H, U_TOP } from './shell.js';
 
-const COL = {
-  pane: 'rgba(236, 186, 104, 0.5)', // amber vellum
-  lattice: '#fbf7ee',
-  hub: '#3b2a20',
-  concrete: '#ebe4d4', // precast concrete, read pale like the concept frames' white frieze
-  louvre: '#6b5d4f',
-  capRib: '#b8b0a2',
-  capHub: '#4e463f',
+// [wave6-P] two looks, swapped by paint(mode):
+//   day   = the real building (photos 01-ext/14, 02-int/18): near-clear glass, white struts, small hub dots, dark apex disc;
+//   lantern (dusk / night) = concept frame 01: amber vellum lit from inside, so the lattice reads as a dark backlit
+//   silhouette (taupe struts, brown hub dots) and the pale cap carries the lit halo.
+const LOOKS = {
+  day: {
+    pane: 'rgba(206, 224, 240, 0.3)', // clear glass carrying the sky (domes.js SKY_GLOW); the planting shows through
+    lattice: '#fbfaf6', hub: '#5b5a58', hubR: 0.02,
+    apexDisc: '#4d4a41', apexRib: '#7a766b', // the dark round apex ring seen from below (photos 02-int/18, 21, 23)
+    capBase: '#5d5a52', capRib: '#3a3833', capHub: '#24221f', capRim: '#d9d6cf',
+  },
+  lantern: {
+    pane: 'rgba(240, 184, 96, 0.82)', // amber vellum, near opaque so it carries the inner glow
+    lattice: '#7d6047', hub: '#3b2618', hubR: 0.034,
+    capBase: '#ebe6da', capRib: '#b8b0a2', capHub: '#4e463f', capRim: '#ebe6da',
+  },
 };
+const BASE_COL = { concrete: '#ebe4d4', louvre: '#6b5d4f' }; // precast concrete, read pale like the concept frames' white frieze
+let COL = { ...BASE_COL, ...LOOKS.day };
 
 const lerp = (a, b, t) => a + (b - a) * t;
 function interp(key, val, out) {
@@ -134,8 +144,17 @@ function drawGore(ctx, emissive) {
   ctx.save(); goreOutline(ctx); ctx.clip();
   ctx.strokeStyle = fg; ctx.lineWidth = 0.15 * PX; goreOutline(ctx); ctx.stroke();
   ctx.fillStyle = emissive ? '#000' : COL.hub;
-  const r = 0.032 * PX;
+  const r = COL.hubR * PX;
   for (const [x, s] of hubs) { const [px, py] = P(x, s); ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI * 2); ctx.fill(); }
+  if (COL.apexDisc) { // day: everything above u 0.94 is the dark apex ring, a white rim round it, ribs to the cap
+    const yA = P(0, sigmaAt(0.94))[1];
+    ctx.fillStyle = emissive ? '#000' : COL.apexDisc; ctx.fillRect(LAYOUT.gore.x - 260, 0, 520, yA);
+    if (!emissive) {
+      ctx.strokeStyle = COL.apexRib; ctx.lineWidth = 0.035 * PX;
+      ctx.beginPath(); ctx.moveTo(...P(0, sigmaAt(0.94))); ctx.lineTo(...P(0, sigmaAt(U_TOP))); ctx.stroke();
+      ctx.fillStyle = COL.lattice; ctx.fillRect(LAYOUT.gore.x - 260, yA - 0.03 * PX, 520, 0.06 * PX);
+    }
+  }
   ctx.restore();
 }
 
@@ -179,9 +198,10 @@ function drawRing(ctx, emissive) {
 
 function drawCap(ctx, emissive) {
   const PX = LAYOUT.PX; const { x: CX, y: CY, r } = LAYOUT.cap; const R = r * PX;
-  ctx.fillStyle = emissive ? '#000' : '#ebe6da';
+  ctx.fillStyle = emissive ? '#000' : COL.capBase;
   ctx.fillRect(CX - R - 10, CY - R - 10, 2 * R + 20, 2 * R + 20);
   if (emissive) return;
+  ctx.strokeStyle = COL.capRim; ctx.lineWidth = 0.05 * PX; ctx.beginPath(); ctx.arc(CX, CY, R * 0.97, 0, Math.PI * 2); ctx.stroke();
   ctx.strokeStyle = COL.capRib; ctx.lineWidth = 0.018 * PX;
   for (const f of [0.92, 0.58]) { ctx.beginPath(); ctx.arc(CX, CY, R * f, 0, Math.PI * 2); ctx.stroke(); }
   ctx.lineWidth = 0.012 * PX;
@@ -192,16 +212,21 @@ function drawCap(ctx, emissive) {
   ctx.fillStyle = COL.capHub; ctx.beginPath(); ctx.arc(CX, CY, R * 0.28, 0, Math.PI * 2); ctx.fill();
 }
 
-function sheet(emissive) {
-  const c = document.createElement('canvas');
-  c.width = LAYOUT.CW; c.height = LAYOUT.CH;
+function paintSheet(c, emissive) {
   const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, c.width, c.height);
   ctx.fillStyle = emissive ? '#000' : COL.lattice;
   ctx.fillRect(0, 0, c.width, c.height);
   drawGore(ctx, emissive);
   drawRing(ctx, emissive);
   drawCap(ctx, emissive);
   if (!emissive) { ctx.fillStyle = '#ffffff'; ctx.fillRect(LAYOUT.white.x - 12, LAYOUT.white.y - 12, 24, 24); }
+}
+
+function sheet(emissive) {
+  const c = document.createElement('canvas');
+  c.width = LAYOUT.CW; c.height = LAYOUT.CH;
+  paintSheet(c, emissive);
   const t = new THREE.CanvasTexture(c);
   t.colorSpace = emissive ? THREE.NoColorSpace : THREE.SRGBColorSpace;
   t.anisotropy = 8;
@@ -209,7 +234,15 @@ function sheet(emissive) {
   return t;
 }
 
-/** { map, emissiveMap } CanvasTextures for the dome cards. */
+/** { map, emissiveMap, paint(look) } CanvasTextures for the dome cards; paint('day'|'lantern') repaints both sheets. */
 export function createPrint() {
-  return { map: sheet(false), emissiveMap: sheet(true) };
+  const map = sheet(false); const emissiveMap = sheet(true);
+  return {
+    map, emissiveMap,
+    paint(look) {
+      COL = { ...BASE_COL, ...LOOKS[look] };
+      paintSheet(map.image, false); paintSheet(emissiveMap.image, true);
+      map.needsUpdate = true; emissiveMap.needsUpdate = true;
+    },
+  };
 }

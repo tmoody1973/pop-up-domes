@@ -58,6 +58,7 @@ async function boot() {
   const audio = createPaperAudio({ muted });
   const music = createMusic({ audio });
   const daynight = createDayNight({ scene, night: params.get('night') === '1', dusk: params.get('dusk') === '1' });
+  if (domes) domes.daynight = daynight; // [wave6-P] the domes pick their look (glass by day, lantern at dusk) from its mode
   // ambient life + weather (leaves, snow, rain, birds, chimney smoke, fireflies ...): 2 draw calls; ?life=0 disables it
   const life = params.get('life') === '0' || CONFIG.life.enabled === false ? null : createLife({ scene, assets, wfc, world, daynight, camera: follow.camera, quality, seed });
   // living animals (cats, sheep, hens, ducks ...): cut-paper cards on risen tiles, 2 draw calls; ?animals=0 disables them
