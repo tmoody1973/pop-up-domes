@@ -95,6 +95,8 @@ export const MODELS = {
   barn_farm: { sockets: S(g, g, g, g), tags: ['landmark', 'blocker'], biomes: { heartland: 0.16, blossom: 0.12 } },
   market_square: { sockets: S(p, p, p, p), tags: ['path', 'landmark'], biomes: { heartland: 1.0, blossom: 0.6 } },
   manor: { sockets: S(g, g, p, g), tags: ['path', 'house', 'landmark', 'blocker'], biomes: { heartland: 0.7, blossom: 0.5 } },
+  // --- Domes site (wave2-E): plain park lawn, the meadow ground print with no props (world/site/tiles.js builds it in code).
+  site_lawn: { sockets: S(g, g, g, g), tags: ['open'] },
 };
 
 export const MODEL_IDS = Object.keys(MODELS);

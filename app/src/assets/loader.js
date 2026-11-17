@@ -10,6 +10,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { CONFIG, TILE_SIZE, PATH_WIDTH, RIVER_WIDTH, FLAP_LAYER_GAP } from '../core/config.js';
 import { MODELS, MODEL_IDS, FALLBACK_MODEL } from '../core/models.js';
+import { SITE_TILE_BUILDERS } from '../world/site/tiles.js';
 
 const P = CONFIG.palette;
 
@@ -343,6 +344,10 @@ export async function loadAssets({ materials, renderer, quality } = {}) {
         warn('tile', id, 'failed:', err && err.message);
       }
     }
+  }
+  // Domes site tiles (wave2-E): code-built from other prototypes, never in tiles.glb.
+  for (const [id, build] of Object.entries(SITE_TILE_BUILDERS)) {
+    protos.set(id, build((src) => protos.get(src) || buildPlaceholderTile(src, materials)));
   }
   for (const id of MODEL_IDS) {
     if (!protos.has(id)) {

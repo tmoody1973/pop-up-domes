@@ -16,6 +16,7 @@ import { bus } from '../core/events.js';
 import { hash2f } from '../core/rng.js';
 import { createFoldInstance } from './fold.js';
 import { createBook, BIOME_TINT_GLSL, biomeTintUniforms, biomeIndexOf } from './book.js';
+import { createSiteProps } from './site/index.js';
 import { biomeAt as biomeIdAt, biomeWeights, BIOMES } from '../core/biomes.js';
 import { state } from '../core/state.js';
 import { isThinned, hashStr } from './cards.js';
@@ -82,6 +83,8 @@ export function createWorld({ scene, assets, wfc, materials, quality }) {
   group.name = 'world';
   scene.add(group);
   const book = createBook({ scene, assets, wfc, materials, quality });
+  // wave2-E hook: the Domes site print + set-pieces (arcade, lobby, poles, trees), world/site/index.js
+  const site = createSiteProps({ scene, materials, assets, wfc, dip: (x, z) => book.gutterDip(x, z) });
 
   // ================================================================================================
   // Batches: one BatchedMesh per material
@@ -1290,8 +1293,11 @@ export function createWorld({ scene, assets, wfc, materials, quality }) {
       // teleport / first frame: spawn everything at once and ink the print around the new place immediately
       stream(dt, jump ? Infinity : W.spawnBudget, false);
       if (jump) book.settle(); else book.update(dt, travellerPos);
+      site.update(dt, travellerPos);
     },
     /** fixer (gold pass): re-pose the camera-facing cards for the current camera (state.listener) right now. */
+    /** wave2-E: the Domes site set-pieces (world/site/index.js). */
+    site,
     debugView() { return { rx: view.rx, rz: view.rz, lx: state.listener.rightX, lz: state.listener.rightZ, cards: activeList.filter((r) => r.card !== null).length, n: activeList.length }; },
     /** checks: forget the cached walk fields (after a CONFIG.world change). */
     debugResetFields() { modelData.clear(); },

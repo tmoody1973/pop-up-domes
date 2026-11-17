@@ -21,6 +21,7 @@ import { createDayNight } from './render/daynight.js';
 import { createLife } from './life/life.js';
 import { createAnimals } from './life/animals.js';
 import { createViews } from './camera/views.js';
+import { createDomes } from './world/domes.js';
 // Allocation-free two-dimensional length.
 const hypot2 = (a, b) => Math.sqrt(a * a + b * b);
 
@@ -47,6 +48,7 @@ async function boot() {
   const wfc = createSiteMap({ seed }); // the Mitchell Park site map (same contract as the old createWFC)
   const world = createWorld({ scene, assets, wfc, materials, quality });
   const traveller = createTraveller({ scene, assets, world, materials });
+  const domes = params.get('domes') === '0' ? null : createDomes({ scene, materials }); // the three dome set-pieces (?domes=0 disables)
   const follow = createFollowCamera({ aspect: window.innerWidth / Math.max(1, window.innerHeight) });
   const controls = createControls({ domElement: canvas, camera: follow.camera, traveller });
   const views = createViews({ follow }); // V cycles camera views
@@ -61,7 +63,7 @@ async function boot() {
   // Gameplay progress is saved independently for each world seed.
   // ponytail: game layer (scraps, lanterns, atlas map) stubbed until the site reads right (LOG.md [wave1-A]).
   const game = { modal: () => false, update() {}, atlasmap: { render() {} } };
-  if (params.get('debug') === '1') window.__domes = { follow, views, traveller, world, siteMap: wfc, controls, state, CONFIG };
+  if (params.get('debug') === '1') window.__domes = { follow, views, traveller, world, siteMap: wfc, controls, state, CONFIG, domes, renderer, scene };
   follow.setAssistGate(game.modal);
   // N: day / night, M: music on / off (keys only - no on-screen UI)
   window.addEventListener('keydown', (e) => {
@@ -96,6 +98,7 @@ async function boot() {
     state.listener.x = p.x; state.listener.z = p.z;
     state.listener.rightX = _right.x / rl; state.listener.rightZ = _right.z / rl;
     world.update(dt, p, traveller.moveDir);
+    if (domes) domes.update(dt, p);
     views.update(dt);
     follow.update(dt, traveller);
     daynight.update(dt);

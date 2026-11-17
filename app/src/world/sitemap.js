@@ -5,7 +5,8 @@
 //
 // Axes: SITE is in FEET, +x = east, +y = north (BUILD-NOTES §4), origin = Show Dome centre. Papertrails has
 // north = -Z (core/models.js:15), so cell z = -y / ftPerTile (z = -y), or the site mirrors.
-import { MODELS, rotateSockets, DIRS, DIR_OFFSET } from '../core/models.js';
+import { MODELS, rotateSockets } from '../core/models.js';
+import { TILE_SIZE } from '../core/config.js';
 
 export const SITE = Object.freeze({
   // Scale (LOG.md [wave1-A]): the book's cell torus (world/book.js GRID = 32) caps the spread at 30 cells; the spread is
@@ -30,18 +31,20 @@ export const SITE = Object.freeze({
     { region: 'link', pts: [[70, 0], [99, 0]] },
     { region: 'link', pts: [[169, -70], [169, -88]] },
     // Entrance arcade: plan 06, faces south-west between Show and Tropical, on the lobby's SW axis (bearing 225 deg).
-    // Arcade = lobby rim (t = 45 ft along the axis) to t = 70 ft; walk between the pools to the plaza at t = 120.
-    { region: 'arcade', pts: [[52.7, -110.8], [35, -128.5]] },
-    { region: 'walk', pts: [[35, -128.5], [0, -163.9]] },
+    // [wave2-E] Arch feet at t = 50 ft along the axis (front wall t = 42), so the pools (t = 58..112) clear the row;
+    // arcade region t = 40..52, walk between the pools to the plaza at t = 120.
+    { region: 'arcade', pts: [[56.2, -107.3], [47.7, -115.8]] },
+    { region: 'walk', pts: [[47.7, -115.8], [0, -163.9]] },
     // Entry drive: plan 06, from S. Layton Blvd (south-west, off the page) to the turnaround (centre measured at
     // (-106, -195) ft, 2.1 px/ft on the 2000 px plan), then up to the plaza.
     { region: 'drive', pts: [[-400, -400], [-106, -195], [0, -163.9]] },
   ],
   // Reflecting pools: plan 06, two long pools flanking the walk, centred t = 85 ft down the axis, 25 ft either side
-  // (plan 06 measures (8, -126) and (39, -157)); long axis along the walk, ~60 ft.
+  // (plan 06 measures (8, -126) and (39, -157)); long axis along the walk. [wave2-E] 54 x 14 ft (t = 58..112, so
+  // they clear the arch row at t = 50 and the 18-ft plaza at t = 120); plan 06 reads ~60 x 15 ft.
   pools: [
-    { x: 6.7, y: -121, len: 60 },
-    { x: 42, y: -156.3, len: 60 },
+    { x: 6.7, y: -121, len: 54, width: 14 },
+    { x: 42, y: -156.3, len: 54, width: 14 },
   ],
   axis: [-Math.SQRT1_2, -Math.SQRT1_2], // unit vector, lobby -> south-west (plan 06)
   // Spine (book gutter), on a tile seam through the Show | Desert-Tropical gap (Show ends x = 70, Desert / Tropical start
@@ -51,13 +54,36 @@ export const SITE = Object.freeze({
   marginTiles: 2,
   // Traveller start: the plaza at the foot of the walk, looking up at the arches (feet).
   start: { x: 0, y: -163.9 },
-  // Cell art (existing tiles only; dome / lobby / pool art belongs to later waves).
-  art: { lawn: 'meadow', dome: 'blossom_garden', lobby: 'market_square', pool: 'pond' },
+  // [wave2-E] Every cell is plain lawn (`site_lawn`: the meadow ground print, no props, world/site/tiles.js). Walks,
+  // drive, pools, hub and labels are printed in world space on top (world/site/print.js); arcade, lobby, poles and
+  // trees are set-pieces (world/site/pieces.js). The dome / biome waves swap `dome` for their interior tiles.
+  art: { lawn: 'site_lawn', dome: 'site_lawn', lobby: 'site_lawn', pool: 'site_lawn', path: 'site_lawn' },
+  // Printed map labels (PROMPT.md "Labels"), feet, size = cap height in feet. On the lawn on the camera side of each
+  // dome (labels north of a dome would hide behind it); Layton Blvd runs along the west edge (world/site/print.js).
+  labels: [
+    { text: 'SHOW DOME', x: -120, y: 8, size: 10 },
+    { text: 'DESERT DOME', x: 306, y: -4, size: 10 },
+    { text: 'TROPICAL DOME', x: 169, y: -250, size: 10 },
+    { text: 'S. LAYTON BLVD', x: -178, y: -60, size: 7.5, rot: -Math.PI / 2 },
+  ],
+  // Park trees: only where the photos show them (01-exterior/01: a tree on the lawn west of the Show Dome by the drive;
+  // 09: a flowering tree on the lawn in front of the arcade), plus one at the turnaround island edge.
+  trees: [
+    { x: -62, y: -112, sprite: 'trees_a_0' },
+    { x: -150, y: -150, sprite: 'trees_a_3' },
+    { x: 92, y: -205, sprite: 'trees_a_3' },
+  ],
+  // Leaf-headed light poles (01-exterior/03, 07) flanking the walk, feet along / across the axis.
+  poles: [{ t: 62, s: 13 }, { t: 62, s: -13 }, { t: 104, s: 13 }, { t: 104, s: -13 }],
 });
+
+/** Feet (site, +y north) -> world units (x, z) with z = -y. */
+export function ftToWorld(xFt, yFt) {
+  return [(xFt / SITE.ftPerTile) * TILE_SIZE, (-yFt / SITE.ftPerTile) * TILE_SIZE];
+}
 
 const OFF_PAGE = 'off-page';
 const PATHISH = new Set(['link', 'arcade', 'walk', 'drive', 'lobby']);
-const PATH_MODELS = ['path_end', 'path_straight', 'path_corner', 'path_t', 'path_cross'];
 
 const F = SITE.ftPerTile;
 const toCell = (xFt, yFt) => [Math.round(xFt / F), Math.round(-yFt / F)]; // z = -y
@@ -144,16 +170,6 @@ export function regionAt(cx, cz) {
 }
 
 // ---- cells ----------------------------------------------------------------------------------------------------------
-function pathTile(mask) {
-  for (const model of PATH_MODELS) {
-    for (let rot = 0; rot < 4; rot++) {
-      const s = rotateSockets(MODELS[model].sockets, rot);
-      if (DIRS.every((d) => (s[d] === 'path') === mask[d])) return { model, rot };
-    }
-  }
-  return { model: 'path_cross', rot: 0 };
-}
-
 function makeCell(x, z, model, rot, region, biome, domeId) {
   const m = MODELS[model];
   const extra = domeId ? ['dome'] : region === OFF_PAGE ? [OFF_PAGE] : [];
@@ -175,15 +191,7 @@ function cellFor(cx, cz) {
   if (region.startsWith('dome:')) return makeCell(cx, cz, SITE.art.dome, 0, region, biome, region.slice(5));
   if (region === 'lobby') return makeCell(cx, cz, SITE.art.lobby, 0, region, biome, null);
   if (region === 'pool') return makeCell(cx, cz, SITE.art.pool, 0, region, biome, null);
-  if (PATHISH.has(region)) {
-    const mask = {};
-    for (const d of DIRS) {
-      const n = regionAt(cx + DIR_OFFSET[d][0], cz + DIR_OFFSET[d][1]);
-      mask[d] = PATHISH.has(n) || (region === 'link' && n.startsWith('dome:'));
-    }
-    const { model, rot } = pathTile(mask);
-    return makeCell(cx, cz, model, rot, region, biome, null);
-  }
+  if (PATHISH.has(region)) return makeCell(cx, cz, SITE.art.path, 0, region, biome, null);
   return makeCell(cx, cz, SITE.art.lawn, 0, 'lawn', biome, null);
 }
 

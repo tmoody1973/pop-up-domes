@@ -181,7 +181,7 @@ export function createFoldInstance(tileGroup, info = {}) {
 
   let span = 0;
   for (const f of flaps) {
-    f.tUp = f.delay * S.staggerSpan;
+    f.tUp = f.delay * (info.staggerSpan ?? S.staggerSpan); // per-instance span: large set-pieces sweep slower (ARCHITECTURE §5.4)
     if (f.parent && f.tUp < f.parent.tUp + S.nestedLag) f.tUp = f.parent.tUp + S.nestedLag;
     if (f.tUp > span) span = f.tUp;
   }
