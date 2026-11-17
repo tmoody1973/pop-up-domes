@@ -14,7 +14,7 @@
 // ARCHITECTURE §1.2: X = hinge, +Y = up the card (chord), +Z = printed outer face.
 import * as THREE from 'three';
 import { TILE_SIZE, FLAP_LAYER_GAP } from '../../core/config.js';
-import { SITE } from '../sitemap.js';
+import { SITE, ftToWorld } from '../sitemap.js';
 
 // ---- subject (BUILD-NOTES §1-3; feet) -------------------------------------------------------------------------------
 /** BUILD-NOTES §2: [u = y / 85 ft, r = radius / 70 ft]. */
@@ -52,6 +52,12 @@ export const STAGGER_SPAN = 1.15;
 export const FEEL = Object.freeze({ stiffness: 0.8, wobble: 0.7 });
 /** Cutaway sector: gores whose centre is within this angle of the camera side (+Z, follow yaw 0) -> 5 of 16. */
 export const SECTOR_HALF_DEG = 50;
+/** [wave4-J] Doorways: clear width at the ring (= collide.js DOME_DOOR_W, jamb faces 1.0 u = 12 ft apart) and head
+ * height (10 ft). The opening is a notch in the gore's lowest tier card (a ~1 ft lintel stays: the card is one piece)
+ * plus a gap in that gore's base-ring card. */
+export const DOOR_W = 1.0;
+export const DOOR_TOP_FT = 10;
+const DOOR_U = DOOR_TOP_FT / UNIT_FT / H; // 0.118 (tier 1 ends at u = 0.13)
 
 // ---- profile curve ----------------------------------------------------------------------------------------------------
 const curve = new THREE.CatmullRomCurve3(PROFILE.map(([u, r]) => new THREE.Vector3(r, u, 0)), false, 'centripetal');
@@ -76,6 +82,7 @@ function buildRows() {
   for (const [u] of PROFILE) if (u <= U_TOP) us.add(u);
   for (const u of TIERS_U) us.add(u);
   for (const u of RINGS_U) if (u <= U_TOP) us.add(u);
+  us.add(DOOR_U); // a row exactly at the door head, so the notch is cut on a row
   const list = [...us].sort((a, b) => a - b);
   const rows = list.map((u) => { const r = rAt(u) * R; return { u, rho: r * COS, y: u * H, hw: r * SIN, sigma: 0, nr: 1, ny: 0 }; });
   for (let i = 1; i < rows.length; i++) rows[i].sigma = rows[i - 1].sigma + Math.hypot(rows[i].rho - rows[i - 1].rho, rows[i].y - rows[i - 1].y);
@@ -135,8 +142,12 @@ function mesher() {
 
 const EDGE = 0.9; // cream cut edge (ARCHITECTURE §2.3)
 
-/** One tier card of a gore, in its own hinge frame. Also returns the chord (for the fold maths). */
-function tierGeometry(u0, u1) {
+/**
+ * One tier card of a gore, in its own hinge frame. Also returns the chord (for the fold maths).
+ * door = { x0, x1 } (card X, x0 < x1): cut a doorway notch from the bottom edge up to the DOOR_U row. The card stays
+ * one piece (two legs + the strip above the door head), so it folds exactly like the uncut card.
+ */
+function tierGeometry(u0, u1, door = null) {
   const rows = ROWS.filter((r) => r.u >= u0 - 1e-9 && r.u <= u1 + 1e-9);
   const p0 = rows[0]; const p1 = rows[rows.length - 1];
   const dr = p1.rho - p0.rho; const dy = p1.y - p0.y; const L = Math.hypot(dr, dy);
@@ -144,40 +155,65 @@ function tierGeometry(u0, u1) {
   const loc = (rho, y) => [(rho - p0.rho) * d[0] + (y - p0.y) * d[1], (rho - p0.rho) * n[0] + (y - p0.y) * n[1]];
   const m = mesher();
   const h = CARD_T / 2;
-  const F = []; const B = [];
-  for (const r of rows) {
-    const [ly, lz] = loc(r.rho, r.y);
-    const ny = r.nr * d[0] + r.ny * d[1]; const nz = r.nr * n[0] + r.ny * n[1];
-    const f = []; const b = [];
-    for (const s of [-1, 1]) {
-      f.push(m.v(s * r.hw, ly + h * ny, lz + h * nz, 0, ny, nz, goreUv(s * r.hw, r.sigma), 1));
-      b.push(m.v(s * r.hw, ly - h * ny, lz - h * nz, 0, -ny, -nz, goreUv(s * r.hw, r.sigma), 1));
+  // one strip over rows rs, across x = xa(r) .. xb(r); caps = which cut edges get a cream edge face
+  const strip = (rs, xa, xb, caps) => {
+    const F = []; const B = [];
+    for (const r of rs) {
+      const [ly, lz] = loc(r.rho, r.y);
+      const ny = r.nr * d[0] + r.ny * d[1]; const nz = r.nr * n[0] + r.ny * n[1];
+      const f = []; const b = [];
+      for (const x of [xa(r), xb(r)]) {
+        f.push(m.v(x, ly + h * ny, lz + h * nz, 0, ny, nz, goreUv(x, r.sigma), 1));
+        b.push(m.v(x, ly - h * ny, lz - h * nz, 0, -ny, -nz, goreUv(x, r.sigma), 1));
+      }
+      F.push(f); B.push(b);
     }
-    F.push(f); B.push(b);
-  }
-  for (let j = 0; j + 1 < rows.length; j++) {
-    m.quad(F[j][0], F[j][1], F[j + 1][1], F[j + 1][0]);
-    m.quad(B[j][0], B[j + 1][0], B[j + 1][1], B[j][1]);
-  }
-  // cut edges: seams (both sides), bottom, top
-  for (const s of [0, 1]) {
-    const sx = s ? 1 : -1; const E = [];
-    for (let j = 0; j < rows.length; j++) {
-      const pf = F[j][s]; const pb = B[j][s];
-      E.push([m.v(...m.pos(pf), sx, 0, 0, WHITE_UV, EDGE), m.v(...m.pos(pb), sx, 0, 0, WHITE_UV, EDGE)]);
+    for (let j = 0; j + 1 < rs.length; j++) {
+      m.quad(F[j][0], F[j][1], F[j + 1][1], F[j + 1][0]);
+      m.quad(B[j][0], B[j + 1][0], B[j + 1][1], B[j][1]);
     }
-    for (let j = 0; j + 1 < rows.length; j++) m.quad(E[j][0], E[j + 1][0], E[j + 1][1], E[j][1]);
-  }
-  for (const [j, sy] of [[0, -1], [rows.length - 1, 1]]) {
-    const q = [F[j][0], F[j][1], B[j][1], B[j][0]].map((i) => m.v(...m.pos(i), 0, sy, 0, WHITE_UV, EDGE));
-    m.quad(q[0], q[1], q[2], q[3]);
+    for (const s of [0, 1]) { // side cut edges (seams, or door jambs)
+      const sx = s ? 1 : -1; const E = [];
+      for (let j = 0; j < rs.length; j++) E.push([m.v(...m.pos(F[j][s]), sx, 0, 0, WHITE_UV, EDGE), m.v(...m.pos(B[j][s]), sx, 0, 0, WHITE_UV, EDGE)]);
+      for (let j = 0; j + 1 < rs.length; j++) m.quad(E[j][0], E[j + 1][0], E[j + 1][1], E[j][1]);
+    }
+    for (const [j, sy, on] of [[0, -1, caps.bottom], [rs.length - 1, 1, caps.top]]) {
+      if (!on) continue;
+      const q = [F[j][0], F[j][1], B[j][1], B[j][0]].map((i) => m.v(...m.pos(i), 0, sy, 0, WHITE_UV, EDGE));
+      m.quad(q[0], q[1], q[2], q[3]);
+    }
+  };
+  const seamL = (r) => -r.hw; const seamR = (r) => r.hw;
+  if (!door) strip(rows, seamL, seamR, { bottom: true, top: true });
+  else {
+    const legs = rows.filter((r) => r.u <= DOOR_U + 1e-9); const head = rows.filter((r) => r.u >= DOOR_U - 1e-9);
+    strip(legs, seamL, () => door.x0, { bottom: true, top: false });
+    strip(legs, () => door.x1, seamR, { bottom: true, top: false });
+    strip(head, seamL, seamR, { bottom: true, top: true }); // its bottom cap is the door head (lintel underside)
   }
   return { geometry: m.done(), L, alpha: Math.atan2(dy, dr), rho0: p0.rho, y0: p0.y };
 }
 
-/** Planar slab from a 2-D outline (card XY), with a uv function for the printed faces. */
-function slabGeometry(outline, thick, uvFn) {
+/** Planar slab from 2-D outline(s) (card XY; an array of outlines = disjoint pieces of one card), uv fn for the faces. */
+function slabGeometry(outlines, thick, uvFn) {
   const m = mesher();
+  for (const outline of Array.isArray(outlines[0][0]) ? outlines : [outlines]) slabInto(m, outline, thick, uvFn);
+  return m.done();
+}
+
+/** Keep the part of a polygon with sgn * (x - x0) >= 0 (Sutherland-Hodgman, one vertical clip line). */
+function clipX(poly, x0, sgn) {
+  const inside = (p) => sgn * (p[0] - x0) >= 0;
+  const out = [];
+  for (let i = 0; i < poly.length; i++) {
+    const a = poly[i]; const b = poly[(i + 1) % poly.length];
+    if (inside(a)) out.push(a);
+    if (inside(a) !== inside(b)) { const t = (x0 - a[0]) / (b[0] - a[0]); out.push([x0, a[1] + t * (b[1] - a[1])]); }
+  }
+  return out;
+}
+
+function slabInto(m, outline, thick, uvFn) {
   const h = thick / 2;
   const tris = THREE.ShapeUtils.triangulateShape(outline.map(([x, y]) => new THREE.Vector2(x, y)), []);
   const f = outline.map(([x, y]) => m.v(x, y, h, 0, 0, 1, uvFn(x, y), 1));
@@ -192,7 +228,6 @@ function slabGeometry(outline, thick, uvFn) {
     const q = [[x0, y0, h], [x1, y1, h], [x1, y1, -h], [x0, y0, -h]].map(([x, y, z]) => m.v(x, y, z, nx, ny, 0, WHITE_UV, EDGE));
     m.quad(q[0], q[1], q[2], q[3]);
   }
-  return m.done();
 }
 
 /** Stack height of a folded gore (+ the cap) under the base ring: the ring's hinge goes above it. */
@@ -215,6 +250,18 @@ export function buildGeometries() {
   }
   const ringUv = (x, y) => uvOf(LAYOUT.ring.x + (x + W / 2) * LAYOUT.PX, LAYOUT.ring.y + (RING.peak * H - (y + hy)) * LAYOUT.PX);
   const ring = slabGeometry(outline, CARD_T, ringUv);
+  // [wave4-J] doorway variants: tier 1 notched + base ring broken, one pair per distinct door offset within its gore
+  const doorGeo = new Map(); // key 'd<k>' -> { tier, ring }
+  for (const c of domeCentres()) {
+    for (const dr of doorsOf(c)) {
+      if (doorGeo.has(dr.key)) continue;
+      const xt = tiers[0].rho0 * Math.tan(dr.delta); const xr = ringR * Math.tan(dr.delta); const hd = DOOR_W / 2;
+      doorGeo.set(dr.key, {
+        tier: tierGeometry(TIERS_U[0], TIERS_U[1], { x0: xt - hd, x1: xt + hd }).geometry,
+        ring: slabGeometry([clipX(outline, xr - hd, -1), clipX(outline, xr + hd, 1)], CARD_T, ringUv),
+      });
+    }
+  }
   // apex cap: a drum hinged on the top edge of one gore; card +Y points inward across the opening, +Z up
   const top = rowAt(U_TOP);
   const rc = LAYOUT.cap.r;
@@ -222,7 +269,39 @@ export function buildGeometries() {
   for (let i = 0; i < 48; i++) { const a = (i / 48) * Math.PI * 2; circle.push([Math.cos(a) * rc, top.rho + Math.sin(a) * rc]); }
   const capUv = (x, y) => uvOf(LAYOUT.cap.x + x * LAYOUT.PX, LAYOUT.cap.y - (y - top.rho) * LAYOUT.PX);
   const cap = slabGeometry(circle, CAP_T, capUv);
-  return { tiers, ring, cap, ringR, ringHinge: hy, capHub: top.rho };
+  // every drawn geometry by anchor key (userData.geo): 'tier<i>' | 'ring' | 'cap' | 'tier0:d<k>' | 'ring:d<k>'
+  const byKey = new Map([...tiers.map((t, i) => ['tier' + i, t.geometry]), ['ring', ring], ['cap', cap]]);
+  for (const [k, g] of doorGeo) { byKey.set('tier0:' + k, g.tier); byKey.set('ring:' + k, g.ring); }
+  return { tiers, ring, cap, ringR, ringHinge: hy, capHub: top.rho, byKey };
+}
+
+/**
+ * [wave4-J] Doorways of one dome, derived exactly as world/collide.js derives its jamb gaps (one source: SITE): the
+ * bearing to the lobby hub, plus every link-gallery end point lying within 1 u of this dome's glass foot.
+ * Bearing = atan2(dz, dx) (+z = south). Each door falls inside one gore (doors are 1 u, gores ~2.1 u at the foot):
+ * gore = the one whose centre bearing is nearest, delta = gore centre bearing - door bearing (card +X = toward
+ * smaller bearings, so the door centre sits at card x = rho * tan(delta)).
+ * @param {{ id: string, x: number, z: number }} c a dome centre (domeCentres())
+ */
+export function doorsOf(c) {
+  const [hubX, hubZ] = ftToWorld(SITE.lobby.x, SITE.lobby.y);
+  const bearings = [Math.atan2(hubZ - c.z, hubX - c.x)];
+  const centres = domeCentres();
+  for (const p of SITE.paths) {
+    if (p.region !== 'link') continue;
+    for (const [xf, yf] of p.pts) {
+      const [x, z] = ftToWorld(xf, yf);
+      let best = null; let bd = Infinity; // nearest dome foot, as collide.js
+      for (const d of centres) { const e = Math.abs(Math.hypot(x - d.x, z - d.z) - BASE_R); if (e < bd) { bd = e; best = d; } }
+      if (best && best.id === c.id && bd < 1) bearings.push(Math.atan2(z - c.z, x - c.x));
+    }
+  }
+  const step = (2 * Math.PI) / N_GORES;
+  return bearings.map((b) => {
+    const gore = ((Math.round((Math.PI / 2 - b) / step) % N_GORES) + N_GORES) % N_GORES;
+    let delta = Math.PI / 2 - goreAngle(gore) - b; delta -= Math.round(delta / (2 * Math.PI)) * 2 * Math.PI;
+    return { bearing: b, gore, delta, key: 'd' + Math.round(delta * 1e4) };
+  });
 }
 
 // ---- flaps ------------------------------------------------------------------------------------------------------------------
@@ -263,9 +342,13 @@ export function buildDome(geos, id = 'dome') {
   const sector = new THREE.Group(); sector.name = id + '_cut';
   const T = geos.tiers.length;
   let cap = null;
+  const centre = domeCentres().find((e) => e.id === id);
+  const doors = centre ? doorsOf(centre) : [];
+  if (new Set(doors.map((dr) => dr.gore)).size !== doors.length) throw new Error(`[domes] two doorways share a gore on ${id}`);
   for (let g = 0; g < N_GORES; g++) {
     const host = inSector(g) ? sector : main;
     const a = angFrac(g);
+    const door = doors.find((dr) => dr.gore === g); // [wave4-J] at most one door per gore (asserted below)
     const gore = new THREE.Group(); gore.name = `${id}_gore${g}`;
     gore.rotation.y = goreAngle(g); // gore +Z = (sin, 0, cos): gore 0 faces +Z (the camera side)
     host.add(gore);
@@ -289,7 +372,7 @@ export function buildDome(geos, id = 'dome') {
       let f;
       if (i === 0) {
         // the hinge stands `base` above the page; the card is shifted back down so the glass starts at y = 0
-        f = flap(`${id}_g${g}_t1`, 'tier0', fields, [0, -base * Math.sin(t.alpha), base * Math.cos(t.alpha)]);
+        f = flap(`${id}_g${g}_t1`, door ? 'tier0:' + door.key : 'tier0', fields, [0, -base * Math.sin(t.alpha), base * Math.cos(t.alpha)]);
         f.node.position.set(0, base, t.rho0);
         f.node.quaternion.copy(rotX(Math.PI / 2 - t.alpha));
         gore.add(f.node);
@@ -314,7 +397,7 @@ export function buildDome(geos, id = 'dome') {
     }
     // base ring card of this gore: upright, folds inward over the stack (foldAngle < 0: printed face lands up)
     const lean = 1.2 * DEG;
-    const ring = flap(`${id}_g${g}_ring`, 'ring', {
+    const ring = flap(`${id}_g${g}_ring`, door ? 'ring:' + door.key : 'ring', {
       foldAngle: -Math.PI / 2 - lean, delay: 0.06 * a, layer: T + 2, size: Math.min(1, (RING.peak * H) / TILE_SIZE),
       part: 'ring', gore: g, tier: 0, wobble: 0.4,
     });

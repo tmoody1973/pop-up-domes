@@ -1,5 +1,5 @@
 // Pop-up Atlas composition root.
-// URL params: ?seed=N  ?quality=low|med|high  ?mute=1  ?hint=0  ?night=1  ?life=0  ?animals=0  ?debug=1 (window.__domes)
+// URL params: ?seed=N  ?quality=low|med|high  ?mute=1  ?hint=0  ?night=1  ?dusk=1 (N cycles day / dusk / night)  ?life=0  ?animals=0  ?debug=1 (window.__domes)
 import * as THREE from 'three';
 import { CONFIG, QUALITY, TILE_SIZE } from './core/config.js';
 import { bus } from './core/events.js';
@@ -51,12 +51,13 @@ async function boot() {
   const domes = params.get('domes') === '0' ? null : createDomes({ scene, materials }); // the three dome set-pieces (?domes=0 disables)
   if (domes) world.collide.setDomes(domes); // wave3-G: risen dome rings block, doorways pass
   const follow = createFollowCamera({ aspect: window.innerWidth / Math.max(1, window.innerHeight) });
+  world.site.setCamera(follow.camera); // wave4-I: site set-pieces in the sight line fade (world/site/index.js)
   const controls = createControls({ domElement: canvas, camera: follow.camera, traveller });
   const views = createViews({ follow }); // V cycles camera views
   const post = createPost({ renderer, scene, camera: follow.camera, quality });
   const audio = createPaperAudio({ muted });
   const music = createMusic({ audio });
-  const daynight = createDayNight({ scene, night: params.get('night') === '1' });
+  const daynight = createDayNight({ scene, night: params.get('night') === '1', dusk: params.get('dusk') === '1' });
   // ambient life + weather (leaves, snow, rain, birds, chimney smoke, fireflies ...): 2 draw calls; ?life=0 disables it
   const life = params.get('life') === '0' || CONFIG.life.enabled === false ? null : createLife({ scene, assets, wfc, world, daynight, camera: follow.camera, quality, seed });
   // living animals (cats, sheep, hens, ducks ...): cut-paper cards on risen tiles, 2 draw calls; ?animals=0 disables them

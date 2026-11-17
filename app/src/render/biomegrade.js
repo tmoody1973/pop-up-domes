@@ -1,38 +1,65 @@
 // OWNER: render agent. Per-biome light + grade, composed with the day / night blend.
 //
 // One writer for the look tunables: every frame daynight.js asks this module for
-//     value = lerp( sum_b w_b * DAY[b],  sum_b w_b * NIGHT[b],  nightAmount )
+//     value = piecewise lerp over e: DAY (e = 0) -> DUSK (e = 0.5) -> NIGHT (e = 1), each sum_b w_b * TABLE[b]
 // and writes the result into CONFIG (lights.js / post.js / materials.js read CONFIG every frame, so no other
 // module has to know about biomes). w_b = biomeWeights around the traveller (smoothed in time).
 //   DAY[heartland]  = the pristine CONFIG values (the start area keeps its look exactly)
 //   DAY[other]      = pristine values overridden by GRADE[biome].day
 //   NIGHT[b]        = NIGHT_BASE overridden by GRADE[biome].night (keys in neither table keep DAY[b])
+//   DUSK[b]         = DUSK_BASE where it has the key, else the midpoint of DAY[b] and NIGHT[b] (the old e = 0.5)
 // Colours are blended in linear RGB. Live edits of GRADE / NIGHT_BASE need a reload (tables are baked at boot).
 import * as THREE from 'three';
 import { CONFIG } from '../core/config.js';
 import { BIOMES, biomeWeights } from '../core/biomes.js';
 
-/** Night look shared by all biomes (fixer pass): dark navy ambient, the moon key carries the shapes and the shadows,
- * warm only at the lights (glow + spill). Back-lit translucency turns cool so green cards stop going magenta. */
+/** Night look shared by all biomes (fixer pass): dark ambient, the moon key carries the shapes and the shadows,
+ * warm only at the lights (glow + spill). Back-lit translucency turns cool so green cards stop going magenta.
+ * wave4-K: less uniformly blue (the old navy grade read as one blue wash): greyer moon, warm-dark ground bounce, a
+ * near-neutral room fade and post tint, stronger glows. */
 export const NIGHT_BASE = {
   lights: {
-    key: { color: '#8fb0f0', intensity: 1.05, elevationDeg: 50, azimuthDeg: -62 }, // moon: casts the soft shadows, rims the cards
-    fill: { color: '#3a58ac', intensity: 0.38, elevationDeg: 20 },
-    hemi: { sky: '#4666c8', ground: '#16285c', intensity: 0.5 }, // fixer pass: 0.33 -> 0.5, bluer: the unlit plane of a cross tree stays a mid blue, not a black wedge
+    key: { color: '#a4b4d8', intensity: 1.0, elevationDeg: 50, azimuthDeg: -62 }, // moon: casts the soft shadows, rims the cards
+    fill: { color: '#48598c', intensity: 0.36, elevationDeg: 20 },
+    hemi: { sky: '#58648e', ground: '#2a2230', intensity: 0.5 }, // fixer pass: 0.33 -> 0.5, bluer: the unlit plane of a cross tree stays a mid blue, not a black wedge
     lantern: { intensity: 2.3, distance: 5.6 },
-    paper: { wrap: 0.42, translucency: 0.12, translucencyTint: '#7fa0d8', fibreCloud: 0.05 }, // fixer pass: wrap 0.16 -> 0.42 at night (faces turned from the moon keep their colour)
+    paper: { wrap: 0.42, translucency: 0.12, translucencyTint: '#98a4c4', fibreCloud: 0.05 }, // fixer pass: wrap 0.16 -> 0.42 at night (faces turned from the moon keep their colour)
     gobo: { key: 0.2, tint: 0.05 },
-    fade: { color: '#070c2a', colorRight: '#060922', start: 5.0, end: 11.5, amount: 0.92 },
-    shadow: { leak: '#16286a', lightSize: 0.22 },
-    background: '#070a24',
+    fade: { color: '#0b0a12', colorRight: '#09090f', start: 6.5, end: 16, amount: 0.75 },
+    shadow: { leak: '#25223e', lightSize: 0.22 },
+    background: '#0b0a12',
   },
   post: {
-    exposure: 0.92, bloom: 0.3, spill: 7.5, bloomThreshold: 1.25, tint: [0.82, 0.97, 1.2], shadowTint: '#091638', shadowLift: 0.042,
-    saturation: 0.74, contrast: 1.1, vignette: 0.34, aoTint: '#081030', greenDesat: 0.45, split: 0.02,
+    exposure: 0.92, bloom: 0.3, spill: 7.5, bloomThreshold: 1.25, tint: [0.9, 0.96, 1.08], shadowTint: '#121028', shadowLift: 0.042,
+    saturation: 0.8, contrast: 1.1, vignette: 0.34, aoTint: '#120c1c', greenDesat: 0.45, split: 0.02,
     edgeRim: 0.6, edgeRimColor: '#fbf6ea', aoRadius: 0.22, grain: 0.02, ao: 1.0,
   },
   dof: { ramp: 0.42, maxBlurPx: 16, nearGain: 1.2 },
-  assets: { glowIntensity: 9 },
+  assets: { glowIntensity: 11 },
+};
+
+/** wave4-K dusk (concept-frames/01_spread-dusk.png): a warm low lantern key from behind-left, a cool fill from the
+ * right, a dark warm room, dome panes glowing amber from inside, blue-white halos; the page stays readable. */
+export const DUSK_BASE = {
+  lights: {
+    key: { color: '#ffcf9c', intensity: 1.4, elevationDeg: 46, azimuthDeg: -120 }, // azimuth = fallback without a lantern
+    lanternKey: 1, // the key comes from the room's table lantern (lights.js)
+    fill: { color: '#8ea2cc', intensity: 0.42, elevationDeg: 22 },
+    hemi: { sky: '#a3a6bc', ground: '#5e4a36', intensity: 0.55 },
+    lantern: { intensity: 1.9, distance: 6.0 },
+    paper: { wrap: 0.38, translucency: 0.4, translucencyTint: '#ffa050' },
+    gobo: { key: 0.22, tint: 0.06 },
+    // the fade is what the room beyond the page turns into (post.js gradeWorld): dark, but light enough of a hand that
+    // the room shaders' lamp pool on the table still shows
+    fade: { color: '#1a100a', colorRight: '#141016', start: 8, end: 18, amount: 0.6 },
+    shadow: { leak: '#5a4030', lightSize: 0.3 },
+    background: '#1a100a',
+  },
+  post: {
+    exposure: 1.0, bloom: 0.45, spill: 6, bloomThreshold: 1.3, tint: [1.0, 0.98, 0.95], shadowTint: '#1a1028', shadowLift: 0.04,
+    saturation: 1.0, contrast: 1.08, vignette: 0.28, aoTint: '#2a1418', greenDesat: 0.2, grain: 0.014,
+  },
+  assets: { glowIntensity: 15 },
 };
 
 /**
@@ -166,9 +193,10 @@ function enc(v) {
 export function createBiomeGrade({ soft = 2.0 } = {}) {
   const nb = BIOMES.length;
   const nightBase = leaves(NIGHT_BASE, [], new Map());
+  const duskBase = leaves(DUSK_BASE, [], new Map());
   const dayMaps = BIOMES.map((b) => leaves((GRADE[b] && GRADE[b].day) || {}, [], new Map()));
   const nightMaps = BIOMES.map((b) => leaves((GRADE[b] && GRADE[b].night) || {}, [], new Map()));
-  const paths = new Set(nightBase.keys());
+  const paths = new Set([...nightBase.keys(), ...duskBase.keys()]);
   for (const m of dayMaps) for (const k of m.keys()) paths.add(k);
   for (const m of nightMaps) for (const k of m.keys()) paths.add(k);
 
@@ -181,13 +209,15 @@ export function createBiomeGrade({ soft = 2.0 } = {}) {
     if (!obj || obj[k] === undefined) continue;
     const base = obj[k];
     const kind = isHex(base) ? 2 : Array.isArray(base) ? 1 : 0;
-    const day = []; const night = [];
+    const day = []; const night = []; const dusk = [];
     for (let b = 0; b < nb; b++) {
       const d = dayMaps[b].has(path) ? dayMaps[b].get(path) : base;
       const n = nightMaps[b].has(path) ? nightMaps[b].get(path) : nightBase.has(path) ? nightBase.get(path) : d;
-      day.push(enc(d)); night.push(enc(n));
+      const de = enc(d); const ne = enc(n);
+      day.push(de); night.push(ne);
+      dusk.push(duskBase.has(path) ? enc(duskBase.get(path)) : kind ? de.map((v, i) => (v + ne[i]) / 2) : (de + ne) / 2);
     }
-    items.push({ obj, k, kind, base, day, night, acc: kind ? [0, 0, 0] : 0, hasNight: nightBase.has(path) || nightMaps.some((m) => m.has(path)) });
+    items.push({ obj, k, kind, base, day, night, dusk, acc: kind ? [0, 0, 0] : 0 });
   }
 
   const target = new Float32Array(nb);
@@ -202,19 +232,24 @@ export function createBiomeGrade({ soft = 2.0 } = {}) {
 
   function write(e) {
     const pureHeartDay = e === 0 && w[0] === 1;
+    // piecewise: day -> dusk on e 0..0.5, dusk -> night on 0.5..1 (e = 0 is the day table exactly)
+    const late = e > 0.5;
+    const s = late ? (e - 0.5) * 2 : e * 2;
     for (const it of items) {
       if (pureHeartDay) { it.obj[it.k] = it.kind === 1 ? it.base.slice() : it.base; continue; }
+      const A = late ? it.dusk : it.day;
+      const B = late ? it.night : it.dusk;
       if (it.kind === 0) {
         let d = 0; let n = 0;
-        for (let b = 0; b < nb; b++) { d += w[b] * it.day[b]; n += w[b] * it.night[b]; }
-        it.obj[it.k] = d + (n - d) * e;
+        for (let b = 0; b < nb; b++) { d += w[b] * A[b]; n += w[b] * B[b]; }
+        it.obj[it.k] = d + (n - d) * s;
       } else {
         const a = it.acc;
         const len = it.kind === 2 ? 3 : it.base.length;
         for (let i = 0; i < len; i++) {
           let d = 0; let n = 0;
-          for (let b = 0; b < nb; b++) { d += w[b] * it.day[b][i]; n += w[b] * it.night[b][i]; }
-          a[i] = d + (n - d) * e;
+          for (let b = 0; b < nb; b++) { d += w[b] * A[b][i]; n += w[b] * B[b][i]; }
+          a[i] = d + (n - d) * s;
         }
         if (it.kind === 2) it.obj[it.k] = '#' + _c.setRGB(a[0], a[1], a[2]).getHexString();
         else it.obj[it.k] = a.slice(0, len);
@@ -229,7 +264,7 @@ export function createBiomeGrade({ soft = 2.0 } = {}) {
     /**
      * @param {number} dt seconds (0 = snap, used by teleports / captures)
      * @param {number} x world x / TILE_SIZE  @param {number} z world z / TILE_SIZE
-     * @param {number} night eased 0..1
+     * @param {number} night eased 0..1 (0 day, 0.5 dusk, 1 night)
      * @returns {boolean} true when CONFIG was rewritten
      */
     update(dt, seed, x, z, night) {

@@ -16,6 +16,7 @@ import * as THREE from 'three';
 import { CONFIG, TILE_SIZE } from '../core/config.js';
 import { MODELS, MODEL_IDS, FALLBACK_MODEL } from '../core/models.js';
 import { createFoldInstance } from './fold.js';
+import { createRoom } from './room.js';
 import { isThinned } from './cards.js';
 import { BIOMES, BIOME_INDEX } from '../core/biomes.js';
 import { state } from '../core/state.js';
@@ -844,37 +845,10 @@ vec3 pageColor() {
   cover.frustumCulled = false;
   group.add(cover);
 
-  // ---- table ------------------------------------------------------------------------------------
-  const TABLE = 260;
+  // ---- table + room ([wave4-I] world/room.js: finite walnut tabletop, dim room box, brass lantern) ---------------
   const tableY = -0.002 - T - B.coverThickness - 0.001;
-  const uBookRect = { value: new THREE.Vector4(0, 0, cw, cd) };
-  const tableMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.86, metalness: 0 });
-  tableMat.name = 'book:table';
-  const uTable = { value: new THREE.Vector4(1 / tableScale, 0, 0, B.tableGain ?? 1) };
-  tableMat.onBeforeCompile = (shader) => {
-    shader.uniforms.uBookRect = uBookRect;
-    shader.uniforms.uTable = uTable;
-    shader.uniforms.uTableTex = { value: tableTex };
-    shader.vertexShader = shader.vertexShader
-      .replace('#include <common>', '#include <common>\nvarying vec2 vTb;')
-      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvTb = position.xz;');
-    shader.fragmentShader = shader.fragmentShader
-      .replace('#include <common>', '#include <common>\nvarying vec2 vTb;\nuniform vec4 uBookRect;\nuniform vec4 uTable;\nuniform sampler2D uTableTex;')
-      .replace('#include <map_fragment>', `#include <map_fragment>
-  {
-    vec2 q = (vTb + uTable.yz) * uTable.x;
-    diffuseColor.rgb = texture2D(uTableTex, q).rgb * uTable.w;
-    vec2 bd = abs(vTb - uBookRect.xy) - uBookRect.zw;
-    float dist = length(max(bd, 0.0)) + min(max(bd.x, bd.y), 0.0);
-    diffuseColor.rgb *= mix(0.3, 1.0, smoothstep(0.0, 1.5, dist));   // contact occlusion around the book
-  }`);
-  };
-  tableMat.customProgramCacheKey = () => 'book-table-v1';
-  const table = new THREE.Mesh(new THREE.PlaneGeometry(TABLE, TABLE).rotateX(-Math.PI / 2), tableMat);
-  table.name = 'table';
-  table.receiveShadow = true;
-  table.frustumCulled = false;
-  scene.add(table);
+  const room = createRoom({ scene, wood: tableTex, woodScale: tableScale, woodGain: B.tableGain ?? 1, book: { x: SPREAD.x, z: SPREAD.z, cw, cd }, tableY });
+  const table = room.table;
 
   // ---- window state -----------------------------------------------------------------------------
   const centre = { x: 0, z: 0 };
@@ -893,13 +867,6 @@ vec3 pageColor() {
     U.uTrav.value.x = px - ax * TILE_SIZE; U.uTrav.value.y = pz - az * TILE_SIZE;
     U.uGut.value.x = gutterWorld - centre.x;
     U.uGut2.value.x = gutterFade;
-    const tpx = Math.round(centre.x);
-    const tpz = Math.round(centre.z);
-    table.position.set(tpx, tableY, tpz);
-    uTable.value.y = fmod(tpx, tableScale);
-    uTable.value.z = fmod(tpz, tableScale);
-    uBookRect.value.x = centre.x - tpx;
-    uBookRect.value.y = centre.z - tpz;
   }
 
   function cells(dt, snap) {
@@ -937,6 +904,7 @@ vec3 pageColor() {
     group,
     page,
     table,
+    room,
     /** checks: bake layout (round 3): twin layers, the dry twins (VAR_N) and the desert twins without fences (FEN_N). */
     debugBake: { layers, VAR_N, FEN_N, fence: [...fenceSet] },
     centre,
@@ -946,6 +914,7 @@ vec3 pageColor() {
     update(dt, travellerPos) {
       place(travellerPos.x, travellerPos.z);
       cells(dt, false);
+      room.update();
     },
     /** Move the window only (so cellOnPage is valid for this frame's streaming decisions). */
     follow(travellerPos) { place(travellerPos.x, travellerPos.z); },
@@ -991,12 +960,11 @@ vec3 pageColor() {
     modelIndex,
     dispose() {
       scene.remove(group);
-      scene.remove(table);
+      room.dispose();
       atlas.dispose();
       cellTex.dispose();
-      pageGeo.dispose(); blockGeo.dispose(); cover.geometry.dispose(); table.geometry.dispose();
+      pageGeo.dispose(); blockGeo.dispose(); cover.geometry.dispose();
       for (const m of ownMaterials) m.dispose();
-      tableMat.dispose();
       if (ownFibre) ownFibre.dispose();
       if (ownSheet) ownSheet.dispose();
       if (ownTable) ownTable.dispose();

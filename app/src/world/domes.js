@@ -38,8 +38,9 @@ export function createDomes({ scene, materials }) {
   material.forceSinglePass = true; // cards are separate instances sorted back to front: no back/front double pass needed
   material.needsUpdate = true;
 
-  const geoList = [...geos.tiers.map((t) => t.geometry), geos.ring, geos.cap];
-  const geoIndex = (key) => (key === 'ring' ? geoList.length - 2 : key === 'cap' ? geoList.length - 1 : +key.slice(4));
+  const geoKeys = [...geos.byKey.keys()]; // tiers, ring, cap + the [wave4-J] doorway variants (notched tier 1, broken ring)
+  const geoList = geoKeys.map((k) => geos.byKey.get(k));
+  const geoIndex = (key) => geoKeys.indexOf(key);
   const centres = S.domeCentres();
   const domes = centres.map((c) => {
     const { main, sector, cap } = S.buildDome(geos, c.id);

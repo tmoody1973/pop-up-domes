@@ -1,0 +1,38 @@
+{
+ "tag": "after2",
+ "f1": {
+  "calls": 46,
+  "triangles": 94299,
+  "p50ms": 50.1,
+  "p95ms": 83.3,
+  "cam": {
+   "pos": [
+    7.01,
+    4.23,
+    11.53
+   ],
+   "pitch": 18.7
+  },
+  "site": "arcade:- lobby:1 leaf_pole_0:0 leaf_pole_1:0 leaf_pole_2:0 leaf_pole_3:0 park_tree_0:0 park_tree_1:0 park_tree_2:0"
+ },
+ "bookRect": {
+  "x": 7,
+  "z": 7,
+  "hw": 24,
+  "hd": 16
+ },
+ "book": {
+  "calls": 99,
+  "triangles": 164875,
+  "p50ms": 50,
+  "p95ms": 83.4
+ },
+ "doors": {
+  "calls": 88,
+  "triangles": 127399,
+  "p50ms": 66.7,
+  "p95ms": 150
+ },
+ "doorsSite": "arcade:null lobby:0 leaf_pole_0:0 leaf_pole_1:0 leaf_pole_2:0 leaf_pole_3:0 park_tree_0:0 park_tree_1:0 park_tree_2:0"
+}
+console errors/warnings: none

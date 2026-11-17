@@ -85,13 +85,18 @@ export function buildArcade(material) {
 // square, 21.6 ft high (plan 06 hub is ~90 ft across: smaller, see LOG.md [wave2-E]).
 const LOBBY = { W: 3.6, H: 1.8 };
 
-function lobbyWall(name, material, front) {
+// [wave4-I] One centred door pair per wall (collide.js LOBBY_DOOR_W 0.7 u: a door toward the arcade and each dome).
+const DOOR = { W: 0.7, H: 0.62 };
+
+function lobbyWall(name, material) {
   const { W, H } = LOBBY;
   const geos = [slab(rect(W, 0, H), C.fascia)];
   geos.push(slab(rect(W - 0.24, 0.1, H * 0.74), C.lobbyGlass, 0.011, 0.006));
   const n = 8;
   for (let i = 1; i < n; i++) geos.push(slab(rect(0.02, 0.1, H * 0.74, -W / 2 + 0.12 + ((W - 0.24) * i) / n), C.mullion, 0.015, 0.003));
-  if (front) geos.push(slab(rect(0.7, 0, 0.62), C.glass, 0.016, 0.004)); // entrance doors toward the arcade
+  geos.push(slab(rect(DOOR.W + 0.06, 0, DOOR.H + 0.05), C.mullion, 0.016, 0.003)); // door frame
+  geos.push(slab(rect(DOOR.W, 0, DOOR.H), C.glass, 0.019, 0.004)); // the door pair
+  geos.push(slab(rect(0.02, 0, DOOR.H), C.mullion, 0.022, 0.003)); // meeting stiles
   return cardMesh(name, geos, material);
 }
 
@@ -112,7 +117,7 @@ export function buildLobby(material) {
     const yaw = (k * Math.PI) / 2;
     const name = 'lobby_wall_' + k;
     const delay = 0.1 * k;
-    const w = flap(name, lobbyWall(name, material, k === 0), {
+    const w = flap(name, lobbyWall(name, material), {
       x: Math.sin(yaw) * (W / 2), z: Math.cos(yaw) * (W / 2), yaw, layer: k % 2, delay, sign: 1, stiffness: 0.7,
     });
     const roof = flap('lobby_roof_' + k, lobbyRoof('lobby_roof_' + k, material), { layer: k % 2, delay, sign: -1 });

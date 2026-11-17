@@ -35,6 +35,7 @@ export const lights = {
   // azimuth 0 = light comes from the camera side (south at yaw 0), negative = from screen-left.
   // gold pass: higher sun (shadows <= 0.4x height), warm fill, much more ambient (gold shadow / lit is 0.7-0.87)
   key: { color: '#ffd29c', intensity: 2.9, azimuthDeg: -58, elevationDeg: 60 }, // warm golden key, casts shadows
+  lanternKey: 0, // wave4-K: 0..1, swing the key's bearing onto the room's table lantern (dusk sets 1: biomegrade DUSK_BASE)
   fill: { color: '#f3cfa6', intensity: 0.95, azimuthDeg: 108, elevationDeg: 24 }, // warm fill from the right, no shadows
   hemi: { sky: '#ffe9cc', ground: '#b98858', intensity: 0.42 },
   /** Left-to-right falloff of the key (lantern-like source at screen-left) and rise of the fill, around the focus point. */

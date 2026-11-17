@@ -46,6 +46,10 @@ export function createLights({ scene, quality = 'high' }) {
   const _v = new THREE.Vector3();
   const WORLD_UP = new THREE.Vector3(0, 1, 0);
   let extent = -1;
+  // wave4-K: the table lantern (world/room.js, created later by book.js), looked up lazily
+  let roomLantern = null;
+  let lanternLookIn = 0;
+  const _lt = new THREE.Vector3();
 
   function setDir(out, azDeg, elDeg) {
     const az = THREE.MathUtils.degToRad(azDeg);
@@ -107,6 +111,24 @@ export function createLights({ scene, quality = 'high' }) {
         if (camera.isPerspectiveCamera) { fovTan = Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2); aspect = camera.aspect; }
       }
       setDir(keyDir, L.key.azimuthDeg, L.key.elevationDeg);
+      // wave4-K: L.lanternKey (0 by day, 1 at dusk) swings the key's bearing onto the room's table lantern, so the warm
+      // key comes from the lamp in the frame. The elevation stays L.key.elevationDeg: the true angle (~12 deg) throws
+      // page-long shadows. No lantern in the scene = the tunable azimuth, unchanged.
+      const lk = L.lanternKey || 0;
+      if (lk > 0 && !roomLantern && --lanternLookIn <= 0) {
+        lanternLookIn = 60; // ponytail: retry the scene search once a second-ish, not every frame
+        const room = scene.getObjectByName('room');
+        roomLantern = (room && room.getObjectByName('lantern')) || null;
+      }
+      if (lk > 0 && roomLantern) {
+        roomLantern.getWorldPosition(_lt);
+        _lt.set(_lt.x - _c.x, 0, _lt.z - _c.z);
+        if (_lt.lengthSq() > 1e-6) {
+          const el = THREE.MathUtils.degToRad(L.key.elevationDeg);
+          _lt.normalize().multiplyScalar(Math.cos(el)).setY(Math.sin(el));
+          keyDir.lerp(_lt, Math.min(1, lk)).normalize();
+        }
+      }
       setDir(fillDir, L.fill.azimuthDeg, L.fill.elevationDeg);
 
       // --- key shadow frustum: fitted to the visible ground, quantised size, texel-snapped centre ----
