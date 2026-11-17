@@ -1,0 +1,175 @@
+{
+ "tag": "before",
+ "domes": [
+  {
+   "id": "show",
+   "x": 0,
+   "z": 0
+  },
+  {
+   "id": "desert",
+   "x": 14.083333333333334,
+   "z": 0
+  },
+  {
+   "id": "tropical",
+   "x": 14.083333333333334,
+   "z": 13.166666666666666
+  }
+ ],
+ "arcade": {
+  "x": 5.3760038712953495,
+  "z0": 4.974143358979596,
+  "z1": 12.4230913168136
+ },
+ "a": {
+  "at": [
+   14.08,
+   10.2
+  ],
+  "cam": [
+   14.09,
+   4.75,
+   18.34
+  ],
+  "rays": [
+   {
+    "h": 0.1,
+    "hit": "dome-interiors#298",
+    "fade": null
+   },
+   {
+    "h": 0.1,
+    "hit": "dome-interiors#227",
+    "fade": null
+   },
+   {
+    "h": 0.1,
+    "hit": "dome-interiors#226",
+    "fade": null
+   },
+   {
+    "h": 0.55,
+    "hit": "dome-interiors#227",
+    "fade": null
+   },
+   {
+    "h": 0.55,
+    "hit": "dome-interiors#226",
+    "fade": null
+   }
+  ],
+  "faded": {
+   "domes": null,
+   "interiors": null,
+   "site": ""
+  },
+  "px": {
+   "box": {
+    "x": 719,
+    "y": 385,
+    "x1": 781,
+    "y1": 454
+   },
+   "travellerPx": 254,
+   "boxPx": 4278
+  },
+  "metrics": {
+   "calls": 75,
+   "p50ms": 16.7,
+   "p95ms": 16.8
+  }
+ },
+ "b": {
+  "at": [
+   14.08,
+   -6.3
+  ],
+  "cam": [
+   14.09,
+   7.22,
+   1.13
+  ],
+  "rays": [
+   {
+    "h": 0.1,
+    "hit": "domes#252",
+    "fade": null
+   },
+   {
+    "h": 0.1,
+    "hit": "domes#190",
+    "fade": null
+   },
+   {
+    "h": 0.55,
+    "hit": "domes#252",
+    "fade": null
+   },
+   {
+    "h": 0.55,
+    "hit": "domes#191",
+    "fade": null
+   }
+  ],
+  "faded": {
+   "domes": null,
+   "interiors": null,
+   "site": ""
+  },
+  "px": {
+   "box": {
+    "x": 716,
+    "y": 354,
+    "x1": 784,
+    "y1": 417
+   },
+   "travellerPx": 1227,
+   "boxPx": 4284
+  },
+  "metrics": {
+   "calls": 42,
+   "p50ms": 16.7,
+   "p95ms": 16.7
+  }
+ },
+ "c": {
+  "at": [
+   5.38,
+   4.47
+  ],
+  "cam": [
+   5.39,
+   4.42,
+   15.91
+  ],
+  "rays": [
+   {
+    "h": 0.1,
+    "hit": "arcade_wall_mesh",
+    "fade": null
+   }
+  ],
+  "faded": {
+   "domes": null,
+   "interiors": null,
+   "site": "lobby:1"
+  },
+  "px": {
+   "box": {
+    "x": 731,
+    "y": 569,
+    "x1": 769,
+    "y1": 618
+   },
+   "travellerPx": 824,
+   "boxPx": 1862
+  },
+  "metrics": {
+   "calls": 60,
+   "p50ms": 16.7,
+   "p95ms": 16.8
+  }
+ }
+}
+console errors/warnings: none

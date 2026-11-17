@@ -13,6 +13,7 @@ import { spriteCard, flap } from '../site/card.js';
 import { BASE_R } from '../domes/shell.js';
 import { PLANS, layout, pondsOf } from './plans.js';
 import { network, pathDistance, PATH_HALF } from './paths.js';
+import { createBatchFade, BAYER_GLSL } from '../sightfade.js';
 
 const STAGGER = 0.9; // s: the planting ripples up from the centre over ~1 s (fold.js per-instance staggerSpan)
 const FLOOR_PX = 512; // canvas pixels per dome floor
@@ -132,6 +133,17 @@ function buildFloors(ids, layouts) {
 export async function createInteriors({ scene, materials, domes, daynight }) {
   const atlas = await fetch('./textures/art/atlas.json').then((r) => (r.ok ? r.json() : Promise.reject(new Error('atlas.json HTTP ' + r.status))));
   const paper = materials.paper({ color: '#ffffff', side: THREE.DoubleSide, variant: 'interior' });
+  // [fade] a card in the sight line dithers out: its batch colour alpha (1 = solid) rides in vColor.a, which the paper
+  // shader never outputs (it writes the die-cut coverage), so it is free to carry the fade
+  const paperCompile = paper.onBeforeCompile; const paperKey = paper.customProgramCacheKey;
+  paper.onBeforeCompile = (shader, r) => {
+    paperCompile.call(paper, shader, r);
+    shader.fragmentShader = shader.fragmentShader
+      .replace('#include <common>', '#include <common>\n' + BAYER_GLSL)
+      .replace('void main() {', 'void main() {\n  if (vColor.a < 0.999 && siteBayer4(gl_FragCoord.xy) < 1.0 - vColor.a) discard;');
+  };
+  paper.customProgramCacheKey = () => paperKey.call(paper) + '|card-fade';
+  paper.needsUpdate = true;
   const ids = domes.domes.map((d) => d.id);
 
   const rooms = domes.domes.map((d) => {
@@ -151,7 +163,17 @@ export async function createInteriors({ scene, materials, domes, daynight }) {
   batch.castShadow = true; batch.receiveShadow = true;
   batch.frustumCulled = false; // bounds change as the cards fold; per-instance culling instead
   batch.perObjectFrustumCulled = true;
-  for (const r of rooms) for (const a of r.anchors) { r.ids.push(batch.addInstance(batch.addGeometry(a.geometry))); a.geometry.dispose(); }
+  for (const r of rooms) {
+    r.boxes = [];
+    for (const a of r.anchors) {
+      r.ids.push(batch.addInstance(batch.addGeometry(a.geometry)));
+      a.geometry.computeBoundingBox(); r.boxes.push(a.geometry.boundingBox);
+      a.geometry.dispose();
+    }
+  }
+  const _c = new THREE.Vector4(1, 1, 1, 1);
+  for (const r of rooms) for (const i of r.ids) batch.setColorAt(i, _c); // colour texture from the start: one program
+  for (const r of rooms) r.fader = createBatchFade(r.ids, r.anchors, r.boxes, (id, f) => batch.setColorAt(id, _c.set(1, 1, 1, 1 - f)));
   for (const r of rooms) for (const i of r.ids) batch.setVisibleAt(i, false);
   batch.visible = false;
   scene.add(batch);
@@ -187,8 +209,8 @@ export async function createInteriors({ scene, materials, domes, daynight }) {
 
   const api = {
     rooms, batch, floor,
-    /** Per frame, after domes.update(): open = the dome stands and its cutaway is open. */
-    update(dt) {
+    /** Per frame, after domes.update(): open = the dome stands and its cutaway is open. p = traveller position. */
+    update(dt, p) {
       const cut = domes.override.cut;
       for (const r of rooms) {
         const d = r.dome;
@@ -197,10 +219,14 @@ export async function createInteriors({ scene, materials, domes, daynight }) {
         else if (!open && r.fold.target !== 0) r.fold.setTarget(0);
         if (!r.fold.settled) { r.fold.update(dt); write(r); }
         else if (r.fold.target === 0) show(r, false);
+        const active = !!(p && domes.camera && r.shown && r.fold.target === 1);
+        if (active || r.fader.busy()) r.fader.step(dt, p, domes.camera, active);
       }
     },
     /** Evidence: what each interior holds. */
     debugProps() { return rooms.map((r) => ({ id: r.id, open: r.fold.target === 1, cards: r.anchors.length, props: r.cards.map((c) => c.s) })); },
+    /** Evidence: cards faded (> 0.5) per interior. */
+    debugFaded() { return Object.fromEntries(rooms.map((r) => [r.id, r.fader.count()])); },
   };
   if (new URLSearchParams(location.search).get('debug') === '1') window.__interiors = { ...api, daynight };
   return api;

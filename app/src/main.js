@@ -62,6 +62,7 @@ async function boot() {
   const music = createMusic({ audio });
   const daynight = createDayNight({ scene, night: params.get('night') === '1', dusk: params.get('dusk') === '1' });
   if (domes) domes.daynight = daynight; // [wave6-P] the domes pick their look (glass by day, lantern at dusk) from its mode
+  if (domes) domes.camera = follow.camera; // [fade] dome shells / interior cards in the sight line fade (world/sightfade.js)
   // ambient life + weather (leaves, snow, rain, birds, chimney smoke, fireflies ...): 2 draw calls; ?life=0 disables it
   const life = params.get('life') === '0' || CONFIG.life.enabled === false ? null : createLife({ scene, assets, wfc, world, daynight, camera: follow.camera, quality, seed });
   // living animals (cats, sheep, hens, ducks ...): cut-paper cards on risen tiles, 2 draw calls; ?animals=0 disables them
@@ -107,7 +108,7 @@ async function boot() {
     world.update(dt, p, traveller.moveDir);
     if (domes) domes.showAll = follow.zoom > (domes.showAll ? 1.8 : 2.2); // zoomed-out overview stands every dome up
     if (domes) domes.update(dt, p);
-    if (interiors) interiors.update(dt);
+    if (interiors) interiors.update(dt, p);
     views.update(dt);
     follow.update(dt, traveller);
     daynight.update(dt);

@@ -12,6 +12,7 @@ import { TILE_SIZE } from '../core/config.js';
 import { createFoldInstance } from './fold.js';
 import * as S from './domes/shell.js';
 import { createPrint } from './domes/print.js';
+import { createBatchFade } from './sightfade.js';
 
 const RISE_AT = 2 * TILE_SIZE; // ~2 tiles from the base ring (PROMPT.md "The domes")
 const FOLD_AT = 3 * TILE_SIZE;
@@ -35,6 +36,9 @@ const FACING_GLOW = `
 `;
 /** Day = the real glass building; dusk / night = paper lantern (print.js LOOKS). */
 const lookOf = (mode) => (mode === 'day' ? 'day' : 'lantern');
+/** [fade] Alpha a shell card keeps when it stands between the traveller (outside the dome) and the lens: a faint ghost,
+ * so the dome still reads. The vellum already multiplies the print alpha by diffuseColor.a (vColor.a = batch colour). */
+const GHOST = 0.12;
 
 export function createDomes({ scene, materials }) {
   const geos = S.buildGeometries();
@@ -78,6 +82,15 @@ export function createDomes({ scene, materials }) {
   // shadows through the die-cut lattice only: panes (alpha < 0.5) cast none
   batch.customDepthMaterial = new THREE.MeshDepthMaterial({ map: print.map, alphaTest: 0.5 });
   for (const d of domes) for (let k = 0; k < 2; k++) for (const a of d.anchors[k]) d.ids[k].push(batch.addInstance(gid[geoIndex(a.userData.geo)]));
+  // [fade] per-card sight-line fade (main + sector cards of a dome), boxes in the card frame = the instance matrix frame
+  for (const g of geoList) if (!g.boundingBox) g.computeBoundingBox();
+  const _c = new THREE.Vector4(1, 1, 1, 1);
+  for (const d of domes) for (const ids of d.ids) for (const i of ids) batch.setColorAt(i, _c); // colour texture up front
+  for (const d of domes) {
+    const an = [...d.anchors[0], ...d.anchors[1]];
+    d.fader = createBatchFade([...d.ids[0], ...d.ids[1]], an, an.map((a) => geos.byKey.get(a.userData.geo).boundingBox),
+      (id, f) => batch.setColorAt(id, _c.set(1, 1, 1, 1 - f * (1 - GHOST))));
+  }
   scene.add(batch);
 
   // apex halos: one InstancedMesh, riding on each cap
@@ -113,9 +126,13 @@ export function createDomes({ scene, materials }) {
   }
 
   const api = {
+    /** Evidence: shell cards faded (> 0.5) per dome. */
+    debugFaded() { return Object.fromEntries(domes.map((d) => [d.id, d.fader.count()])); },
     domes, batch, halo, material, override, geos,
     /** The day/night controller (main.js sets it once created); its mode picks the look. */
     daynight: null,
+    /** [fade] The lens the sight-line fade tests against (main.js sets it once; interiors read it too). */
+    camera: null,
     /** Set by main.js from the camera zoom: true = every dome rises regardless of distance (overview). */
     showAll: false,
     /** Per frame, after the traveller moved. p = traveller position (world units). */
@@ -138,6 +155,9 @@ export function createDomes({ scene, materials }) {
           f.update(dt);
           write(d, k);
         }
+        // outside and standing: shell cards between him and the lens ghost; inside, the cutaway already clears the view
+        const active = !!(api.camera && d.want === 1 && !cut);
+        if (active || d.fader.busy()) d.fader.step(dt, p, api.camera, active);
       }
     },
   };
