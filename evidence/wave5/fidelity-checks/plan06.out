@@ -1,0 +1,13 @@
+{"px_per_ft": 3.387, "dome_diam_px": {"show": 474.7, "desert": 474.1, "tropical": 473.5}, "fit_points": {"show": 281, "desert": 135, "tropical": 301}, "fit_median_resid_px": {"show": 0.97, "desert": 2.46, "tropical": 0.96}, "plan_rotation_vs_site_deg": 2.34}
+feature                                plan ft (N-up)    err     plan ft (reg.)    err            SITE ft
+dome centre show                   (    0.0,   -0.0)    0.0 (   -0.2,    4.5)    4.5 (    0.0,    0.0)
+dome centre desert                 (  164.3,  -12.5)   13.3 (  164.4,   -1.3)    4.7 (  169.0,    0.0)
+dome centre tropical               (  167.1, -172.7)   14.8 (  173.8, -161.2)    5.8 (  169.0, -158.0)
+lobby hub centre                   (   94.4,  -77.4)   10.0 (   97.2,  -69.0)   16.2 (   84.5,  -79.0)
+link Show-Desert (midpoint)        (   81.7,   -2.1)    3.6 (   81.5,    5.7)    6.4 (   84.5,    0.0)
+link Desert-Tropical (midpoint)    (  167.6,  -93.7)   14.8 (  171.1,  -82.3)    3.9 (  169.0,  -79.0)
+arcade front (centre)              (   60.4, -112.0)    8.5 (   64.7, -105.0)   14.4 (   52.0, -111.5)
+pool W (centre)                    (    7.8, -127.6)    6.7 (   12.8, -122.7)    6.4 (    6.7, -121.0)
+pool E (centre)                    (   38.8, -162.2)    6.7 (   45.2, -156.0)    3.3 (   42.0, -156.3)
+arcade axis bearing (arcade -> SW between the pools, compass deg): {'plan_north_up': 228.4, 'plan_registered': 226.0, 'site': 225.0}
+{"px_per_ft": 3.387, "plan_rotation_vs_site_deg": 2.34}

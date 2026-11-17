@@ -1,0 +1,54 @@
+{
+ "quality=med&dusk=1": {
+  "raf_ms": {
+   "n": 263,
+   "mean": 42.79,
+   "p50": 40.7,
+   "p95": 65,
+   "p99": 124.7,
+   "max": 1222
+  },
+  "drawCalls_median": 106,
+  "drawCalls_max": 106,
+  "triangles_median": 164913,
+  "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)",
+  "risen": [
+   "show:1",
+   "desert:1",
+   "tropical:1"
+  ],
+  "busy_finish_ms": {
+   "n": 217,
+   "mean": 44.55,
+   "p50": 42.3,
+   "p95": 74,
+   "p99": 103.2,
+   "max": 120.8
+  }
+ },
+ "quality=med&dusk=1&domes=0": {
+  "raf_ms": {
+   "n": 197,
+   "mean": 63.79,
+   "p50": 45.8,
+   "p95": 128.5,
+   "p99": 207.4,
+   "max": 2531.5
+  },
+  "drawCalls_median": 102,
+  "drawCalls_max": 102,
+  "triangles_median": 87833,
+  "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)",
+  "risen": "domes=0",
+  "busy_finish_ms": {
+   "n": 239,
+   "mean": 40.69,
+   "p50": 39.3,
+   "p95": 59.4,
+   "p99": 97.1,
+   "max": 151.3
+  }
+ }
+}
+draw calls domes on / domes=0: 106 / 102 = 1.04x
+console errors/warnings: none

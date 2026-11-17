@@ -1,0 +1,10 @@
+spread-dusk {"hint":"absent","mode":"dusk","inside":[]}
+arches-dusk {"hint":"absent","mode":"dusk","inside":[]}
+desert-cutaway-dusk {"hint":"absent","mode":"dusk","inside":["desert"]}
+tropical-cutaway-dusk {"hint":"absent","mode":"dusk","inside":["tropical"]}
+show-cutaway-dusk {"hint":"absent","mode":"dusk","inside":["show"]}
+park-lawn-day {"hint":"absent","mode":"day","inside":[]}
+interior-desert-day {"hint":"absent","mode":"day","inside":["desert"]}
+interior-show-day {"hint":"absent","mode":"day","inside":["show"]}
+interior-tropical-day {"hint":"absent","mode":"day","inside":["tropical"]}
+console errors/warnings: none

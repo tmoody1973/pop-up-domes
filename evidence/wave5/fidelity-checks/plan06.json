@@ -1,0 +1,181 @@
+{
+ "meta": {
+  "px_per_ft": 3.387,
+  "dome_diam_px": {
+   "show": 474.7,
+   "desert": 474.1,
+   "tropical": 473.5
+  },
+  "fit_points": {
+   "show": 281,
+   "desert": 135,
+   "tropical": 301
+  },
+  "fit_median_resid_px": {
+   "show": 0.97,
+   "desert": 2.46,
+   "tropical": 0.96
+  },
+  "plan_rotation_vs_site_deg": 2.34,
+  "arcade_axis_bearing_deg": {
+   "plan_north_up": 228.4,
+   "plan_registered": 226.0,
+   "site": 225.0
+  }
+ },
+ "rows": [
+  {
+   "feature": "dome centre show",
+   "plan_ft_north_up": [
+    0.0,
+    -0.0
+   ],
+   "err_north_up_ft": 0.0,
+   "plan_ft_registered": [
+    -0.2,
+    4.5
+   ],
+   "err_registered_ft": 4.5,
+   "site_ft": [
+    0,
+    0
+   ]
+  },
+  {
+   "feature": "dome centre desert",
+   "plan_ft_north_up": [
+    164.3,
+    -12.5
+   ],
+   "err_north_up_ft": 13.3,
+   "plan_ft_registered": [
+    164.4,
+    -1.3
+   ],
+   "err_registered_ft": 4.7,
+   "site_ft": [
+    169,
+    0
+   ]
+  },
+  {
+   "feature": "dome centre tropical",
+   "plan_ft_north_up": [
+    167.1,
+    -172.7
+   ],
+   "err_north_up_ft": 14.8,
+   "plan_ft_registered": [
+    173.8,
+    -161.2
+   ],
+   "err_registered_ft": 5.8,
+   "site_ft": [
+    169,
+    -158
+   ]
+  },
+  {
+   "feature": "lobby hub centre",
+   "plan_ft_north_up": [
+    94.4,
+    -77.4
+   ],
+   "err_north_up_ft": 10.0,
+   "plan_ft_registered": [
+    97.2,
+    -69.0
+   ],
+   "err_registered_ft": 16.2,
+   "site_ft": [
+    84.5,
+    -79
+   ]
+  },
+  {
+   "feature": "link Show-Desert (midpoint)",
+   "plan_ft_north_up": [
+    81.7,
+    -2.1
+   ],
+   "err_north_up_ft": 3.6,
+   "plan_ft_registered": [
+    81.5,
+    5.7
+   ],
+   "err_registered_ft": 6.4,
+   "site_ft": [
+    84.5,
+    0
+   ]
+  },
+  {
+   "feature": "link Desert-Tropical (midpoint)",
+   "plan_ft_north_up": [
+    167.6,
+    -93.7
+   ],
+   "err_north_up_ft": 14.8,
+   "plan_ft_registered": [
+    171.1,
+    -82.3
+   ],
+   "err_registered_ft": 3.9,
+   "site_ft": [
+    169,
+    -79
+   ]
+  },
+  {
+   "feature": "arcade front (centre)",
+   "plan_ft_north_up": [
+    60.4,
+    -112.0
+   ],
+   "err_north_up_ft": 8.5,
+   "plan_ft_registered": [
+    64.7,
+    -105.0
+   ],
+   "err_registered_ft": 14.4,
+   "site_ft": [
+    51.95,
+    -111.55
+   ]
+  },
+  {
+   "feature": "pool W (centre)",
+   "plan_ft_north_up": [
+    7.8,
+    -127.6
+   ],
+   "err_north_up_ft": 6.7,
+   "plan_ft_registered": [
+    12.8,
+    -122.7
+   ],
+   "err_registered_ft": 6.4,
+   "site_ft": [
+    6.7,
+    -121
+   ]
+  },
+  {
+   "feature": "pool E (centre)",
+   "plan_ft_north_up": [
+    38.8,
+    -162.2
+   ],
+   "err_north_up_ft": 6.7,
+   "plan_ft_registered": [
+    45.2,
+    -156.0
+   ],
+   "err_registered_ft": 3.3,
+   "site_ft": [
+    42,
+    -156.3
+   ]
+  }
+ ]
+}
