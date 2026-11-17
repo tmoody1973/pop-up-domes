@@ -1,0 +1,10 @@
+.DS_Store
+node_modules/
+dist/
+.remember/
+# someone else's images: reference only, never published
+style-reference/
+# historic construction photos: rights unclear (Milwaukee County Parks collection)
+Mitchell-Park-Domes-Reference/04-structure-details/
+# generated in progress; publish once reviewed (CC BY-SA derivatives)
+concept-frames/
