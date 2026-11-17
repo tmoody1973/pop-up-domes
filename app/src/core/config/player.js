@@ -78,4 +78,28 @@ export const camera = {
   // at most pitchMax and / or round by at most yawMax degrees (first candidate that clears him); back after `release` s of clear view.
   // ease = time constant (s) of the critically damped offset; interval = s between sight tests; rethink = s before a held offset is re-chosen.
   assist: { enabled: true, delay: 0.4, release: 0.6, pitchMax: 10, yawMax: 14, ease: 0.8, interval: 0.1, rethink: 1.2, far: 1.3 }, // far: a second, slightly wider tier (x far: 13 / 18 degrees) only when the first still leaves part of him hidden
+  // [wave3-F] dome proximity (camera/follow.js, decision 005): near a dome the lens drops so the dome rises above the
+  // horizon and reads tall and pointed; the dome geometry is untouched. Weights are smooth functions of the traveller's
+  // position, so the pose glides with his walk (no time blend on top, no pops). views.js scales it by domeMix (journey 1).
+  domeMix: 1,
+  dome: {
+    // trigger: approach weight 0 at startTiles from a dome's glass base ring -> 1 at the ring (smoothstep, combined over
+    // the domes as 1 - prod(1 - w) so the gap between two domes counts); inside weight 0 at the ring -> 1 insideDepth
+    // world units inside it. 4 tiles (not 3): the arcade sits ~4.5 units from Show's ring and should already feel low.
+    startTiles: 4,
+    insideDepth: 2,
+    // guard: the low lens must not stand inside, or behind, a dome that hides the traveller (e.g. south of Desert is
+    // Tropical, 18 ft away). Approach weight x prod over domes of (1 - lateral x near x far): lateral 1 -> 0 over |dx| / R
+    // in `lateral`; near 0 -> 1 as the dome centre lies `near` x R toward the camera; far 1 -> 0 once the dome is wholly
+    // past the lens (`reach` = how far south of him the low lens stands, ~10.5 units, + slack).
+    guard: { lateral: [0.6, 1.25], near: [0.2, 0.8], reach: 12 }, // lateral ramp 3.5 units wide: walking into Desert past Tropical rises <= ~0.6 deg / frame at a run
+    // approach pose: eye ~4.2 units (50 ft, below the 85-ft apex) and ~11.6 back, so the apex stands above the horizon;
+    // lens axis 5 deg down, sight line to the traveller ~20 deg down (the brief's 18-28 deg is this line, not the axis).
+    // The look target is lifted (targetHeight) so dome and traveller share the frame; fov 40 (from 27) because the whole
+    // 7.1-unit dome must fit while he stands 1 tile from its ring. Not closer than the default: closer crops the apex.
+    approach: { pitchDeg: 5, distance: 11.6, fov: 40, targetHeight: 3.2, screenUp: 0 },
+    // inside (cutaway open, camera-side +Z sector folded flat): sight line ~31 deg down through the opening, so the
+    // traveller and the interior floor read, with the back wall of the dome as the backdrop.
+    inside: { pitchDeg: 26, distance: 9.5, fov: 32, targetHeight: 0.6, screenUp: 0.4 },
+  },
 };

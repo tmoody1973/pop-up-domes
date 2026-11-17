@@ -36,7 +36,7 @@ const DEFAULTS = {
 
 const INK = '#5a3a28';
 // flat ground tones (fallback patchwork when the book bake cannot be read)
-const BIOME_GROUND = { heartland: '#c3c084', desert: '#e3c68f', snow: '#e7ecef', blossom: '#cdd596', pinewood: '#8fa07a' };
+const BIOME_GROUND = { heartland: '#c3c084', desert: '#e3c68f', snow: '#e7ecef', blossom: '#cdd596', pinewood: '#8fa07a', tropical: '#7f9a5c' };
 // washes laid over the heartland print of SHARED tiles so each biome reads in its own colour: [blend, colour, alpha] ...
 const BIOME_WASH = {
   heartland: [],
@@ -44,6 +44,7 @@ const BIOME_WASH = {
   snow: [['color', '#c9d8ea', 0.9], ['source-over', '#f1f4f6', 0.58]],
   blossom: [['color', '#b3c070', 0.3], ['source-over', '#f0c9c4', 0.1]],
   pinewood: [['color', '#557250', 0.55], ['multiply', '#b9c7b0', 0.55]],
+  tropical: [['color', '#5f7f45', 0.5], ['multiply', '#c4d0a8', 0.45]],
 };
 const SERIF = "Georgia, 'Times New Roman', serif";
 const TAU = Math.PI * 2;

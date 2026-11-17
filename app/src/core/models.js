@@ -31,7 +31,9 @@ const p = 'path';
 const r = 'river';
 const S = (n, e, s, w) => ({ n, e, s, w });
 /** Shorthand for a full biome table (multipliers in the order of BIOMES in core/biomes.js). */
-const B = (heartland, desert, snow, blossom, pinewood) => ({ heartland, desert, snow, blossom, pinewood });
+// tropical (wave3-H) is last and optional: no tile model is placed by biome any more (the site map is hand-authored), so
+// the shipped calls keep their five values and tropical defaults to 0.
+const B = (heartland, desert, snow, blossom, pinewood, tropical = 0) => ({ heartland, desert, snow, blossom, pinewood, tropical });
 
 /**
  * model id -> { sockets (rot 0), tags, biomes? }   (biomes: see BIOME SCHEMA above; paths / rivers / bridge have none = everywhere)

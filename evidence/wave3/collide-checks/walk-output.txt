@@ -1,0 +1,148 @@
+PageUnresponsiveError: Page p1 (http://127.0.0.1:5199/?debug=1&hint=0) did not answer Page.captureScreenshot within 15000ms: a main-frame navigation had started but not committed. It was stopped once that wait ran out, so the Page answers again and shows http://127.0.0.1:5199/?debug=1&hint=0. Retry the call to continue on that document; to load the pending one, call page.goto(url, { timeout }) with a longer timeout, or continue on a new Page from task.newPage().
+    at #describeUnresponsivePage (file:////[eval1]:20906:27)
+    at async #withPage (file:////[eval1]:20868:19)
+    at async file:////[eval2]:141:1
+TEST                  CASE                                RESULT DETAIL
+1 wall stops          show @-158deg                       PASS   closest centre-to-wall-face 0.12 u (radius 0.12), stop r=5.75 vs ring 5.53 (face 5.63)
+1 wall stops          desert @-44deg                      PASS   closest centre-to-wall-face 0.12 u (radius 0.12), stop r=5.75 vs ring 5.53 (face 5.63)
+1 wall stops          tropical @67deg                     PASS   closest centre-to-wall-face 0.12 u (radius 0.12), stop r=5.75 vs ring 5.53 (face 5.63)
+2 doorway enters      show door @43deg                    PASS   end r=3.34 (inside < 5.43)
+2 doorway enters      show door @0deg                     PASS   end r=3.34 (inside < 5.43)
+2 doorway enters      desert door @137deg                 PASS   end r=3.34 (inside < 5.43)
+2 doorway enters      desert door @180deg                 PASS   end r=3.34 (inside < 5.43)
+2 doorway enters      desert door @90deg                  PASS   end r=3.34 (inside < 5.43)
+2 doorway enters      tropical door @-137deg              PASS   end r=3.34 (inside < 5.43)
+2 doorway enters      tropical door @-90deg               PASS   end r=3.34 (inside < 5.43)
+3 arcade              through door arch 3                 PASS   end t=-2.21 u from the arch row (wall at -0.67), crossings outside openings: 0, closest to row 0.01
+3 arcade              through door arch 4                 PASS   end t=-2.49 u from the arch row (wall at -0.67), crossings outside openings: 0, closest to row 0.01
+3 arcade              through door arch 5                 PASS   end t=-2.21 u from the arch row (wall at -0.67), crossings outside openings: 0, closest to row 0.01
+3 arcade              glazed arch 1 blocks                PASS   end t=0.16 u from the arch row (wall at -0.67), crossings outside openings: 0, closest to row 0.16
+3 arcade              glazed arch 7 blocks                PASS   end t=0.16 u from the arch row (wall at -0.67), crossings outside openings: 0, closest to row 0.16
+3 arcade              stucco wall blocks (behind arch 1)  PASS   closest t=-0.83 (wall at -0.67)
+4 pool blocks         pool 0                              PASS   frames in water 0, closest centre-to-water 0.12 u
+4 pool blocks         pool 1                              PASS   frames in water 0, closest centre-to-water 0.12 u
+5 lobby               wall 0 door                         PASS   frames inside 86/150, end inside
+5 lobby               wall 0 wall                         PASS   frames inside 0/60, end outside
+5 lobby               wall 1 door                         PASS   frames inside 86/150, end inside
+5 lobby               wall 1 wall                         PASS   frames inside 0/60, end outside
+5 lobby               wall 2 door                         PASS   frames inside 86/150, end inside
+5 lobby               wall 2 wall                         PASS   frames inside 0/60, end outside
+5 lobby               wall 3 door                         PASS   frames inside 86/150, end inside
+5 lobby               wall 3 wall                         PASS   frames inside 0/60, end outside
+6 folded dome passes  show folded (progress 0)            PASS   end r=2.97 (walked over the folded ring)
+{
+ "ring": {
+  "rIn": 5.43,
+  "rOut": 5.63,
+  "ringR": 5.53,
+  "doorW": 1,
+  "doorHalfDeg": 6.26
+ },
+ "doors": [
+  {
+   "id": "show",
+   "centre": [
+    0,
+    0
+   ],
+   "doorsDeg": [
+    43.07,
+    0
+   ]
+  },
+  {
+   "id": "desert",
+   "centre": [
+    14.08,
+    0
+   ],
+   "doorsDeg": [
+    136.93,
+    180,
+    90
+   ]
+  },
+  {
+   "id": "tropical",
+   "centre": [
+    14.08,
+    13.17
+   ],
+   "doorsDeg": [
+    -136.93,
+    -90
+   ]
+  }
+ ],
+ "lobby": [
+  {
+   "at": [
+    5.77,
+    7.86
+   ],
+   "normal": [
+    -0.71,
+    0.71
+   ],
+   "halfLen": 1.8,
+   "door": true
+  },
+  {
+   "at": [
+    8.31,
+    7.86
+   ],
+   "normal": [
+    0.71,
+    0.71
+   ],
+   "halfLen": 1.8,
+   "door": true
+  },
+  {
+   "at": [
+    8.31,
+    5.31
+   ],
+   "normal": [
+    0.71,
+    -0.71
+   ],
+   "halfLen": 1.8,
+   "door": true
+  },
+  {
+   "at": [
+    5.77,
+    5.31
+   ],
+   "normal": [
+    -0.71,
+    -0.71
+   ],
+   "halfLen": 1.8,
+   "door": true
+  }
+ ],
+ "arcade": {
+  "spacing": 1.11,
+  "archW": 0.82,
+  "opening": 0.46,
+  "doors": [
+   [
+    3.31,
+    8.74
+   ],
+   [
+    4.1,
+    9.53
+   ],
+   [
+    4.88,
+    10.31
+   ]
+  ]
+ }
+}
+
+ego's nodejs process exited with code 1.

@@ -3,14 +3,20 @@
 // are unchanged so callers are untouched; `seed` is ignored.
 //
 // Layout (Domes): a lookup into the site map's regions (world/sitemap.js): each dome's circular footprint carries
-// that dome's biome (Show -> blossom, Desert -> desert, Tropical -> heartland until a `tropical` biome exists); the
-// lawn, lobby, paths and everything else are heartland. Distances are measured to the footprint circles, so the
+// that dome's biome (Show -> blossom, Desert -> desert, Tropical -> tropical, wave3-H); the lawn, lobby, paths and
+// everything else are heartland. Distances are measured to the footprint circles, so the
 // soft weights and `edge` agree with the cell biomes at every spot.
 
 import { DOMES } from '../world/sitemap.js';
 
-export const BIOMES = ['heartland', 'desert', 'snow', 'blossom', 'pinewood'];
-export const BIOME_INDEX = { heartland: 0, desert: 1, snow: 2, blossom: 3, pinewood: 4 };
+// `tropical` is appended (index 5), so every existing index and table order is unchanged. Per-biome tables that
+// gained a tropical entry (wave3-H): core/models.js B(), config/fold.js wind, config/world.js biomeTint,
+// config/life.js, config/animals.js, render/biomegrade.js GRADE, render/water.js palette, game/atlasmap.js.
+export const BIOMES = ['heartland', 'desert', 'snow', 'blossom', 'pinewood', 'tropical'];
+export const BIOME_INDEX = { heartland: 0, desert: 1, snow: 2, blossom: 3, pinewood: 4, tropical: 5 };
+// ponytail: world/sitemap.js still tags the Tropical Dome 'heartland' (owned by another wave); this maps it here so
+// light, grade, weather and wind agree now. Drop it once SITE.domes[tropical].biome = 'tropical'.
+const DOME_BIOME = { tropical: 'tropical' };
 
 const H = BIOME_INDEX.heartland;
 const _d = new Float64Array(BIOMES.length); // distance (tiles) from the point to the nearest region of each biome (scratch)
@@ -22,7 +28,7 @@ function distances(x, z) {
   for (let k = 0; k < DOMES.length; k++) {
     const d = DOMES[k];
     const s = Math.sqrt((x - d.cx) * (x - d.cx) + (z - d.cz) * (z - d.cz)) - d.rt; // < 0 inside
-    const b = BIOME_INDEX[d.biome];
+    const b = BIOME_INDEX[DOME_BIOME[d.id] || d.biome];
     if (s <= 0) { inside = k; _d[b] = 0; if (b !== H) _d[H] = Math.min(_d[H], -s); } else if (s < _d[b]) _d[b] = s;
   }
   if (inside < 0) _d[H] = 0; // the grounds

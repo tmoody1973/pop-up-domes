@@ -17,6 +17,7 @@ import { hash2f } from '../core/rng.js';
 import { createFoldInstance } from './fold.js';
 import { createBook, BIOME_TINT_GLSL, biomeTintUniforms, biomeIndexOf } from './book.js';
 import { createSiteProps } from './site/index.js';
+import { createCollider } from './collide.js';
 import { biomeAt as biomeIdAt, biomeWeights, BIOMES } from '../core/biomes.js';
 import { state } from '../core/state.js';
 import { isThinned, hashStr } from './cards.js';
@@ -85,6 +86,8 @@ export function createWorld({ scene, assets, wfc, materials, quality }) {
   const book = createBook({ scene, assets, wfc, materials, quality });
   // wave2-E hook: the Domes site print + set-pieces (arcade, lobby, poles, trees), world/site/index.js
   const site = createSiteProps({ scene, materials, assets, wfc, dip: (x, z) => book.gutterDip(x, z) });
+  // wave3-G: walls of the domes (while risen), lobby, arcade and the pools (world/collide.js), folded into clearanceAt
+  const collide = createCollider({ site: site.group });
 
   // ================================================================================================
   // Batches: one BatchedMesh per material
@@ -1235,8 +1238,9 @@ export function createWorld({ scene, assets, wfc, materials, quality }) {
   function clearanceAt(x, z) {
     // Domes (wave1-A): the spread is finite; its printed edge is a wall (room = distance inside the cream margin).
     const edge = Math.min(book.halfWidth - CONFIG.book.margin - Math.abs(x - book.centre.x), book.halfDepth - CONFIG.book.margin - Math.abs(z - book.centre.z));
-    if (edge < FREE) return Math.min(edge, fieldClearance(x, z));
-    return fieldClearance(x, z);
+    // wave3-G: the site set-pieces (world/collide.js) block like any other wall
+    const f = Math.min(fieldClearance(x, z), collide.clearance(x, z));
+    return edge < FREE ? Math.min(edge, f) : f;
   }
   function fieldClearance(x, z) {
     const s = classify(x, z);
@@ -1298,6 +1302,8 @@ export function createWorld({ scene, assets, wfc, materials, quality }) {
     /** fixer (gold pass): re-pose the camera-facing cards for the current camera (state.listener) right now. */
     /** wave2-E: the Domes site set-pieces (world/site/index.js). */
     site,
+    /** wave3-G: site collision (world/collide.js). main.js links the domes: world.collide.setDomes(domes). */
+    collide,
     debugView() { return { rx: view.rx, rz: view.rz, lx: state.listener.rightX, lz: state.listener.rightZ, cards: activeList.filter((r) => r.card !== null).length, n: activeList.length }; },
     /** checks: forget the cached walk fields (after a CONFIG.world change). */
     debugResetFields() { modelData.clear(); },

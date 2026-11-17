@@ -1,0 +1,127 @@
+{
+ "biome": [
+  {
+   "dome": "desert",
+   "biomeAt": "desert",
+   "index": 1,
+   "worldBiomeAt": "desert",
+   "gradeBiome": "desert",
+   "gradeWeight": 0.664,
+   "interiorOpen": true,
+   "settled": true,
+   "inside": true
+  },
+  {
+   "dome": "show",
+   "biomeAt": "blossom",
+   "index": 3,
+   "worldBiomeAt": "blossom",
+   "gradeBiome": "blossom",
+   "gradeWeight": 0.711,
+   "interiorOpen": true,
+   "settled": true,
+   "inside": true
+  },
+  {
+   "dome": "tropical",
+   "biomeAt": "tropical",
+   "index": 5,
+   "worldBiomeAt": "tropical",
+   "gradeBiome": "tropical",
+   "gradeWeight": 0.73,
+   "interiorOpen": true,
+   "settled": true,
+   "inside": true
+  }
+ ],
+ "drawCalls": {
+  "oneOpen": {
+   "calls": 52,
+   "triangles": 123081
+  },
+  "noneOpen": {
+   "calls": 50,
+   "triangles": 103577
+  },
+  "batchVisibleWhenClosed": false
+ },
+ "props": [
+  {
+   "id": "show",
+   "cards": 36,
+   "props": {
+    "gazebo_0": 1,
+    "trees_b_0": 1,
+    "trees_b_3": 1,
+    "blossom_tree_white_0": 1,
+    "wisteria_arch_0": 1,
+    "bench_0": 2,
+    "mountains_rocks_6": 1,
+    "mountains_rocks_7": 1,
+    "flower_bed_0": 3,
+    "flower_bed_1": 9,
+    "blossom_tree_0": 6,
+    "bushes_0": 2,
+    "fern_1": 3,
+    "fern_0": 1
+   }
+  },
+  {
+   "id": "desert",
+   "cards": 48,
+   "props": {
+    "int_red_spire": 3,
+    "int_red_outcrop": 7,
+    "int_fan_palm": 2,
+    "bench_0": 1,
+    "int_organ_cactus": 2,
+    "cactus_1": 3,
+    "cactus_0": 2,
+    "int_agave": 8,
+    "barrel_cactus_0": 3,
+    "barrel_cactus_1": 4,
+    "prickly_pear_0": 4,
+    "desert_flowers_0": 6,
+    "desert_flowers_1": 1
+   }
+  },
+  {
+   "id": "tropical",
+   "cards": 49,
+   "props": {
+    "int_fan_palm": 1,
+    "int_tall_palm": 2,
+    "int_canopy_tree": 5,
+    "int_banana": 1,
+    "int_tree_fern": 3,
+    "palm_1": 5,
+    "int_monstera": 5,
+    "int_elephant_ear": 9,
+    "bushes_0": 2,
+    "fern_1": 5,
+    "fern_0": 3
+   }
+  }
+ ],
+ "afterLeaving": [
+  {
+   "id": "show",
+   "target": 0,
+   "settled": true,
+   "shown": false
+  },
+  {
+   "id": "desert",
+   "target": 0,
+   "settled": true,
+   "shown": false
+  },
+  {
+   "id": "tropical",
+   "target": 0,
+   "settled": true,
+   "shown": false
+  }
+ ]
+}
+console errors/warnings: none

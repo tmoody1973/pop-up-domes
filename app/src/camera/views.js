@@ -5,13 +5,14 @@ import { state } from '../core/state.js';
 
 export const VIEWS = [
   { name: 'journey', cam: {} }, // the default gameplay framing
-  { name: 'close', cam: { distance: 6.4, pitchDeg: 30, fov: 30, screenUp: 0.35, yawDeg: 0 } }, // beside the traveller
-  { name: 'wide', cam: { distance: 14.5, pitchDeg: 47, fov: 27, screenUp: 1.0, yawDeg: 0, reach: 0.9 } }, // the whole spread
-  { name: 'low', cam: { distance: 7.6, pitchDeg: 25, fov: 32, screenUp: 0.5, yawDeg: -24, reach: 0.4 } }, // low side-on diorama shot
-  { name: 'postcard', cam: { distance: 9.6, pitchDeg: 30, fov: 30, screenUp: 0.55, yawDeg: 26, reach: 0.5 } }, // three-quarter from the other side
+  { name: 'close', cam: { distance: 6.4, pitchDeg: 30, fov: 30, screenUp: 0.35, yawDeg: 0, domeMix: 0 } }, // beside the traveller
+  { name: 'wide', cam: { distance: 14.5, pitchDeg: 47, fov: 27, screenUp: 1.0, yawDeg: 0, reach: 0.9, domeMix: 0 } }, // the whole spread
+  { name: 'low', cam: { distance: 7.6, pitchDeg: 25, fov: 32, screenUp: 0.5, yawDeg: -24, reach: 0.4, domeMix: 0 } }, // low side-on diorama shot
+  { name: 'postcard', cam: { distance: 9.6, pitchDeg: 30, fov: 30, screenUp: 0.55, yawDeg: 26, reach: 0.5, domeMix: 0 } }, // three-quarter from the other side
 ];
 // reach = extra reveal radius in tiles (world.js reads state.viewReach): a far view sees past the ring of risen tiles
-const KEYS = ['distance', 'pitchDeg', 'yawDeg', 'fov', 'screenUp', 'reach'];
+// domeMix = how much the dome-proximity pose (follow.js, CONFIG.camera.dome) applies: journey only, eased like the rest
+const KEYS = ['distance', 'pitchDeg', 'yawDeg', 'fov', 'screenUp', 'reach', 'domeMix'];
 
 export function createViews({ follow }) {
   const C = CONFIG.camera;

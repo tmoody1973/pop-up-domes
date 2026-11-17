@@ -18,6 +18,7 @@ export const life = {
     snow:      { leaves: 0.0, dust: 0.0, gusts: 0.0, snow: 1.0, petals: 0.0, rain: 0.0, mist: 0.25, fireflies: 0.0, butterflies: 0.0, clouds: 0.6, birds: 0.5 },
     blossom:   { leaves: 0.0, dust: 0.0, gusts: 0.0, snow: 0.0, petals: 1.0, rain: 0.0, mist: 0.0, fireflies: 0.75, butterflies: 1.0, clouds: 0.7, birds: 1.0 },
     pinewood:  { leaves: 0.12, dust: 0.0, gusts: 0.0, snow: 0.0, petals: 0.0, rain: 1.0, mist: 1.0, fireflies: 1.0, butterflies: 0.0, clouds: 0.6, birds: 0.6 },
+    tropical:  { leaves: 0.2, dust: 0.0, gusts: 0.0, snow: 0.0, petals: 0.15, rain: 0.0, mist: 0.6, fireflies: 0.5, butterflies: 1.0, clouds: 0.0, birds: 0.6 }, // wave3-H: humid glasshouse, no sky weather
   },
 
   /** Pool sizes (instances). Everything lives in two draw calls, so these only cost a few triangles each. */

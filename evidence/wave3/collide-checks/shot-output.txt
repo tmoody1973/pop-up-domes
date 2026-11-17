@@ -1,0 +1,2 @@
+{ shot: '/Users/tarikmoody/Projects/domes/evidence/wave3/g1-doorway.png', st: { at: [ 5.5277937117204825, 0 ], c: 0.5009007036746891, errs: [] } }
+

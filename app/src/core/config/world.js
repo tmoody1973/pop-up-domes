@@ -130,6 +130,13 @@ export const world = {
       prop: { hue: 34, sat: 0.85, tint: '#4d7468', amount: 0.36, gain: 1.5, lift: 0.4, mul: 0.92, keepWater: 0.7 },
       path: { color: '#c2b187', edge: '#5d5b3e', amount: 0.75, edgeAmount: 0.3 }, // pine-needle track: the one warm line in the teal wood
     },
+    // wave3-H: deep humid green ground, props pulled slightly toward leaf green (only reached once sitemap tags the
+    // Tropical Dome cells 'tropical'; the interior cards are not tiles and are never tinted)
+    tropical: {
+      ground: { hue: 6, sat: 1.05, tint: '#6f8f4f', amount: 0.5, gain: 1.4, lift: 0.5, keepWater: 0.85 },
+      prop: { hue: 4, sat: 1.0, tint: '#7c9a5a', amount: 0.12, gain: 1.1, lift: 0.35, keepWater: 0.85 },
+      path: { color: '#cdb48a', edge: '#6e6040', amount: 0.75, edgeAmount: 0.3 },
+    },
   },
 };
 

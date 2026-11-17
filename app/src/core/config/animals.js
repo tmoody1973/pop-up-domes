@@ -179,6 +179,9 @@ export const animals = {
       forest: [['songbird', 0.4, 2, 3, 'dh'], ['deer', 0.2, 1, 2, 'h'], ['squirrel', 0.3, 1, 1, 'd'], ['rabbit', 0.25, 1, 1, '']],
       hills: [['lamb', 0.3, 2, 2, 'h'], ['rabbit', 0.2, 1, 1, '']],
     },
+    tropical: { // wave3-H: the glasshouse keeps birds only (the interior is set-pieces, not tiles)
+      meadow: [['songbird', 0.4, 2, 3, 'dh']],
+    },
     pinewood: {
       meadow: [['rabbit', 0.25, 1, 2, ''], ['deer', 0.2, 1, 2, 'h'], ['fox', 0.25, 1, 1, 'n'], ['hedgehog', 0.3, 1, 1, 'n']],
       meadow_flowers: [['rabbit', 0.3, 1, 2, ''], ['deer', 0.2, 1, 1, ''], ['hedgehog', 0.3, 1, 1, 'n']],

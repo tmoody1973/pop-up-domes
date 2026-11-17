@@ -8,19 +8,30 @@
 //   stands a little below centre and the tiles rising ahead (north) are inside the frame.
 // - A very slow, tiny drift keeps the frame alive like a hand-set tripod head (deterministic).
 // - focusPoint / focusDistance (the traveller chest) feed the depth of field.
+// - [wave3-F] Dome proximity (CONFIG.camera.dome, decision 005): near a dome the active pose is blended toward a low,
+//   wider "approach" pose, and inside a dome toward an "inside" pose. The weights are smooth functions of the traveller's
+//   position only, so the lens glides with his walk; yaw stays 0 (the cutaway sector is fixed on the +Z side).
 import * as THREE from 'three';
-import { CONFIG } from '../core/config.js';
+import { CONFIG, TILE_SIZE } from '../core/config.js';
 import { sight } from '../world/world.js';
 import { state } from '../core/state.js';
+import { domeCentres, BASE_R } from '../world/domes/shell.js';
 
 const DEG = Math.PI / 180;
 const TWO_PI = Math.PI * 2;
+const DOME_KEYS = ['pitchDeg', 'distance', 'fov', 'targetHeight', 'screenUp'];
+const DOMES = domeCentres();
+/** 0 at a, 1 at b (either order), smooth in between. */
+const ramp = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 
 export function createFollowCamera({ aspect = 16 / 9 } = {}) {
   const C = CONFIG.camera;
   const camera = new THREE.PerspectiveCamera(C.fov, aspect, C.near, C.far);
   camera.name = 'follow-camera';
-  let pose = { ...C };
+  let base = { ...C }; // the pose views.js asks for (journey = the defaults)
+  const pose = { ...C }; // what the lens uses this frame: base blended toward the dome poses (refreshed in blendPose)
+  const D = C.dome;
+  const dome = { approach: 0, inside: 0 }; // last weights (debug / evidence)
   const target = new THREE.Vector3(); // smoothed look-at point
   const targetVel = new THREE.Vector3(); // spring velocity of the look-at point
   const focusPoint = new THREE.Vector3(); // what must be sharp (the traveller chest)
@@ -140,6 +151,36 @@ export function createFollowCamera({ aspect = 16 / 9 } = {}) {
     return _want;
   }
 
+  /** Dome weights at world point p: approach (1 at a base ring) x guard (no dome between the low lens and him), inside. */
+  function domeWeights(p) {
+    const start = (D.startTiles ?? 4) * TILE_SIZE;
+    const G = D.guard; const reach = G.reach + BASE_R; // a dome whose centre is further south than this stands behind the lens
+    let keepA = 1; let keepI = 1; let clear = 1;
+    for (let i = 0; i < DOMES.length; i++) {
+      const dx = p.x - DOMES[i].x; const south = DOMES[i].z - p.z; // > 0: the dome lies toward the camera
+      const edge = Math.hypot(dx, south) - BASE_R; // > 0 outside the glass foot
+      keepA *= 1 - ramp(start, 0, edge);
+      keepI *= 1 - ramp(0, -(D.insideDepth ?? 2), edge);
+      // any dome in the strip between him and the low lens (|dx| < R, toward the camera, not past it) vetoes the low pose
+      clear *= 1 - (1 - ramp(G.lateral[0], G.lateral[1], Math.abs(dx) / BASE_R)) * ramp(G.near[0] * BASE_R, G.near[1] * BASE_R, south) * ramp(reach + 1, reach - 1, south);
+    }
+    dome.approach = (1 - keepA) * clear; dome.inside = 1 - keepI;
+  }
+  /** pose = base, blended toward approach then inside by the dome weights x base.domeMix (views: journey only). */
+  function blendPose(traveller) {
+    Object.assign(pose, base);
+    const mix = base.domeMix ?? 1;
+    if (!D || mix <= 0) { dome.approach = 0; dome.inside = 0; return; }
+    domeWeights(traveller.position);
+    const wa = dome.approach * mix; const wi = dome.inside * mix;
+    if (wa === 0 && wi === 0) return;
+    for (const k of DOME_KEYS) {
+      const b = base[k] ?? 0;
+      const a = b + ((D.approach[k] ?? b) - b) * wa;
+      pose[k] = a + ((D.inside[k] ?? a) - a) * wi;
+    }
+  }
+
   function setFocus(traveller) {
     focusPoint.copy(traveller.position);
     focusPoint.y += CONFIG.TRAVELLER_HEIGHT * (pose.focusHeight ?? 0.6);
@@ -165,7 +206,9 @@ export function createFollowCamera({ aspect = 16 / 9 } = {}) {
     // never let the lens sink into the page or the near plane cut the paper under it
     const minY = target.y + camera.near + 0.35;
     if (camera.position.y < minY) camera.position.y = minY;
-    state.camPitch = pose.pitchDeg + aPitch; // world.js make-room: how steeply the sight line climbs
+    // world.js make-room: how steeply the sight line climbs from the traveller to the lens. [wave3-F] measured, not the
+    // axis pitch: the dome poses lift the look target, so the axis is shallower than the line to him.
+    state.camPitch = Math.atan2(camera.position.y - focusPoint.y, Math.hypot(camera.position.x - focusPoint.x, camera.position.z - focusPoint.z)) / DEG;
     camera.lookAt(target);
     if (camera.fov !== pose.fov) { camera.fov = pose.fov; camera.updateProjectionMatrix(); }
     camera.updateMatrixWorld();
@@ -187,9 +230,12 @@ export function createFollowCamera({ aspect = 16 / 9 } = {}) {
     /** Distance from the camera to focusPoint (world units) - for depth-of-field. */
     get focusDistance() { return camera.position.distanceTo(focusPoint); },
     get pose() { return pose; },
+    /** Dome-proximity weights of the last update: { approach, inside } in 0..1. */
+    get dome() { return dome; },
     /** Pause sight assist when fn() returns true, such as while the atlas page is open. */
     setAssistGate(fn) { gate = fn || null; },
     update(dt, traveller) {
+      blendPose(traveller);
       if (dt > 0) {
         clock += dt;
         const goal = wanted(traveller);
@@ -208,6 +254,7 @@ export function createFollowCamera({ aspect = 16 / 9 } = {}) {
     },
     /** Place the camera at the traveller's initial position without smoothing. */
     snap(traveller) {
+      blendPose(traveller);
       aYaw = 0; aPitch = 0; gYaw = 0; gPitch = 0; aYawV = 0; aPitchV = 0; occT = 0; clearT = 0; checkT = 0;
       target.copy(wanted(traveller, true)); // where the spring would sit in steady state
       updateAssist(0, traveller, true);
@@ -220,7 +267,7 @@ export function createFollowCamera({ aspect = 16 / 9 } = {}) {
     },
     /** Override any of {distance,pitchDeg,yawDeg,fov,lookAhead,smoothTime,screenUp,screenRight,targetHeight,driftAmp}; null restores the defaults. */
     setPose(overrides) {
-      pose = { ...C, ...(overrides || {}) };
+      base = { ...C, ...(overrides || {}) };
     },
     setAspect(a) {
       camera.aspect = a;

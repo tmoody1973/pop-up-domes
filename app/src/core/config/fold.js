@@ -83,7 +83,7 @@ export const spring = {
     stiff: 'fence|hedge|cactus|lantern|lamp|post|sign|mushroom|tent|hay|stack|sheep|cow|hen|camel|deer|fox|goat|horse|dog|cat|rabbit',
     stiffMul: 0.35,
     /** Wind strength per biome (blended with biomeWeights at the tile): desert gusty, pinewood still, snow gentle. */
-    strength: { heartland: 1, desert: 1.35, snow: 0.6, blossom: 0.85, pinewood: 0.32 },
+    strength: { heartland: 1, desert: 1.35, snow: 0.6, blossom: 0.85, pinewood: 0.32, tropical: 0.4 /* still, humid air under glass */ },
     /** Gust field: two travelling sine fronts. Direction (deg from +X toward +Z), wavelength (world units), period (s). */
     directionDeg: 30,
     gustLength: 14, gustPeriod: 9,

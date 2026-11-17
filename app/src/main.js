@@ -49,6 +49,7 @@ async function boot() {
   const world = createWorld({ scene, assets, wfc, materials, quality });
   const traveller = createTraveller({ scene, assets, world, materials });
   const domes = params.get('domes') === '0' ? null : createDomes({ scene, materials }); // the three dome set-pieces (?domes=0 disables)
+  if (domes) world.collide.setDomes(domes); // wave3-G: risen dome rings block, doorways pass
   const follow = createFollowCamera({ aspect: window.innerWidth / Math.max(1, window.innerHeight) });
   const controls = createControls({ domElement: canvas, camera: follow.camera, traveller });
   const views = createViews({ follow }); // V cycles camera views
@@ -64,6 +65,7 @@ async function boot() {
   // ponytail: game layer (scraps, lanterns, atlas map) stubbed until the site reads right (LOG.md [wave1-A]).
   const game = { modal: () => false, update() {}, atlasmap: { render() {} } };
   if (params.get('debug') === '1') window.__domes = { follow, views, traveller, world, siteMap: wfc, controls, state, CONFIG, domes, renderer, scene };
+  const interiors = domes ? await (await import('./world/interiors/index.js')).createInteriors({ scene, materials, domes, daynight }) : null; // wave3-H dome planting
   follow.setAssistGate(game.modal);
   // N: day / night, M: music on / off (keys only - no on-screen UI)
   window.addEventListener('keydown', (e) => {
@@ -99,6 +101,7 @@ async function boot() {
     state.listener.rightX = _right.x / rl; state.listener.rightZ = _right.z / rl;
     world.update(dt, p, traveller.moveDir);
     if (domes) domes.update(dt, p);
+    if (interiors) interiors.update(dt);
     views.update(dt);
     follow.update(dt, traveller);
     daynight.update(dt);

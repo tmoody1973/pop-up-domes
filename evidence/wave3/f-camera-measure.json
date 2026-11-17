@@ -1,0 +1,85 @@
+{
+ "viewport": [
+  1500,
+  727
+ ],
+ "f1": {
+  "bbox_H_over_W": 0.632,
+  "apexAboveBackBase_over_W": 0.347,
+  "bboxPx": [
+   883,
+   14,
+   2332,
+   929
+  ],
+  "apexPx": [
+   1414,
+   14
+  ],
+  "apexInFrame": true,
+  "axisPitch": 5.27,
+  "sightLine": 18.56,
+  "eyeY": 4.22,
+  "fov": 39.87,
+  "approachW": 0.99
+ },
+ "f1_default": {
+  "bbox_H_over_W": 0.708,
+  "apexAboveBackBase_over_W": 0.302,
+  "bboxPx": [
+   1012,
+   -952,
+   4244,
+   1336
+  ],
+  "apexPx": [
+   2760,
+   -952
+  ],
+  "apexInFrame": false,
+  "axisPitch": 41.91,
+  "sightLine": 42.66,
+  "eyeY": 7.2,
+  "fov": 27,
+  "approachW": 0
+ },
+ "f2": {
+  "w": {
+   "approach": 0.4737278478987399,
+   "inside": 0
+  }
+ },
+ "f3": {
+  "w": {
+   "approach": 0,
+   "inside": 1
+  },
+  "cut": [
+   "show:false",
+   "desert:true",
+   "tropical:false"
+  ]
+ },
+ "f4": {
+  "w": {
+   "approach": 0,
+   "inside": 0
+  },
+  "pitchDeg": 42,
+  "distance": 10.8,
+  "fov": 27,
+  "targetHeight": 0,
+  "screenUp": 0.6
+ },
+ "continuity": [
+  "lawn->Show @1.15 u/s: axis 0.301 deg/frame (at 0.0,4.4), sight-line 0.201, fov 0.115",
+  "lawn->Show @2.07 u/s: axis 0.544 deg/frame (at 0.0,4.4), sight-line 0.418, fov 0.207",
+  "lawn->gap->Desert @1.15 u/s: axis 0.317 deg/frame (at 8.9,0.0), sight-line 0.225, fov 0.115",
+  "lawn->gap->Desert @2.07 u/s: axis 0.573 deg/frame (at 8.9,0.0), sight-line 0.440, fov 0.207",
+  "lawn->Tropical @1.15 u/s: axis 0.301 deg/frame (at 14.1,17.6), sight-line 0.201, fov 0.115",
+  "lawn->Tropical @2.07 u/s: axis 0.542 deg/frame (at 14.1,17.6), sight-line 0.417, fov 0.207",
+  "Show->lawn @1.15 u/s: axis 0.302 deg/frame (at 0.0,4.4), sight-line 0.217, fov 0.115",
+  "Show->lawn @2.07 u/s: axis 0.544 deg/frame (at 0.0,4.4), sight-line 0.490, fov 0.207"
+ ],
+ "consoleErrors": []
+}

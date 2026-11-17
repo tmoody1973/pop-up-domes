@@ -19,7 +19,7 @@ export const SITE = Object.freeze({
   domes: [
     { id: 'show', x: 0, y: 0, r: 70, biome: 'blossom' },
     { id: 'desert', x: 169, y: 0, r: 70, biome: 'desert' },
-    { id: 'tropical', x: 169, y: -158, r: 70, biome: 'heartland' }, // ponytail: no `tropical` biome yet (LOG.md)
+    { id: 'tropical', x: 169, y: -158, r: 70, biome: 'tropical' },
   ],
   // Lobby: plan 03-floor-plans/06 (NOT BUILD-NOTES §4, which wrongly puts it in the Show-Desert gap): a central hub touching
   // all three domes = the point equidistant from the three centres. The triangle is right-angled at Desert, so that is the

@@ -118,6 +118,27 @@ export const GRADE = {
       post: { tint: [0.84, 0.99, 1.16] },
     },
   },
+  // wave3-H: the Tropical Dome. Warm, humid, green-filtered light under glass: a soft high key through the canopy, a
+  // leaf-green fill and a short hazy view (concept frame 05: warm lamp-lit greens).
+  tropical: {
+    day: {
+      lights: {
+        key: { color: '#fbe7bf', intensity: 2.7, elevationDeg: 64 },
+        fill: { color: '#7fa27a', intensity: 1.1 },
+        hemi: { sky: '#e4f0d4', ground: '#5c7a52', intensity: 0.58 },
+        gobo: { key: 0.2, tint: 0.06 },
+        shadow: { lightSize: 0.38, leak: '#4a6a48' },
+        fade: { color: '#93a487', colorRight: '#86997e', start: 5.5, end: 12.5, amount: 0.76 },
+        background: '#8c9d82',
+      },
+      post: { exposure: 0.84, contrast: 1.06, saturation: 1.04, tint: [1.0, 1.01, 0.96], shadowTint: '#13281a', aoTint: '#33503a', vignette: 0.12 },
+      assets: { glowIntensity: 4.0 },
+    },
+    night: {
+      lights: { fade: { color: '#0a1a24', colorRight: '#08161e' }, background: '#08161f' },
+      post: { tint: [0.86, 1.0, 1.1] },
+    },
+  },
 };
 
 const isHex = (v) => typeof v === 'string' && v[0] === '#';

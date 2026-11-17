@@ -1,0 +1,9 @@
+show: cards 33, on a walk 0, in a pond 0, ponds on a walk 0
+  doors [{"deg":43,"component":0,"connected":true,"rimRadius":5.64},{"deg":0,"component":0,"connected":true,"rimRadius":5.64}]
+  props {"gazebo_0":1,"trees_b_0":1,"trees_b_3":1,"blossom_tree_white_0":1,"wisteria_arch_0":1,"bench_0":2,"mountains_rocks_6":1,"mountains_rocks_7":1,"flower_bed_0":3,"flower_bed_1":9,"blossom_tree_0":6,"bushes_0":2,"fern_1":3,"fern_0":1}
+desert: cards 46, on a walk 0, in a pond 0, ponds on a walk 0
+  doors [{"deg":137,"component":4,"connected":true,"rimRadius":5.64},{"deg":180,"component":4,"connected":true,"rimRadius":5.64},{"deg":90,"component":4,"connected":true,"rimRadius":5.64}]
+  props {"int_red_spire":3,"int_red_outcrop":7,"int_fan_palm":2,"bench_0":1,"int_organ_cactus":2,"cactus_1":3,"cactus_0":2,"int_agave":8,"barrel_cactus_0":3,"barrel_cactus_1":4,"prickly_pear_0":4,"desert_flowers_0":6,"desert_flowers_1":1}
+tropical: cards 41, on a walk 0, in a pond 0, ponds on a walk 0
+  doors [{"deg":-137,"component":4,"connected":true,"rimRadius":5.64},{"deg":-90,"component":4,"connected":true,"rimRadius":5.64}]
+  props {"int_fan_palm":1,"int_tall_palm":2,"int_canopy_tree":5,"int_banana":1,"int_tree_fern":3,"palm_1":5,"int_monstera":5,"int_elephant_ear":9,"bushes_0":2,"fern_1":5,"fern_0":3}
