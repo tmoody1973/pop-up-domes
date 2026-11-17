@@ -21,6 +21,7 @@ import { createDayNight } from './render/daynight.js';
 import { createLife } from './life/life.js';
 import { createAnimals } from './life/animals.js';
 import { createViews } from './camera/views.js';
+import { createZoom } from './camera/zoom.js';
 import { createDomes } from './world/domes.js';
 // Allocation-free two-dimensional length.
 const hypot2 = (a, b) => Math.sqrt(a * a + b * b);
@@ -54,6 +55,7 @@ async function boot() {
   world.site.setCamera(follow.camera); // wave4-I: site set-pieces in the sight line fade (world/site/index.js)
   const controls = createControls({ domElement: canvas, camera: follow.camera, traveller });
   const views = createViews({ follow }); // V cycles camera views
+  createZoom({ domElement: canvas, follow }); // wheel / pinch / + - 0 zoom
   const post = createPost({ renderer, scene, camera: follow.camera, quality });
   const audio = createPaperAudio({ muted });
   const music = createMusic({ audio });
