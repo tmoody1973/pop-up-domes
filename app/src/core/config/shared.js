@@ -21,4 +21,4 @@ export const FLAP_LAYER_GAP = 0.004;
 export const TRAVELLER_HEIGHT = 0.6;
 
 export const DEFAULT_SEED = 7;
-export const DEFAULT_QUALITY = 'high';
+export const DEFAULT_QUALITY = 'med'; // was 'high': med + auto step-down (render/autoquality.js) keeps slower devices playable

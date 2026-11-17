@@ -22,6 +22,7 @@ import { createLife } from './life/life.js';
 import { createAnimals } from './life/animals.js';
 import { createViews } from './camera/views.js';
 import { createZoom } from './camera/zoom.js';
+import { createAutoQuality } from './render/autoquality.js';
 import { createDomes } from './world/domes.js';
 // Allocation-free two-dimensional length.
 const hypot2 = (a, b) => Math.sqrt(a * a + b * b);
@@ -41,7 +42,7 @@ async function boot() {
   const hint = document.getElementById('hint');
 
   const scene = new THREE.Scene();
-  const { renderer, setSize: setRendererSize } = createRenderer({ canvas, quality });
+  const { renderer, setSize: setRendererSize, setQuality: setRendererQuality } = createRenderer({ canvas, quality });
   const materials = createMaterials({ quality });
   const assets = await loadAssets({ materials, renderer, quality });
   materials.setTextures(assets.textures);
@@ -104,6 +105,7 @@ async function boot() {
     state.listener.x = p.x; state.listener.z = p.z;
     state.listener.rightX = _right.x / rl; state.listener.rightZ = _right.z / rl;
     world.update(dt, p, traveller.moveDir);
+    if (domes) domes.showAll = follow.zoom > (domes.showAll ? 1.8 : 2.2); // zoomed-out overview stands every dome up
     if (domes) domes.update(dt, p);
     if (interiors) interiors.update(dt);
     views.update(dt);
@@ -119,6 +121,7 @@ async function boot() {
   function render(dt) {
     post.setFocus(follow.focusPoint);
     post.render(dt);
+    if (autoQ) autoQ.sample();
     game.atlasmap.render(); // Drawn over the finished frame; no-op while closed.
   }
 
@@ -134,6 +137,8 @@ async function boot() {
     bus.emit('resize', { width: w, height: h, dpr: renderer.getPixelRatio() });
   }
   window.addEventListener('resize', resize);
+  // no ?quality= chosen: start at the default and step down to low once if the device is slow
+  const autoQ = params.get('quality') ? null : createAutoQuality({ start: quality, setQuality: setRendererQuality, onChange: (lvl) => { state.quality = lvl; resize(); } });
 
   // ---- hint (the only on-screen text) -----------------------------------------------------------
   if (showHint) {

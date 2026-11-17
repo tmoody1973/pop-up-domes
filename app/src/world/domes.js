@@ -116,6 +116,8 @@ export function createDomes({ scene, materials }) {
     domes, batch, halo, material, override, geos,
     /** The day/night controller (main.js sets it once created); its mode picks the look. */
     daynight: null,
+    /** Set by main.js from the camera zoom: true = every dome rises regardless of distance (overview). */
+    showAll: false,
     /** Per frame, after the traveller moved. p = traveller position (world units). */
     update(dt, p) {
       const want = lookOf(api.daynight ? api.daynight.mode : 'day');
@@ -124,7 +126,7 @@ export function createDomes({ scene, materials }) {
         const dist = Math.hypot(p.x - d.x, p.z - d.z);
         const edge = dist - S.BASE_R;
         if (override.rise !== null) d.want = override.rise ? 1 : 0;
-        else if (edge < RISE_AT) d.want = 1;
+        else if (api.showAll || edge < RISE_AT) d.want = 1; // showAll: zoomed-out overview stands every dome up
         else if (edge > FOLD_AT) d.want = 0;
         if (dist < IN_AT) d.inside = true; else if (dist > OUT_AT) d.inside = false;
         const cut = override.cut !== null ? !!override.cut : d.inside;
