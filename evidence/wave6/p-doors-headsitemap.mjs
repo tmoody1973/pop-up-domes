@@ -1,3 +1,5 @@
+// SUPERSEDED (issue #9): reads a /private/tmp scratch copy that predates f8ec9cb. Re-run the radius part with
+// evidence/checks/door-gore-radius.mjs, which reads app/ in this repo.
 // [wave4-J] Doorway checks (Node, rest pose, every dome risen, cutaway sector up):
 //  1. walk lines: for each doorway, a radial segment r = 4.3 .. 6.9 u along the door bearing, raycast against every
 //     dome card (world space). Lines at chest (0.36 u = focusHeight 0.6 x TRAVELLER_HEIGHT), feet (0.05) and head
