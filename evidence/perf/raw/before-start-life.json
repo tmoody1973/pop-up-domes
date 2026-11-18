@@ -1,0 +1,117 @@
+{
+ "mode": "life",
+ "view": "start",
+ "label": "before",
+ "quality": "med",
+ "base": "http://127.0.0.1:5360/",
+ "headless": false,
+ "measureMs": 5000,
+ "reps": 3,
+ "started": "2026-11-17T22:58:36.707Z",
+ "loadBefore": [
+  2.85888671875,
+  3.2275390625,
+  3.82568359375
+ ],
+ "life": {
+  "savedMed": 0.133,
+  "savedP95": -0.033,
+  "savedGpu": 0,
+  "savedCpu": 0.067,
+  "runs": {
+   "on": [
+    {
+     "n": 562,
+     "med": 9.2,
+     "p95": 9.6,
+     "gpuMed": null,
+     "gpuP95": null,
+     "gpuN": 0,
+     "cpuMed": 9.1,
+     "dpr": 1.25,
+     "calls": 73,
+     "tris": 152615,
+     "load1": 4.18,
+     "kinds": {}
+    },
+    {
+     "n": 557,
+     "med": 9.2,
+     "p95": 10.3,
+     "gpuMed": null,
+     "gpuP95": null,
+     "gpuN": 0,
+     "cpuMed": 9.2,
+     "dpr": 1.25,
+     "calls": 73,
+     "tris": 152615,
+     "load1": 3.67,
+     "kinds": {}
+    },
+    {
+     "n": 555,
+     "med": 9.2,
+     "p95": 10.4,
+     "gpuMed": null,
+     "gpuP95": null,
+     "gpuN": 0,
+     "cpuMed": 9.1,
+     "dpr": 1.25,
+     "calls": 73,
+     "tris": 152615,
+     "load1": 4.04,
+     "kinds": {}
+    }
+   ],
+   "off": [
+    {
+     "n": 563,
+     "med": 9.1,
+     "p95": 9.8,
+     "gpuMed": null,
+     "gpuP95": null,
+     "gpuN": 0,
+     "cpuMed": 9.1,
+     "dpr": 1.25,
+     "calls": 69,
+     "tris": 146145,
+     "load1": 3.77,
+     "kinds": {}
+    },
+    {
+     "n": 551,
+     "med": 9.1,
+     "p95": 10.4,
+     "gpuMed": null,
+     "gpuP95": null,
+     "gpuN": 0,
+     "cpuMed": 9.1,
+     "dpr": 1.25,
+     "calls": 69,
+     "tris": 146145,
+     "load1": 3.42,
+     "kinds": {}
+    },
+    {
+     "n": 561,
+     "med": 9,
+     "p95": 10.2,
+     "gpuMed": null,
+     "gpuP95": null,
+     "gpuN": 0,
+     "cpuMed": 9,
+     "dpr": 1.25,
+     "calls": 69,
+     "tris": 146145,
+     "load1": 3.72,
+     "kinds": {}
+    }
+   ]
+  }
+ },
+ "loadAfter": [
+  3.72265625,
+  3.4501953125,
+  3.86328125
+ ]
+}

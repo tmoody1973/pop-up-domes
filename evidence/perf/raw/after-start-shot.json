@@ -1,0 +1,36 @@
+{
+ "mode": "shot",
+ "view": "start",
+ "label": "after",
+ "quality": "med",
+ "base": "http://127.0.0.1:5360/",
+ "headless": false,
+ "measureMs": 5000,
+ "reps": 3,
+ "started": "2026-11-18T00:03:37.093Z",
+ "loadBefore": [
+  3.8271484375,
+  5.24853515625,
+  5.41748046875
+ ],
+ "shot": "/Users/tarikmoody/Projects/domes/evidence/perf/shots/after-start-med.jpg",
+ "baseline": {
+  "n": 572,
+  "med": 8.7,
+  "p95": 10,
+  "gpuMed": null,
+  "gpuP95": null,
+  "gpuN": 0,
+  "cpuMed": 8.7,
+  "dpr": 1.25,
+  "calls": 73,
+  "tris": 152615,
+  "load1": 3.83,
+  "kinds": {}
+ },
+ "loadAfter": [
+  3.833984375,
+  5.18505859375,
+  5.3916015625
+ ]
+}

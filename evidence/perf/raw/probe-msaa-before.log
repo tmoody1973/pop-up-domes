@@ -1,0 +1,4 @@
+book {"samples":2,"type":1016,"size":[1800,1125],"base":[11.5,11.4,11.5],"msaa0":[7.9,8.1,8],"noDepthResolve":[11.3,11.3,11.4],"msaa4":[13.3,13.5,13.3]}
+start {"samples":2,"type":1016,"size":[1800,1125],"base":[9,9.1,9.3],"msaa0":[7.7,7.8,7.9],"noDepthResolve":[8.6,8.9,9.6],"msaa4":[10.1,10.8,10.5]}
+book {"samples":2,"type":1016,"size":[1800,1125],"base":[11.7,11.5,11.6],"msaa0":[8,8,8],"noDepthResolve":[11.3,11.3,11.4],"noA2C":[11.4,11.4,11.6],"domesHidden":[8.3,8.1,8.1],"domesHiddenMsaa0":[6.5,6.6,6.5],"msaa4":[13.4,13.3,13.2]}
+book {"samples":2,"type":1016,"size":[1800,1125],"base":[11.4,11.4,11.4],"msaa0":[8,8,8],"domesHidden":[8.2,8.3,8.2],"domesNoRecv":[9.9,9.8,9.9],"domesNoCast":[11.1,11.2,11.2],"domesTaps46":[11.1,11.1,10.9]}

@@ -1,0 +1,35 @@
+{
+ "mode": "base",
+ "view": "book",
+ "label": "ab-after-2",
+ "quality": "med",
+ "base": "http://127.0.0.1:5360/",
+ "headless": false,
+ "measureMs": 5000,
+ "reps": 3,
+ "started": "2026-11-17T23:57:41.029Z",
+ "loadBefore": [
+  7.70654296875,
+  6.16357421875,
+  5.53515625
+ ],
+ "baseline": {
+  "n": 465,
+  "med": 10.8,
+  "p95": 11.9,
+  "gpuMed": null,
+  "gpuP95": null,
+  "gpuN": 0,
+  "cpuMed": 10.8,
+  "dpr": 1.25,
+  "calls": 106,
+  "tris": 235857,
+  "load1": 6.75,
+  "kinds": {}
+ },
+ "loadAfter": [
+  6.7490234375,
+  6.00927734375,
+  5.4873046875
+ ]
+}

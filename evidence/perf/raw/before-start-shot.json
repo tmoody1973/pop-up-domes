@@ -1,0 +1,36 @@
+{
+ "mode": "shot",
+ "view": "start",
+ "label": "before",
+ "quality": "med",
+ "base": "http://127.0.0.1:5360/",
+ "headless": false,
+ "measureMs": 5000,
+ "reps": 3,
+ "started": "2026-11-17T22:17:49.889Z",
+ "loadBefore": [
+  2.68603515625,
+  2.98486328125,
+  7.26171875
+ ],
+ "shot": "/Users/tarikmoody/Projects/domes/evidence/perf/shots/before-start-med.jpg",
+ "baseline": {
+  "n": 559,
+  "med": 9.1,
+  "p95": 10.4,
+  "gpuMed": null,
+  "gpuP95": null,
+  "gpuN": 0,
+  "cpuMed": 9.1,
+  "dpr": 1.25,
+  "calls": 73,
+  "tris": 152615,
+  "load1": 3.14,
+  "kinds": {}
+ },
+ "loadAfter": [
+  3.1376953125,
+  3.080078125,
+  7.220703125
+ ]
+}

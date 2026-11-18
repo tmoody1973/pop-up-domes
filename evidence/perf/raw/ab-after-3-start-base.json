@@ -1,0 +1,35 @@
+{
+ "mode": "base",
+ "view": "start",
+ "label": "ab-after-3",
+ "quality": "med",
+ "base": "http://127.0.0.1:5360/",
+ "headless": false,
+ "measureMs": 5000,
+ "reps": 3,
+ "started": "2026-11-17T23:56:50.901Z",
+ "loadBefore": [
+  5.9267578125,
+  5.6767578125,
+  5.3388671875
+ ],
+ "baseline": {
+  "n": 521,
+  "med": 9.7,
+  "p95": 11.5,
+  "gpuMed": null,
+  "gpuP95": null,
+  "gpuN": 0,
+  "cpuMed": 9.5,
+  "dpr": 1.25,
+  "calls": 73,
+  "tris": 152615,
+  "load1": 6.65,
+  "kinds": {}
+ },
+ "loadAfter": [
+  6.6455078125,
+  5.83544921875,
+  5.3984375
+ ]
+}

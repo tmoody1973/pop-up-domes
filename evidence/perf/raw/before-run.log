@@ -1,0 +1,66 @@
+16:18  up 4 days,  8:44, 7 users, load averages: 3.16 3.11 7.04
+start dpr1 saved med 3 p95 2.733 gpu 0 | on med 9.20 off 6.20
+start dpr2 saved med -11.767 p95 -14.5 gpu 0 | on med 9.20 off 20.97
+start post saved med 3.433 p95 2.9 gpu 0 | on med 9.17 off 5.73
+start dof saved med 0.5 p95 -1.1 gpu 0 | on med 9.13 off 8.63
+start fill saved med -0.133 p95 -0.4 gpu 0 | on med 9.47 off 9.60
+start ao saved med 0.467 p95 0.933 gpu 0 | on med 10.10 off 9.63
+start bloom saved med 0.133 p95 -0.167 gpu 0 | on med 9.60 off 9.47
+start grain saved med -0.5 p95 -0.367 gpu 0 | on med 10.07 off 10.57
+start chroma saved med 0.4 p95 2.933 gpu 0 | on med 10.13 off 9.73
+start sharpen saved med 0.067 p95 0.433 gpu 0 | on med 9.50 off 9.43
+start msaa saved med 0 p95 0.233 gpu 0 | on med 9.50 off 9.50
+start shadows saved med 1.8 p95 2.467 gpu 0 | on med 9.50 off 7.70
+start shadow1024 saved med 0.233 p95 0.5 gpu 0 | on med 9.53 off 9.30
+start pcss saved med 0.2 p95 0.367 gpu 0 | on med 9.50 off 9.30
+start interiors saved med -0.1 p95 -0.133 gpu 0 | on med 9.43 off 9.53
+start domes saved med 0.067 p95 0.033 gpu 0 | on med 9.47 off 9.40
+start room saved med 0.067 p95 0.267 gpu 0 | on med 9.67 off 9.60
+start life saved med 0.033 p95 0.067 gpu 0 | on med 9.70 off 9.67
+start site saved med 1.067 p95 1.1 gpu 0 | on med 9.73 off 8.67
+16:31  up 4 days,  8:57, 7 users, load averages: 3.41 3.35 4.84
+book dpr1 saved med 2.667 p95 2.633 gpu 0 | on med 11.50 off 8.83
+book dpr2 saved med -11.9 p95 -29.7 gpu 0 | on med 11.53 off 23.43
+book post saved med 5.4 p95 5.8 gpu 0 | on med 12.00 off 6.60
+book dof saved med 0.5 p95 0.4 gpu 0 | on med 12.37 off 11.87
+book fill saved med 0.167 p95 0.233 gpu 0 | on med 12.33 off 12.17
+book ao saved med 0.167 p95 0.3 gpu 0 | on med 12.33 off 12.17
+book bloom saved med 0.067 p95 0 gpu 0 | on med 12.30 off 12.23
+book grain saved med 0.133 p95 0.2 gpu 0 | on med 12.30 off 12.17
+book chroma saved med -0.167 p95 -0.6 gpu 0 | on med 12.10 off 12.27
+book sharpen saved med 0.133 p95 0.2 gpu 0 | on med 12.30 off 12.17
+book msaa saved med -0.033 p95 -0.067 gpu 0 | on med 12.27 off 12.30
+book shadows saved med 3.633 p95 3.633 gpu 0 | on med 12.30 off 8.67
+book shadow1024 saved med 0.367 p95 0.367 gpu 0 | on med 12.27 off 11.90
+book pcss saved med 1.167 p95 1.233 gpu 0 | on med 12.27 off 11.10
+book interiors saved med 0.1 p95 0.3 gpu 0 | on med 12.37 off 12.27
+book domes saved med 2.867 p95 3.1 gpu 0 | on med 12.27 off 9.40
+book room saved med 0.5 p95 0.367 gpu 0 | on med 12.60 off 12.10
+book life saved med 0 p95 0.5 gpu 0 | on med 12.80 off 12.80
+book site saved med 0.3 p95 -0.767 gpu 0 | on med 13.00 off 12.70
+16:45  up 4 days,  9:10, 7 users, load averages: 11.05 5.99 4.97
+tropical dpr1 saved med 3.833 p95 3.967 gpu 0 | on med 12.47 off 8.63
+tropical dpr2 saved med -16.3 p95 -18.067 gpu 0 | on med 12.53 off 28.83
+tropical post saved med 3.167 p95 3.767 gpu 0 | on med 12.50 off 9.33
+tropical dof saved med 0.033 p95 0.033 gpu 0 | on med 12.60 off 12.57
+tropical fill saved med 0.2 p95 -0 gpu 0 | on med 12.93 off 12.73
+tropical ao saved med 0.233 p95 0.367 gpu 0 | on med 12.90 off 12.67
+tropical bloom saved med 0.167 p95 0.033 gpu 0 | on med 12.87 off 12.70
+tropical grain saved med 0 p95 0.133 gpu 0 | on med 12.83 off 12.83
+tropical chroma saved med 0.067 p95 0.1 gpu 0 | on med 12.93 off 12.87
+tropical sharpen saved med 0.067 p95 -0.267 gpu 0 | on med 12.90 off 12.83
+tropical msaa saved med 0 p95 0.033 gpu 0 | on med 12.90 off 12.90
+tropical shadows saved med 7.367 p95 7.533 gpu 0 | on med 12.77 off 5.40
+tropical shadow1024 saved med 0.567 p95 0.267 gpu 0 | on med 13.57 off 13.00
+tropical pcss saved med 1.233 p95 1.2 gpu 0 | on med 13.67 off 12.43
+tropical interiors saved med 2.7 p95 2.533 gpu 0 | on med 13.53 off 10.83
+tropical domes saved med 1.433 p95 1.233 gpu 0 | on med 13.57 off 12.13
+tropical room saved med 0.133 p95 0.1 gpu 0 | on med 13.60 off 13.47
+tropical life saved med 0.033 p95 0.1 gpu 0 | on med 13.57 off 13.53
+tropical site saved med 0.333 p95 0.567 gpu 0 | on med 13.57 off 13.23
+16:58  up 4 days,  9:24, 7 users, load averages: 2.86 3.23 3.83
+start life url {"savedMed":0.133,"savedP95":-0.033,"savedGpu":0,"savedCpu":0.067}
+16:59  up 4 days,  9:25, 7 users, load averages: 3.72 3.45 3.86
+book life url {"savedMed":-0.2,"savedP95":-0.733,"savedGpu":0,"savedCpu":-0.233}
+17:00  up 4 days,  9:26, 7 users, load averages: 3.11 3.33 3.79
+tropical life url {"savedMed":0.1,"savedP95":0.067,"savedGpu":0,"savedCpu":0.067}
