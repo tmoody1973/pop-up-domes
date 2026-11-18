@@ -1,0 +1,22 @@
+PASS  phone: hint hidden while the intro is up
+      {"before":{"hint":{"text":"Tap to walk · Pinch zoom · 2-finger tap: dusk / night · 3: view · 4: music","on":false,"opacity":0},"introOn":true}}
+PASS  phone: hint readable 2 s and 6 s after the start tap
+      {"after":[{"t":0,"introOn":false,"hintOn":true,"opacity":0.00547619},{"t":1021,"introOn":false,"hintOn":true,"opacity":0.956199},{"t":2043,"introOn":false,"hintOn":true,"opacity":1},{"t":3470,"introOn":false,"hintOn":true,"opacity":1},{"t":4486,"introOn":false,"hintOn":true,"opacity":1},{"t":5501,"introOn":false,"hintOn":true,"opacity":1},{"t":6510,"introOn":false,"hintOn":true,"opacity":1},{"t":7525,"introOn":false,"hintOn":true,"opacity":1},{"t":8538,"introOn":false,"hintOn":true,"opacity":1},{"t":9547,"introOn":false,"hintOn":false,"opacity":0.278708},{"t":10556,"introOn":false,"hintOn":false,"opacity":0},{"t":11573,"introOn":false,"hintOn":false,"opacity":0}]}
+PASS  phone: hint faded away by 12 s
+      {"last":{"t":12335,"hint":{"text":"Tap to walk · Pinch zoom · 2-finger tap: dusk / night · 3: view · 4: music","on":false,"opacity":0},"introOn":false}}
+PASS  phone: hint names the dusk gesture
+      {"text":"Tap to walk · Pinch zoom · 2-finger tap: dusk / night · 3: view · 4: music"}
+PASS  desktop: hint hidden while the intro is up
+      {"before":{"hint":{"text":"WASD / click to walk  ·  Shift run  ·  Ctrl slow  ·  N dusk / night  ·  M music  ·  Scroll / pinch zoom  ·  V view","on":false,"opacity":0},"introOn":true}}
+PASS  desktop: hint readable 2 s and 6 s after the start tap
+      {"after":[{"t":0,"introOn":false,"hintOn":true,"opacity":0},{"t":1014,"introOn":false,"hintOn":true,"opacity":0.946859},{"t":2029,"introOn":false,"hintOn":true,"opacity":1},{"t":3310,"introOn":false,"hintOn":true,"opacity":1},{"t":4320,"introOn":false,"hintOn":true,"opacity":1},{"t":5336,"introOn":false,"hintOn":true,"opacity":1},{"t":6351,"introOn":false,"hintOn":true,"opacity":1},{"t":7368,"introOn":false,"hintOn":true,"opacity":1},{"t":8385,"introOn":false,"hintOn":true,"opacity":1},{"t":9397,"introOn":false,"hintOn":false,"opacity":0.540037},{"t":10405,"introOn":false,"hintOn":false,"opacity":0.0000767757},{"t":11417,"introOn":false,"hintOn":false,"opacity":0},{"t":12428,"introOn":false,"hintOn":false,"opacity":0}]}
+PASS  desktop: hint faded away by 12 s
+      {"last":{"t":12428,"hint":{"text":"WASD / click to walk  ·  Shift run  ·  Ctrl slow  ·  N dusk / night  ·  M music  ·  Scroll / pinch zoom  ·  V view","on":false,"opacity":0},"introOn":false}}
+PASS  desktop: hint keeps the keyboard wording
+      {"text":"WASD / click to walk  ·  Shift run  ·  Ctrl slow  ·  N dusk / night  ·  M music  ·  Scroll / pinch zoom  ·  V view"}
+PASS  phone ?intro=0: hint on at load
+      {"r":{"hint":{"text":"Tap to walk · Pinch zoom · 2-finger tap: dusk / night · 3: view · 4: music","on":true,"opacity":1},"introOn":false}}
+PASS  phone ?hint=0: hint removed
+      {"r":{"hint":null,"introOn":false}}
+
+ALL PASS
