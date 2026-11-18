@@ -1,0 +1,1848 @@
+{
+ "mode": "ablate",
+ "view": "start",
+ "label": "before",
+ "quality": "med",
+ "base": "http://127.0.0.1:5360/",
+ "headless": false,
+ "measureMs": 5000,
+ "reps": 3,
+ "started": "2026-11-17T22:18:44.621Z",
+ "loadBefore": [
+  3.16357421875,
+  3.111328125,
+  7.04150390625
+ ],
+ "gpuTimer": true,
+ "ablations": {
+  "dpr1": {
+   "savedMed": 3,
+   "savedP95": 2.733,
+   "savedGpu": 0,
+   "savedCpu": 2.967,
+   "runs": {
+    "on": [
+     {
+      "n": 562,
+      "med": 9.2,
+      "p95": 9.8,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.1,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 2.98,
+      "kinds": {}
+     },
+     {
+      "n": 555,
+      "med": 9.2,
+      "p95": 10.3,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.1,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.06,
+      "kinds": {}
+     },
+     {
+      "n": 556,
+      "med": 9.2,
+      "p95": 10,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.1,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 2.97,
+      "kinds": {}
+     }
+    ],
+    "off": [
+     {
+      "n": 804,
+      "med": 6.1,
+      "p95": 7.3,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 6,
+      "dpr": 1,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 2.82,
+      "kinds": {}
+     },
+     {
+      "n": 814,
+      "med": 6.1,
+      "p95": 7.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 6,
+      "dpr": 1,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.14,
+      "kinds": {}
+     },
+     {
+      "n": 793,
+      "med": 6.4,
+      "p95": 7.4,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 6.4,
+      "dpr": 1,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.05,
+      "kinds": {}
+     }
+    ]
+   }
+  },
+  "dpr2": {
+   "savedMed": -11.767,
+   "savedP95": -14.5,
+   "savedGpu": 0,
+   "savedCpu": -11.733,
+   "runs": {
+    "on": [
+     {
+      "n": 543,
+      "med": 9.3,
+      "p95": 10.7,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.2,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.29,
+      "kinds": {}
+     },
+     {
+      "n": 557,
+      "med": 9.2,
+      "p95": 10.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.1,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 2.93,
+      "kinds": {}
+     },
+     {
+      "n": 564,
+      "med": 9.1,
+      "p95": 9.6,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 4.56,
+      "kinds": {}
+     }
+    ],
+    "off": [
+     {
+      "n": 238,
+      "med": 20.9,
+      "p95": 23.7,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 20.8,
+      "dpr": 2,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.1,
+      "kinds": {}
+     },
+     {
+      "n": 228,
+      "med": 21.3,
+      "p95": 27.5,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 21,
+      "dpr": 2,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 5.02,
+      "kinds": {}
+     },
+     {
+      "n": 243,
+      "med": 20.7,
+      "p95": 22.8,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 20.7,
+      "dpr": 2,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 4.36,
+      "kinds": {}
+     }
+    ]
+   }
+  },
+  "post": {
+   "savedMed": 3.433,
+   "savedP95": 2.9,
+   "savedGpu": 0,
+   "savedCpu": 3.433,
+   "runs": {
+    "on": [
+     {
+      "n": 558,
+      "med": 9.2,
+      "p95": 9.8,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.2,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 4.3,
+      "kinds": {}
+     },
+     {
+      "n": 567,
+      "med": 9.1,
+      "p95": 9.6,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.1,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 4.24,
+      "kinds": {}
+     },
+     {
+      "n": 563,
+      "med": 9.2,
+      "p95": 9.6,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.1,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.97,
+      "kinds": {}
+     }
+    ],
+    "off": [
+     {
+      "n": 848,
+      "med": 5.6,
+      "p95": 6.7,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 5.6,
+      "dpr": 1.25,
+      "calls": 64,
+      "tris": 152606,
+      "load1": 4.43,
+      "kinds": {}
+     },
+     {
+      "n": 839,
+      "med": 5.9,
+      "p95": 6.8,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 5.9,
+      "dpr": 1.25,
+      "calls": 64,
+      "tris": 152606,
+      "load1": 3.97,
+      "kinds": {}
+     },
+     {
+      "n": 842,
+      "med": 5.7,
+      "p95": 6.8,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 5.6,
+      "dpr": 1.25,
+      "calls": 64,
+      "tris": 152606,
+      "load1": 3.9,
+      "kinds": {}
+     }
+    ]
+   }
+  },
+  "dof": {
+   "savedMed": 0.5,
+   "savedP95": -1.1,
+   "savedGpu": 0,
+   "savedCpu": 0.533,
+   "runs": {
+    "on": [
+     {
+      "n": 564,
+      "med": 9.2,
+      "p95": 9.6,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.1,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.6,
+      "kinds": {}
+     },
+     {
+      "n": 565,
+      "med": 9.1,
+      "p95": 9.6,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.1,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.56,
+      "kinds": {}
+     },
+     {
+      "n": 565,
+      "med": 9.1,
+      "p95": 9.6,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.79,
+      "kinds": {}
+     }
+    ],
+    "off": [
+     {
+      "n": 587,
+      "med": 8.2,
+      "p95": 9.4,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 8.1,
+      "dpr": 1.25,
+      "calls": 70,
+      "tris": 152612,
+      "load1": 3.48,
+      "kinds": {}
+     },
+     {
+      "n": 589,
+      "med": 8.2,
+      "p95": 9.6,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 8.2,
+      "dpr": 1.25,
+      "calls": 70,
+      "tris": 152612,
+      "load1": 3.6,
+      "kinds": {}
+     },
+     {
+      "n": 511,
+      "med": 9.5,
+      "p95": 13.1,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 70,
+      "tris": 152612,
+      "load1": 4.11,
+      "kinds": {}
+     }
+    ]
+   }
+  },
+  "fill": {
+   "savedMed": -0.133,
+   "savedP95": -0.4,
+   "savedGpu": 0,
+   "savedCpu": -0.1,
+   "runs": {
+    "on": [
+     {
+      "n": 505,
+      "med": 9.5,
+      "p95": 12.8,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 4.1,
+      "kinds": {}
+     },
+     {
+      "n": 505,
+      "med": 9.5,
+      "p95": 12.1,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 4,
+      "kinds": {}
+     },
+     {
+      "n": 519,
+      "med": 9.4,
+      "p95": 11.8,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.77,
+      "kinds": {}
+     }
+    ],
+    "off": [
+     {
+      "n": 530,
+      "med": 9.3,
+      "p95": 11.5,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.2,
+      "dpr": 1.25,
+      "calls": 72,
+      "tris": 152614,
+      "load1": 4.01,
+      "kinds": {}
+     },
+     {
+      "n": 497,
+      "med": 9.7,
+      "p95": 13.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.5,
+      "dpr": 1.25,
+      "calls": 72,
+      "tris": 152614,
+      "load1": 4,
+      "kinds": {}
+     },
+     {
+      "n": 489,
+      "med": 9.8,
+      "p95": 13.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.7,
+      "dpr": 1.25,
+      "calls": 72,
+      "tris": 152614,
+      "load1": 3.79,
+      "kinds": {}
+     }
+    ]
+   }
+  },
+  "ao": {
+   "savedMed": 0.467,
+   "savedP95": 0.933,
+   "savedGpu": 0,
+   "savedCpu": 0.533,
+   "runs": {
+    "on": [
+     {
+      "n": 448,
+      "med": 10.8,
+      "p95": 14.5,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 10.7,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 4.04,
+      "kinds": {}
+     },
+     {
+      "n": 480,
+      "med": 10.1,
+      "p95": 13.5,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 10,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.95,
+      "kinds": {}
+     },
+     {
+      "n": 517,
+      "med": 9.4,
+      "p95": 11.9,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.5,
+      "kinds": {}
+     }
+    ],
+    "off": [
+     {
+      "n": 480,
+      "med": 10,
+      "p95": 12.9,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.8,
+      "dpr": 1.25,
+      "calls": 72,
+      "tris": 152614,
+      "load1": 4.03,
+      "kinds": {}
+     },
+     {
+      "n": 521,
+      "med": 9.4,
+      "p95": 12,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 72,
+      "tris": 152614,
+      "load1": 3.95,
+      "kinds": {}
+     },
+     {
+      "n": 516,
+      "med": 9.5,
+      "p95": 12.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 72,
+      "tris": 152614,
+      "load1": 3.46,
+      "kinds": {}
+     }
+    ]
+   }
+  },
+  "bloom": {
+   "savedMed": 0.133,
+   "savedP95": -0.167,
+   "savedGpu": 0,
+   "savedCpu": 0.1,
+   "runs": {
+    "on": [
+     {
+      "n": 504,
+      "med": 9.7,
+      "p95": 12.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.5,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.61,
+      "kinds": {}
+     },
+     {
+      "n": 505,
+      "med": 9.6,
+      "p95": 12.1,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.53,
+      "kinds": {}
+     },
+     {
+      "n": 517,
+      "med": 9.5,
+      "p95": 11.8,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.4,
+      "kinds": {}
+     }
+    ],
+    "off": [
+     {
+      "n": 527,
+      "med": 9.3,
+      "p95": 11.7,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.2,
+      "dpr": 1.25,
+      "calls": 70,
+      "tris": 152612,
+      "load1": 3.48,
+      "kinds": {}
+     },
+     {
+      "n": 506,
+      "med": 9.6,
+      "p95": 12.9,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 70,
+      "tris": 152612,
+      "load1": 3.44,
+      "kinds": {}
+     },
+     {
+      "n": 512,
+      "med": 9.5,
+      "p95": 12,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 70,
+      "tris": 152612,
+      "load1": 3.37,
+      "kinds": {}
+     }
+    ]
+   }
+  },
+  "grain": {
+   "savedMed": -0.5,
+   "savedP95": -0.367,
+   "savedGpu": 0,
+   "savedCpu": -0.5,
+   "runs": {
+    "on": [
+     {
+      "n": 502,
+      "med": 9.7,
+      "p95": 12.3,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.5,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.25,
+      "kinds": {}
+     },
+     {
+      "n": 508,
+      "med": 9.5,
+      "p95": 12.1,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.36,
+      "kinds": {}
+     },
+     {
+      "n": 421,
+      "med": 11,
+      "p95": 17.4,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 10.9,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.85,
+      "kinds": {}
+     }
+    ],
+    "off": [
+     {
+      "n": 523,
+      "med": 9.4,
+      "p95": 11.7,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.31,
+      "kinds": {}
+     },
+     {
+      "n": 476,
+      "med": 10.1,
+      "p95": 14.5,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 10,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.75,
+      "kinds": {}
+     },
+     {
+      "n": 405,
+      "med": 12.2,
+      "p95": 16.7,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 12,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 4.18,
+      "kinds": {}
+     }
+    ]
+   }
+  },
+  "chroma": {
+   "savedMed": 0.4,
+   "savedP95": 2.933,
+   "savedGpu": 0,
+   "savedCpu": 0.467,
+   "runs": {
+    "on": [
+     {
+      "n": 390,
+      "med": 11.5,
+      "p95": 20.8,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 11.6,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 4.25,
+      "kinds": {}
+     },
+     {
+      "n": 516,
+      "med": 9.3,
+      "p95": 14.1,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.2,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 4.32,
+      "kinds": {}
+     },
+     {
+      "n": 450,
+      "med": 9.6,
+      "p95": 18.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.5,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 4.04,
+      "kinds": {}
+     }
+    ],
+    "off": [
+     {
+      "n": 449,
+      "med": 10.1,
+      "p95": 16,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 10,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 4.47,
+      "kinds": {}
+     },
+     {
+      "n": 469,
+      "med": 9.6,
+      "p95": 16.1,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.5,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 4.13,
+      "kinds": {}
+     },
+     {
+      "n": 508,
+      "med": 9.5,
+      "p95": 12.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 4.13,
+      "kinds": {}
+     }
+    ]
+   }
+  },
+  "sharpen": {
+   "savedMed": 0.067,
+   "savedP95": 0.433,
+   "savedGpu": 0,
+   "savedCpu": 0.033,
+   "runs": {
+    "on": [
+     {
+      "n": 495,
+      "med": 9.7,
+      "p95": 13,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.5,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 4.04,
+      "kinds": {}
+     },
+     {
+      "n": 513,
+      "med": 9.4,
+      "p95": 12.5,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.72,
+      "kinds": {}
+     },
+     {
+      "n": 515,
+      "med": 9.4,
+      "p95": 12,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.49,
+      "kinds": {}
+     }
+    ],
+    "off": [
+     {
+      "n": 518,
+      "med": 9.4,
+      "p95": 12,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.87,
+      "kinds": {}
+     },
+     {
+      "n": 506,
+      "med": 9.6,
+      "p95": 12.4,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.5,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.66,
+      "kinds": {}
+     },
+     {
+      "n": 524,
+      "med": 9.3,
+      "p95": 11.8,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.77,
+      "kinds": {}
+     }
+    ]
+   }
+  },
+  "msaa": {
+   "savedMed": 0,
+   "savedP95": 0.233,
+   "savedGpu": 0,
+   "savedCpu": -0.033,
+   "runs": {
+    "on": [
+     {
+      "n": 497,
+      "med": 9.6,
+      "p95": 12.9,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.79,
+      "kinds": {}
+     },
+     {
+      "n": 518,
+      "med": 9.4,
+      "p95": 11.8,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.54,
+      "kinds": {}
+     },
+     {
+      "n": 511,
+      "med": 9.5,
+      "p95": 12,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.74,
+      "kinds": {}
+     }
+    ],
+    "off": [
+     {
+      "n": 511,
+      "med": 9.4,
+      "p95": 12.1,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.68,
+      "kinds": {}
+     },
+     {
+      "n": 501,
+      "med": 9.7,
+      "p95": 12.1,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.5,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.5,
+      "kinds": {}
+     },
+     {
+      "n": 519,
+      "med": 9.4,
+      "p95": 11.8,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.52,
+      "kinds": {}
+     }
+    ]
+   }
+  },
+  "shadows": {
+   "savedMed": 1.8,
+   "savedP95": 2.467,
+   "savedGpu": 0,
+   "savedCpu": 1.767,
+   "runs": {
+    "on": [
+     {
+      "n": 497,
+      "med": 9.6,
+      "p95": 12.6,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.5,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.37,
+      "kinds": {}
+     },
+     {
+      "n": 524,
+      "med": 9.3,
+      "p95": 11.8,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.46,
+      "kinds": {}
+     },
+     {
+      "n": 506,
+      "med": 9.6,
+      "p95": 12.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.37,
+      "kinds": {}
+     }
+    ],
+    "off": [
+     {
+      "n": 645,
+      "med": 7.7,
+      "p95": 9.5,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 7.7,
+      "dpr": 1.25,
+      "calls": 42,
+      "tris": 77907,
+      "load1": 3.42,
+      "kinds": {}
+     },
+     {
+      "n": 642,
+      "med": 7.8,
+      "p95": 10.3,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 7.7,
+      "dpr": 1.25,
+      "calls": 42,
+      "tris": 77907,
+      "load1": 3.31,
+      "kinds": {}
+     },
+     {
+      "n": 660,
+      "med": 7.6,
+      "p95": 9.4,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 7.5,
+      "dpr": 1.25,
+      "calls": 42,
+      "tris": 77907,
+      "load1": 3.26,
+      "kinds": {}
+     }
+    ]
+   }
+  },
+  "shadow1024": {
+   "savedMed": 0.233,
+   "savedP95": 0.5,
+   "savedGpu": 0,
+   "savedCpu": 0.2,
+   "runs": {
+    "on": [
+     {
+      "n": 498,
+      "med": 9.6,
+      "p95": 12.5,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.5,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.29,
+      "kinds": {}
+     },
+     {
+      "n": 514,
+      "med": 9.4,
+      "p95": 11.9,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.31,
+      "kinds": {}
+     },
+     {
+      "n": 502,
+      "med": 9.6,
+      "p95": 12.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.11,
+      "kinds": {}
+     }
+    ],
+    "off": [
+     {
+      "n": 524,
+      "med": 9.4,
+      "p95": 12,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.27,
+      "kinds": {}
+     },
+     {
+      "n": 524,
+      "med": 9.3,
+      "p95": 12.1,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.2,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.21,
+      "kinds": {}
+     },
+     {
+      "n": 545,
+      "med": 9.2,
+      "p95": 11,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.1,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.32,
+      "kinds": {}
+     }
+    ]
+   }
+  },
+  "pcss": {
+   "savedMed": 0.2,
+   "savedP95": 0.367,
+   "savedGpu": 0,
+   "savedCpu": 0.167,
+   "runs": {
+    "on": [
+     {
+      "n": 507,
+      "med": 9.5,
+      "p95": 12.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.29,
+      "kinds": {}
+     },
+     {
+      "n": 516,
+      "med": 9.4,
+      "p95": 11.9,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3,
+      "kinds": {}
+     },
+     {
+      "n": 499,
+      "med": 9.6,
+      "p95": 12.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.5,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.03,
+      "kinds": {}
+     }
+    ],
+    "off": [
+     {
+      "n": 562,
+      "med": 9.4,
+      "p95": 12.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.17,
+      "kinds": {}
+     },
+     {
+      "n": 539,
+      "med": 9.3,
+      "p95": 11.3,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.2,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 2.84,
+      "kinds": {}
+     },
+     {
+      "n": 537,
+      "med": 9.2,
+      "p95": 11.7,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.2,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 2.87,
+      "kinds": {}
+     }
+    ]
+   }
+  },
+  "interiors": {
+   "savedMed": -0.1,
+   "savedP95": -0.133,
+   "savedGpu": 0,
+   "savedCpu": -0.1,
+   "runs": {
+    "on": [
+     {
+      "n": 516,
+      "med": 9.4,
+      "p95": 12,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 2.96,
+      "kinds": {}
+     },
+     {
+      "n": 513,
+      "med": 9.4,
+      "p95": 12,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 2.97,
+      "kinds": {}
+     },
+     {
+      "n": 499,
+      "med": 9.5,
+      "p95": 13.1,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 2.6,
+      "kinds": {}
+     }
+    ],
+    "off": [
+     {
+      "n": 502,
+      "med": 9.5,
+      "p95": 13,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 2.96,
+      "kinds": {}
+     },
+     {
+      "n": 518,
+      "med": 9.4,
+      "p95": 11.8,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 2.89,
+      "kinds": {}
+     },
+     {
+      "n": 491,
+      "med": 9.7,
+      "p95": 12.7,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.6,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 2.63,
+      "kinds": {}
+     }
+    ]
+   }
+  },
+  "domes": {
+   "savedMed": 0.067,
+   "savedP95": 0.033,
+   "savedGpu": 0,
+   "savedCpu": 0.067,
+   "runs": {
+    "on": [
+     {
+      "n": 514,
+      "med": 9.4,
+      "p95": 12.1,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 2.61,
+      "kinds": {}
+     },
+     {
+      "n": 507,
+      "med": 9.5,
+      "p95": 12.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 2.91,
+      "kinds": {}
+     },
+     {
+      "n": 507,
+      "med": 9.5,
+      "p95": 12.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.22,
+      "kinds": {}
+     }
+    ],
+    "off": [
+     {
+      "n": 509,
+      "med": 9.5,
+      "p95": 12.5,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.4,
+      "dpr": 1.25,
+      "calls": 70,
+      "tris": 145823,
+      "load1": 2.64,
+      "kinds": {}
+     },
+     {
+      "n": 535,
+      "med": 9.3,
+      "p95": 11.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.2,
+      "dpr": 1.25,
+      "calls": 70,
+      "tris": 145823,
+      "load1": 3.24,
+      "kinds": {}
+     },
+     {
+      "n": 514,
+      "med": 9.4,
+      "p95": 12.7,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.3,
+      "dpr": 1.25,
+      "calls": 70,
+      "tris": 145823,
+      "load1": 3.12,
+      "kinds": {}
+     }
+    ]
+   }
+  },
+  "room": {
+   "savedMed": 0.067,
+   "savedP95": 0.267,
+   "savedGpu": 0,
+   "savedCpu": 0,
+   "runs": {
+    "on": [
+     {
+      "n": 510,
+      "med": 9.6,
+      "p95": 12.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.5,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.02,
+      "kinds": {}
+     },
+     {
+      "n": 499,
+      "med": 9.7,
+      "p95": 12.8,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.6,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 2.91,
+      "kinds": {}
+     },
+     {
+      "n": 509,
+      "med": 9.7,
+      "p95": 12.5,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.5,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 2.77,
+      "kinds": {}
+     }
+    ],
+    "off": [
+     {
+      "n": 515,
+      "med": 9.5,
+      "p95": 12.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.5,
+      "dpr": 1.25,
+      "calls": 71,
+      "tris": 152591,
+      "load1": 3.26,
+      "kinds": {}
+     },
+     {
+      "n": 518,
+      "med": 9.6,
+      "p95": 11.9,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.5,
+      "dpr": 1.25,
+      "calls": 71,
+      "tris": 152591,
+      "load1": 2.84,
+      "kinds": {}
+     },
+     {
+      "n": 502,
+      "med": 9.7,
+      "p95": 12.6,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.6,
+      "dpr": 1.25,
+      "calls": 71,
+      "tris": 152591,
+      "load1": 2.82,
+      "kinds": {}
+     }
+    ]
+   }
+  },
+  "life": {
+   "savedMed": 0.033,
+   "savedP95": 0.067,
+   "savedGpu": 0,
+   "savedCpu": 0.033,
+   "runs": {
+    "on": [
+     {
+      "n": 505,
+      "med": 9.7,
+      "p95": 12.4,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.6,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 2.83,
+      "kinds": {}
+     },
+     {
+      "n": 499,
+      "med": 9.8,
+      "p95": 13,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.7,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.73,
+      "kinds": {}
+     },
+     {
+      "n": 514,
+      "med": 9.6,
+      "p95": 12.1,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.5,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.9,
+      "kinds": {}
+     }
+    ],
+    "off": [
+     {
+      "n": 509,
+      "med": 9.7,
+      "p95": 12.4,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.6,
+      "dpr": 1.25,
+      "calls": 69,
+      "tris": 146145,
+      "load1": 3.01,
+      "kinds": {}
+     },
+     {
+      "n": 516,
+      "med": 9.6,
+      "p95": 12.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.5,
+      "dpr": 1.25,
+      "calls": 69,
+      "tris": 146145,
+      "load1": 4.15,
+      "kinds": {}
+     },
+     {
+      "n": 502,
+      "med": 9.7,
+      "p95": 12.7,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.6,
+      "dpr": 1.25,
+      "calls": 69,
+      "tris": 146145,
+      "load1": 4.24,
+      "kinds": {}
+     }
+    ]
+   }
+  },
+  "site": {
+   "savedMed": 1.067,
+   "savedP95": 1.1,
+   "savedGpu": 0,
+   "savedCpu": 1.033,
+   "runs": {
+    "on": [
+     {
+      "n": 507,
+      "med": 9.7,
+      "p95": 12.4,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.6,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 4.06,
+      "kinds": {}
+     },
+     {
+      "n": 493,
+      "med": 9.9,
+      "p95": 13.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.7,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.52,
+      "kinds": {}
+     },
+     {
+      "n": 518,
+      "med": 9.6,
+      "p95": 11.6,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 9.5,
+      "dpr": 1.25,
+      "calls": 73,
+      "tris": 152615,
+      "load1": 3.1,
+      "kinds": {}
+     }
+    ],
+    "off": [
+     {
+      "n": 553,
+      "med": 8.7,
+      "p95": 11.3,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 8.6,
+      "dpr": 1.25,
+      "calls": 38,
+      "tris": 119803,
+      "load1": 3.74,
+      "kinds": {}
+     },
+     {
+      "n": 559,
+      "med": 8.5,
+      "p95": 11.2,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 8.4,
+      "dpr": 1.25,
+      "calls": 38,
+      "tris": 119803,
+      "load1": 3.48,
+      "kinds": {}
+     },
+     {
+      "n": 547,
+      "med": 8.8,
+      "p95": 11.4,
+      "gpuMed": null,
+      "gpuP95": null,
+      "gpuN": 0,
+      "cpuMed": 8.7,
+      "dpr": 1.25,
+      "calls": 38,
+      "tris": 119803,
+      "load1": 3.41,
+      "kinds": {}
+     }
+    ]
+   }
+  }
+ },
+ "loadAfter": [
+  3.40869140625,
+  3.3486328125,
+  4.84228515625
+ ]
+}

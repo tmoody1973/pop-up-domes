@@ -161,8 +161,13 @@ export async function createInteriors({ scene, materials, domes, daynight }) {
   const batch = new THREE.BatchedMesh(geos.length, verts, verts, paper);
   batch.name = 'dome-interiors';
   batch.castShadow = true; batch.receiveShadow = true;
-  batch.frustumCulled = false; // bounds change as the cards fold; per-instance culling instead
-  batch.perObjectFrustumCulled = true;
+  batch.frustumCulled = false; // bounds change as the cards fold
+  // [perf] no per-instance culling or sorting: either one makes three rebuild and re-upload the batch's draw-list
+  // texture before EVERY pass (shadow map, then main), and on ANGLE/Metal that mid-frame re-upload stalls the GPU:
+  // ~4.7 ms a frame inside Tropical on an M3 (evidence/perf). The cards are opaque and only open rooms are visible
+  // (setVisibleAt), so the list is rebuilt only when a room shows / hides.
+  batch.perObjectFrustumCulled = false;
+  batch.sortObjects = false;
   for (const r of rooms) {
     r.boxes = [];
     for (const a of r.anchors) {

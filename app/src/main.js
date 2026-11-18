@@ -139,7 +139,7 @@ async function boot() {
   }
   window.addEventListener('resize', resize);
   // no ?quality= chosen: start at the default and step down to low once if the device is slow
-  const autoQ = params.get('quality') ? null : createAutoQuality({ start: quality, setQuality: setRendererQuality, onChange: (lvl) => { state.quality = lvl; resize(); } });
+  const autoQ = params.get('quality') ? null : createAutoQuality({ start: quality, setQuality: setRendererQuality, onChange: (lvl) => { state.quality = lvl; post.setQuality(lvl); lights.setQuality(lvl); materials.setQuality(lvl); resize(); } }); // [perf] all four follow the step-down (was: pixel ratio only)
 
   // ---- hint (the only on-screen text) -----------------------------------------------------------
   if (showHint) {

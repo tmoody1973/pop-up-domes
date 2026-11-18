@@ -1,0 +1,36 @@
+{
+ "mode": "shot",
+ "view": "book",
+ "label": "after",
+ "quality": "med",
+ "base": "http://127.0.0.1:5360/",
+ "headless": false,
+ "measureMs": 5000,
+ "reps": 3,
+ "started": "2026-11-18T00:03:52.236Z",
+ "loadBefore": [
+  3.833984375,
+  5.18505859375,
+  5.3916015625
+ ],
+ "shot": "/Users/tarikmoody/Projects/domes/evidence/perf/shots/after-book-med.jpg",
+ "baseline": {
+  "n": 468,
+  "med": 10.8,
+  "p95": 11.8,
+  "gpuMed": null,
+  "gpuP95": null,
+  "gpuN": 0,
+  "cpuMed": 10.7,
+  "dpr": 1.25,
+  "calls": 106,
+  "tris": 235857,
+  "load1": 3.86,
+  "kinds": {}
+ },
+ "loadAfter": [
+  3.8642578125,
+  5.1259765625,
+  5.36669921875
+ ]
+}

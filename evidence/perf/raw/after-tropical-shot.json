@@ -1,0 +1,36 @@
+{
+ "mode": "shot",
+ "view": "tropical",
+ "label": "after",
+ "quality": "med",
+ "base": "http://127.0.0.1:5360/",
+ "headless": false,
+ "measureMs": 5000,
+ "reps": 3,
+ "started": "2026-11-18T00:04:07.355Z",
+ "loadBefore": [
+  3.8642578125,
+  5.1259765625,
+  5.36669921875
+ ],
+ "shot": "/Users/tarikmoody/Projects/domes/evidence/perf/shots/after-tropical-med.jpg",
+ "baseline": {
+  "n": 667,
+  "med": 7.4,
+  "p95": 8.7,
+  "gpuMed": null,
+  "gpuP95": null,
+  "gpuN": 0,
+  "cpuMed": 7.3,
+  "dpr": 1.25,
+  "calls": 84,
+  "tris": 251773,
+  "load1": 3.85,
+  "kinds": {}
+ },
+ "loadAfter": [
+  3.85107421875,
+  5.05517578125,
+  5.33642578125
+ ]
+}
