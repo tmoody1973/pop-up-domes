@@ -33,6 +33,12 @@ const seed = Number.isFinite(seedParam) ? seedParam : CONFIG.DEFAULT_SEED;
 const quality = QUALITY[params.get('quality')] ? params.get('quality') : CONFIG.DEFAULT_QUALITY;
 const muted = params.get('mute') === '1';
 const showHint = params.get('hint') !== '0';
+// [intro] opening overview: whole book, every dome up, title on screen; the first tap / key glides down to the traveller. ?intro=0 skips.
+const intro = showHint && params.get('intro') !== '0';
+const introDusk = intro && params.get('dusk') !== '1' && params.get('night') !== '1'; // opens at dusk (lantern domes), fades to day on start
+let introOn = intro;
+let introLook = null; // stand-in the camera follows during the intro (set at start)
+const INTRO_TOWARD_DOMES = 0.6; // 0 = framed on the traveller, 1 = on the middle of the three domes
 
 state.seed = seed;
 state.quality = quality;
@@ -61,7 +67,7 @@ async function boot() {
   const post = createPost({ renderer, scene, camera: follow.camera, quality });
   const audio = createPaperAudio({ muted });
   const music = createMusic({ audio });
-  const daynight = createDayNight({ scene, night: params.get('night') === '1', dusk: params.get('dusk') === '1' });
+  const daynight = createDayNight({ scene, night: params.get('night') === '1', dusk: params.get('dusk') === '1' || introDusk });
   if (domes) domes.daynight = daynight; // [wave6-P] the domes pick their look (glass by day, lantern at dusk) from its mode
   if (domes) domes.camera = follow.camera; // [fade] dome shells / interior cards in the sight line fade (world/sightfade.js)
   // ambient life + weather (leaves, snow, rain, birds, chimney smoke, fireflies ...): 2 draw calls; ?life=0 disables it
@@ -107,11 +113,11 @@ async function boot() {
     state.listener.x = p.x; state.listener.z = p.z;
     state.listener.rightX = _right.x / rl; state.listener.rightZ = _right.z / rl;
     world.update(dt, p, traveller.moveDir);
-    if (domes) domes.showAll = follow.zoom > (domes.showAll ? 1.8 : 2.2); // zoomed-out overview stands every dome up
+    if (domes) domes.showAll = introOn || follow.zoom > (domes.showAll ? 1.8 : 2.2); // zoomed-out overview stands every dome up
     if (domes) domes.update(dt, p);
     if (interiors) interiors.update(dt, p);
     views.update(dt);
-    follow.update(dt, traveller);
+    follow.update(dt, introOn && introLook ? introLook : traveller); // [intro] framed on the domes until the first input
     daynight.update(dt);
     if (life) life.update(dt, p, follow.camera);
     if (animals) animals.update(dt);
@@ -144,6 +150,15 @@ async function boot() {
 
   // ---- hint (the only on-screen text) -----------------------------------------------------------
   if (showHint) {
+    if (intro) {
+      const introEl = document.getElementById('intro');
+      introEl.classList.add('on');
+      bus.once('input:first', () => {
+        introOn = false; introEl.classList.remove('on'); follow.resetZoom();
+        queueMicrotask(() => controls.clearTarget()); // the starting tap lands on the far-off map view: it starts, it does not walk
+        if (introDusk) daynight.set('day');
+      });
+    }
     if (matchMedia("(pointer: coarse)").matches) hint.textContent = "Tap to walk \u00b7 Pinch zoom \u00b7 2-finger tap: dusk / night \u00b7 3: view \u00b7 4: music"; // [phone] touch-first device
     hint.classList.add('on');
     bus.once('input:first', () => hint.classList.remove('on'));
@@ -171,7 +186,14 @@ async function boot() {
   traveller.teleport(x, z);
   controls.clearTarget();
   update(0);
-  follow.snap(traveller);
+  // [intro] start on the whole book, framed between the traveller and the domes; the camera glides to him on the first input
+  introLook = intro && domes ? { position: new THREE.Vector3(), velocity: new THREE.Vector3() } : null;
+  if (introLook) {
+    const n = domes.domes.length; const cx = domes.domes.reduce((a, d) => a + d.x, 0) / n; const cz = domes.domes.reduce((a, d) => a + d.z, 0) / n;
+    introLook.position.set(x + (cx - x) * INTRO_TOWARD_DOMES, 0, z + (cz - z) * INTRO_TOWARD_DOMES);
+  }
+  if (intro) follow.setZoom(Infinity);
+  follow.snap(introLook || traveller);
   _right.setFromMatrixColumn(follow.camera.matrixWorld, 0);
   const rl = hypot2(_right.x, _right.z) || 1;
   state.listener.rightX = _right.x / rl; state.listener.rightZ = _right.z / rl;

@@ -271,6 +271,8 @@ export function createFollowCamera({ aspect = 16 / 9 } = {}) {
     get zoom() { return zoom; },
     zoomBy(f) { zoomGoal = Math.min(Z.max / fit, Math.max(Z.min, zoomGoal * f)); }, // max / fit: the lens stays inside the room
     resetZoom() { zoomGoal = 1; },
+    /** Jump straight to a zoom (clamped), no easing: the opening overview starts here. */
+    setZoom(z) { zoom = zoomGoal = Math.min(Z.max / fit, Math.max(Z.min, z)); },
     /** Place the camera at the traveller's initial position without smoothing. */
     snap(traveller) {
       blendPose(traveller);
