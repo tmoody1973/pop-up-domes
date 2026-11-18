@@ -258,11 +258,8 @@ export function buildGeometries() {
     for (const dr of doorsOf(c)) {
       if (doorGeo.has(dr.key)) continue;
       const hd = DOOR_W / 2;
-      // keep the notch inside its own gore card (a door near a seam would otherwise cut the seam and the neighbour's
-      // edge); the card is narrowest at its foot, so clamp against the foot half-width minus a small margin.
-      // ponytail: notch may sit up to ~0.2 u off the collision door centre for doors near a seam; walk lines still clear.
-      const keepIn = (x, rho) => { const lim = rho * Math.tan(Math.PI / N_GORES) - hd - DOOR_SEAM_MARGIN; return Math.max(-lim, Math.min(lim, x)); };
-      const xt = keepIn(tiers[0].rho0 * Math.tan(dr.delta), tiers[0].rho0); const xr = keepIn(ringR * Math.tan(dr.delta), ringR);
+      // dr.delta is already clamped clear of the seams (doorsOf), so the notch and the ring gap share one bearing
+      const xt = tiers[0].rho0 * Math.tan(dr.delta); const xr = ringR * Math.tan(dr.delta);
       doorGeo.set(dr.key, {
         tier: tierGeometry(TIERS_U[0], TIERS_U[1], { x0: xt - hd, x1: xt + hd }).geometry,
         ring: slabGeometry([clipX(outline, xr - hd, -1), clipX(outline, xr + hd, 1)], CARD_T, ringUv),
@@ -287,7 +284,8 @@ export function buildGeometries() {
  * bearing to the lobby hub, plus every link-gallery end point lying within 1 u of this dome's glass foot.
  * Bearing = atan2(dz, dx) (+z = south). Each door falls inside one gore (doors are 1 u, gores ~2.1 u at the foot):
  * gore = the one whose centre bearing is nearest, delta = gore centre bearing - door bearing (card +X = toward
- * smaller bearings, so the door centre sits at card x = rho * tan(delta)).
+ * smaller bearings, so the door centre sits at card x = rho * tan(delta)). delta is clamped to DOOR_MAX_DELTA;
+ * bearing = where the path arrives, doorBearing = where the opening is drawn and the collider leaves its gap.
  * @param {{ id: string, x: number, z: number }} c a dome centre (domeCentres())
  */
 export function doorsOf(c) {
@@ -307,9 +305,16 @@ export function doorsOf(c) {
   return bearings.map((b) => {
     const gore = ((Math.round((Math.PI / 2 - b) / step) % N_GORES) + N_GORES) % N_GORES;
     let delta = Math.PI / 2 - goreAngle(gore) - b; delta -= Math.round(delta / (2 * Math.PI)) * 2 * Math.PI;
-    return { bearing: b, gore, delta, key: 'd' + Math.round(delta * 1e4) };
+    delta = Math.max(-DOOR_MAX_DELTA, Math.min(DOOR_MAX_DELTA, delta));
+    return { bearing: b, doorBearing: Math.PI / 2 - goreAngle(gore) - delta, gore, delta, key: 'd' + Math.round(delta * 1e4) };
   });
 }
+
+/** Largest door offset (rad from its gore centre) that keeps the opening DOOR_SEAM_MARGIN inside its own gore card, on
+ * both cards it cuts: the tier-1 card at its foot (narrowest) and the base ring. A door nearer a seam would cut the seam
+ * and the neighbour's edge, so it is drawn (and collided, collide.js) at this offset instead (issue #10). */
+const DOOR_MAX_DELTA = Math.min(...[rowAt(TIERS_U[0]).rho, LAYOUT.ring.r].map((rho) =>
+  Math.atan((rho * Math.tan(Math.PI / N_GORES) - DOOR_W / 2 - DOOR_SEAM_MARGIN) / rho)));
 
 // ---- flaps ------------------------------------------------------------------------------------------------------------------
 const rotX = (a) => new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), a);

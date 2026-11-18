@@ -54,6 +54,20 @@ for (const c of S.domeCentres()) {
   }
 }
 console.log(`Door cards measured: ${n}; worst |offset| ${worst.toFixed(2)} ft; limit ${LIMIT_FT} ft`);
-const pass = over === 0 && missing === 0 && n > 0;
+
+// Collision walk-through: along each door's approach path bearing (where the path arrives, doorsOf().bearing), from
+// inside the glass foot to outside the ring, the collider must leave room for the feet (clearance > 0) at every step.
+// Control: 30 deg off the door the ring must block (clearance <= 0 somewhere), or the walk test proves nothing.
+const { rIn, rOut } = collider.shapes;
+collider.setDomes({ domes: S.domeCentres().map((c) => ({ id: c.id, folds: [{ progress: 1 }] })) });
+const minClear = (c, b) => { let m = Infinity; for (let r = rIn - 0.3; r <= rOut + 0.3; r += 0.02) m = Math.min(m, collider.clearance(c.x + Math.cos(b) * r, c.z + Math.sin(b) * r)); return m; };
+let blocked = 0; let leaky = 0;
+for (const c of S.domeCentres()) for (const dr of S.doorsOf(c)) {
+  const through = minClear(c, dr.bearing); const off = minClear(c, dr.bearing + Math.PI / 6);
+  if (through <= 0) blocked++; if (off > 0) leaky++;
+  console.log(`  walk ${c.id.padEnd(9)} gore ${String(dr.gore).padStart(2)} min clearance through door ${through.toFixed(2)} u${through <= 0 ? '  BLOCKED' : ''} | 30 deg off ${off.toFixed(2)} u${off > 0 ? '  NOT BLOCKED' : ''}`);
+}
+console.log(`Walk-through: ${blocked} door path(s) blocked at the base ring, ${leaky} control line(s) not blocked`);
+const pass = over === 0 && missing === 0 && n > 0 && blocked === 0 && leaky === 0;
 console.log(pass ? 'PASS' : `FAIL (${over} over limit, ${missing} missing)`);
 process.exit(pass ? 0 : 1);

@@ -1,7 +1,7 @@
 // Site collision (wave3-G): the walls of the Mitchell Park set-pieces as a signed distance field, combined into
 // world.clearanceAt (room to the nearest blocker; <= 0 = the feet cannot stand there). Every shape is derived at build
-// time from its one source: SITE (sitemap.js) for dome centres, doorway bearings and pools; domes/shell.js for the ring
-// radius; the built arcade / lobby groups (site/pieces.js, placed by site/index.js) for arch, wall and door positions.
+// time from its one source: SITE (sitemap.js) for dome centres and pools; domes/shell.js for the ring radius and the
+// doorway bearings (doorsOf, the same ones the dome cards are cut at); the built arcade / lobby groups (site/pieces.js, placed by site/index.js) for arch, wall and door positions.
 //   domes:  the base ring (glass foot to saw-tooth ring) as an annulus, cut by a doorway toward the lobby hub and at
 //           every link-gallery end (SITE.paths region 'link'). Only while that dome is risen (main fold >= half up).
 //   lobby:  four walls of the pop-up box, a door in the middle of the wall facing the arcade and each dome.
@@ -67,17 +67,8 @@ export function createCollider({ site }) {
   const rOut = S.LAYOUT.ring.r / Math.cos(Math.PI / S.N_GORES); // saw-tooth ring at its polygon corners
   const ringR = (rIn + rOut) / 2; const ringHalf = (rOut - rIn) / 2;
   const doorHalfAng = Math.asin((DOME_DOOR_W / 2 + ringHalf) / ringR); // jamb faces DOME_DOOR_W apart
-  const [hubX, hubZ] = ftToWorld(SITE.lobby.x, SITE.lobby.y);
-  const domes = S.domeCentres().map((c) => ({ ...c, doors: [Math.atan2(hubZ - c.z, hubX - c.x)], fold: null }));
-  for (const p of SITE.paths) {
-    if (p.region !== 'link') continue;
-    for (const [xf, yf] of p.pts) {
-      const [x, z] = ftToWorld(xf, yf);
-      let best = null; let bd = Infinity;
-      for (const d of domes) { const e = Math.abs(len2(x - d.x, z - d.z) - S.BASE_R); if (e < bd) { bd = e; best = d; } }
-      if (best && bd < 1) best.doors.push(Math.atan2(z - best.z, x - best.x));
-    }
-  }
+  // doorways where the dome draws them (shell.js doorsOf: hub + link ends, kept clear of the gore seams; issue #10)
+  const domes = S.domeCentres().map((c) => ({ ...c, doors: S.doorsOf(c).map((d) => d.doorBearing), fold: null }));
   for (const d of domes) d.jambs = d.doors.flatMap((a) => [a - doorHalfAng, a + doorHalfAng].map((b) => [d.x + ringR * Math.cos(b), d.z + ringR * Math.sin(b)]));
 
   // ---- lobby: walls from the built flaps; a centred door in the wall facing the arcade and each dome ----
