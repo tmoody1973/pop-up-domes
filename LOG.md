@@ -194,3 +194,5 @@
 [perf] Fixed: interiors cull/sort off (opaque, room-level visibility); med shadowTaps 8/12 -> 6/8; auto step-down now also switches post/lights/materials to low (was DPR only, verified with evidence/perf/check-stepdown.mjs).
 [perf] Result (evidence/perf/before-after.md): Tropical@dusk med 12.8 -> 7.2 ms (-44%), low 6.3 -> 3.6; book@dusk med 11.8 -> 10.9; plaza unchanged. Shots before/after viewed: no visible change.
 [perf] Not done: dome-shell batch has same stall (~0.5 ms, needs sorting, would need three internals); high quality, other devices, walking hitches unmeasured.
+[phone] Portrait: camera distance x clamp(sqrt(1.6/aspect), 1, 1.8) (follow.js fit; max zoom / fit keeps lens in the room). Touch: 2/3/4-finger tap = dusk-night / view / music (zoom.js onTap, clears the walk the first finger began). Coarse-pointer devices get a touch hint.
+[phone] Verified in emulated iPhone 13 (Chrome, CDP multi-touch): 2-tap day->dusk, 3-tap journey->close, pinch zoom 1->0.45 with no tap fired, traveller moved 0.16 u during taps; portrait shot viewed. Not checked: a real phone, its frame rate, iOS Safari.

@@ -185,6 +185,9 @@ export function createFollowCamera({ aspect = 16 / 9 } = {}) {
   // ponytail: max zoom keeps the lens inside the room box (walls ~50 u from the book, ceiling 70 u up).
   const Z = { min: 0.45, max: 3.8, mapFrom: 1.3, mapTo: 3.0, mapPitchDeg: 58, mapFov: 45, ease: 9 };
   let zoom = 1; let zoomGoal = 1;
+  // [phone] tall screens (portrait phones) crop the sides: pull back by sqrt(1.6 / aspect), capped, so the domes stay in frame
+  const fitFor = (a) => Math.min(1.8, Math.max(1, Math.sqrt(1.6 / a)));
+  let fit = fitFor(aspect);
   const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 
   function setFocus(traveller) {
@@ -197,7 +200,7 @@ export function createFollowCamera({ aspect = 16 / 9 } = {}) {
     const zt = smooth(Z.mapFrom, Z.mapTo, zoom);
     const pitchDeg = pose.pitchDeg + aPitch + (Z.mapPitchDeg - (pose.pitchDeg + aPitch)) * zt;
     const fov = pose.fov + (Z.mapFov - pose.fov) * zt;
-    const dist = pose.distance * zoom;
+    const dist = pose.distance * zoom * fit;
     const pitch = pitchDeg * DEG;
     const yaw = (pose.yawDeg + aYaw) * DEG;
     const h = Math.cos(pitch) * dist;
@@ -266,7 +269,7 @@ export function createFollowCamera({ aspect = 16 / 9 } = {}) {
     },
     /** User zoom (1 = default framing; < 1 closer, > 1 further out). zoomBy multiplies the goal; the view eases to it. */
     get zoom() { return zoom; },
-    zoomBy(f) { zoomGoal = Math.min(Z.max, Math.max(Z.min, zoomGoal * f)); },
+    zoomBy(f) { zoomGoal = Math.min(Z.max / fit, Math.max(Z.min, zoomGoal * f)); }, // max / fit: the lens stays inside the room
     resetZoom() { zoomGoal = 1; },
     /** Place the camera at the traveller's initial position without smoothing. */
     snap(traveller) {
@@ -287,6 +290,7 @@ export function createFollowCamera({ aspect = 16 / 9 } = {}) {
     },
     setAspect(a) {
       camera.aspect = a;
+      fit = fitFor(a); zoomGoal = Math.min(zoomGoal, Z.max / fit);
       camera.updateProjectionMatrix();
     },
   };
