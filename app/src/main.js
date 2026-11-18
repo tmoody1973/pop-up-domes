@@ -39,6 +39,7 @@ const introDusk = intro && params.get('dusk') !== '1' && params.get('night') !==
 let introOn = intro;
 let introLook = null; // stand-in the camera follows during the intro (set at start)
 const INTRO_TOWARD_DOMES = 0.6; // 0 = framed on the traveller, 1 = on the middle of the three domes
+const HINT_HOLD_MS = 9000; // [hint] how long the controls line stays up after the intro closes (then its 1.4 s CSS fade)
 
 state.seed = seed;
 state.quality = quality;
@@ -150,6 +151,7 @@ async function boot() {
 
   // ---- hint (the only on-screen text) -----------------------------------------------------------
   if (showHint) {
+    if (matchMedia("(pointer: coarse)").matches) hint.textContent = "Tap to walk \u00b7 Pinch zoom \u00b7 2-finger tap: dusk / night \u00b7 3: view \u00b7 4: music"; // [phone] touch-first device
     if (intro) {
       const introEl = document.getElementById('intro');
       introEl.classList.add('on');
@@ -157,11 +159,14 @@ async function boot() {
         introOn = false; introEl.classList.remove('on'); follow.resetZoom();
         queueMicrotask(() => controls.clearTarget()); // the starting tap lands on the far-off map view: it starts, it does not walk
         if (introDusk) daynight.set('day');
+        // [hint] the controls line follows the intro instead of sharing its screen: the starting tap would wipe it unread
+        hint.classList.add('on');
+        setTimeout(() => hint.classList.remove('on'), HINT_HOLD_MS);
       });
+    } else {
+      hint.classList.add('on');
+      bus.once('input:first', () => hint.classList.remove('on'));
     }
-    if (matchMedia("(pointer: coarse)").matches) hint.textContent = "Tap to walk \u00b7 Pinch zoom \u00b7 2-finger tap: dusk / night \u00b7 3: view \u00b7 4: music"; // [phone] touch-first device
-    hint.classList.add('on');
-    bus.once('input:first', () => hint.classList.remove('on'));
   } else hint.remove();
 
   // Find a safe initial position without skipping the opening fold animation.
