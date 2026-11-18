@@ -53,6 +53,7 @@ Add these to the address, e.g. `http://127.0.0.1:5273/?quality=low&mute=1`.
 | `?seed=N` | Seed for the small random choices (default 7). The site plan itself is fixed. |
 | `?life=0` | Turn off ambient life and weather. |
 | `?animals=0` | Turn off the paper animals. |
+| `?domes=0` | Leave out the three domes entirely (a debug switch, e.g. for measuring their cost). |
 | `?debug=1` | Expose internals as `window.__domes` in the browser console. |
 
 ## Checks
