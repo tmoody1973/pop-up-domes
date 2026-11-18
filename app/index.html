@@ -3,24 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-    <title>Papertrails</title>
-    <meta name="description" content="Explore an endless paper world. Wander through handcrafted villages, forests, and winding trails in Papertrails." />
-    <link rel="canonical" href="https://xikhar.github.io/papertrails/" />
+    <title>Mitchell Park Domes, a pop-up book</title>
+    <meta name="description" content="Walk through Milwaukee's Mitchell Park Domes as a papercraft pop-up book: the Desert, Tropical and Show domes, inside and out." />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Papertrails" />
-    <meta property="og:title" content="Papertrails" />
-    <meta property="og:description" content="Explore an endless paper world. Wander through handcrafted villages, forests, and winding trails." />
-    <meta property="og:url" content="https://xikhar.github.io/papertrails/" />
-    <meta property="og:image" content="https://xikhar.github.io/papertrails/social-card.jpg" />
-    <meta property="og:image:type" content="image/jpeg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="A traveller exploring Papertrails, a colorful pop-up paper world." />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Papertrails" />
-    <meta name="twitter:description" content="Explore an endless paper world. Wander through handcrafted villages, forests, and winding trails." />
-    <meta name="twitter:image" content="https://xikhar.github.io/papertrails/social-card.jpg" />
-    <meta name="twitter:image:alt" content="A traveller exploring Papertrails, a colorful pop-up paper world." />
+    <meta property="og:title" content="Mitchell Park Domes, a pop-up book" />
+    <meta property="og:description" content="Walk through Milwaukee's Mitchell Park Domes as a papercraft pop-up book." />
+    <meta property="og:url" content="https://pop-up-domes.vercel.app/" />
+    <meta name="twitter:card" content="summary" />
     <link rel="icon" href="data:," />
     <style>
       html, body { cursor: none; margin: 0; height: 100%; overflow: hidden; background: #1c130d; }
@@ -33,10 +22,28 @@
         pointer-events: none; user-select: none; opacity: 0; transition: opacity 1.4s ease;
       }
       #hint.on { opacity: 1; }
+      /* [intro] opening overview: title over the risen domes, gone with the first tap / key (same plain-text rule) */
+      #intro {
+        position: fixed; left: 0; right: 0; bottom: 10vh; text-align: center; padding: 0 6vw;
+        font-family: Georgia, 'Times New Roman', serif; color: rgba(255, 244, 222, 0.94);
+        text-shadow: 0 1px 3px rgba(20, 10, 0, 0.9), 0 2px 18px rgba(20, 10, 0, 0.85); pointer-events: none; user-select: none;
+        opacity: 0; transition: opacity 1.4s ease;
+      }
+      #intro.on { opacity: 1; }
+      #intro h1 { margin: 0 0 0.5em; font-weight: 500; font-size: clamp(26px, 5.2vw, 54px); letter-spacing: 0.06em; }
+      #intro p { margin: 0.3em 0; font-size: clamp(13px, 1.6vw, 17px); letter-spacing: 0.08em; }
+      #intro .go { margin-top: 1.4em; letter-spacing: 0.18em; animation: introPulse 2.4s ease-in-out infinite; }
+      @keyframes introPulse { 50% { opacity: 0.45; } }
     </style>
   </head>
   <body>
     <canvas id="atlas" tabindex="0"></canvas>
+    <div id="intro">
+      <h1>Mitchell Park Domes</h1>
+      <p>Milwaukee's three glass domes &mdash; Desert, Tropical and Show &mdash; as a paper pop-up book.</p>
+      <p>Walk up to a dome and it rises. Walk through its door to go inside.</p>
+      <p class="go">Tap or press any key to begin</p>
+    </div>
     <div id="hint">WASD / click to walk &nbsp;·&nbsp; Shift run &nbsp;·&nbsp; Ctrl slow &nbsp;·&nbsp; N dusk / night &nbsp;·&nbsp; M music &nbsp;·&nbsp; Scroll / pinch zoom &nbsp;·&nbsp; V view</div>
     <script type="module" src="/src/main.js"></script>
   </body>
