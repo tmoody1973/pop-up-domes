@@ -56,7 +56,8 @@ async function boot() {
   world.site.setCamera(follow.camera); // wave4-I: site set-pieces in the sight line fade (world/site/index.js)
   const controls = createControls({ domElement: canvas, camera: follow.camera, traveller });
   const views = createViews({ follow }); // V cycles camera views
-  createZoom({ domElement: canvas, follow }); // wheel / pinch / + - 0 zoom
+  // wheel / pinch / + - 0 zoom; [phone] 2 / 3 / 4-finger tap = N (day / dusk / night) / V (view) / M (music), the walk its first finger began is cancelled
+  createZoom({ domElement: canvas, follow, onTap: (n) => { controls.clearTarget(); if (n === 2) daynight.toggle(); else if (n === 3) views.next(); else music.toggle(); } });
   const post = createPost({ renderer, scene, camera: follow.camera, quality });
   const audio = createPaperAudio({ muted });
   const music = createMusic({ audio });
@@ -143,6 +144,7 @@ async function boot() {
 
   // ---- hint (the only on-screen text) -----------------------------------------------------------
   if (showHint) {
+    if (matchMedia("(pointer: coarse)").matches) hint.textContent = "Tap to walk \u00b7 Pinch zoom \u00b7 2-finger tap: dusk / night \u00b7 3: view \u00b7 4: music"; // [phone] touch-first device
     hint.classList.add('on');
     bus.once('input:first', () => hint.classList.remove('on'));
   } else hint.remove();
